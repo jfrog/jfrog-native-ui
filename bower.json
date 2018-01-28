@@ -1,0 +1,24 @@
+{
+  "name": "native-ui",
+  "version": "1.0.0",
+  "homepage": "http://www.jfrog.com",
+  "description": "JFrog Native UI",
+  "license": "Apache-2.0",
+  "ignore": [
+    "*",
+    "!dist/**/*",
+    "!bower.json",
+    "!package.json",
+    "!README.md",
+    "!LICENSE"
+  ],
+  "dependencies": {
+    "angular": "1.5.11",
+    "jfrog-ui-essentials": "1.0.8"
+  },
+  "resolutions": {
+    "angular": "1.5.11",
+    "jquery": "3.2.1",
+    "codemirror": "5.0.0"
+  }
+}

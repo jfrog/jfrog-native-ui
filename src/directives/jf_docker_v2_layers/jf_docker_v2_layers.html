@@ -1,0 +1,13 @@
+<div class="docker-v2-layers-visualization">
+    <div class="layers-container">
+        <ul class="docker-v2-layer-container">
+        <jf-docker-v2-layer ng-repeat="layer in jfDockerV2Layers.data track by $index"
+                            parent="jfDockerV2Layers"
+                            data="layer"
+                            preselected="$index === 0"
+                            is-base="$index === jfDockerV2Layers.data.length-1"
+                            is-upper="$index === 0">
+        </jf-docker-v2-layer>
+        </ul>
+    </div>
+</div>

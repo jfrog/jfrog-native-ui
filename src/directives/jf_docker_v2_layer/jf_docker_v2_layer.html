@@ -1,0 +1,50 @@
+<li class="layer"
+        ng-click="jfDockerV2Layer.setSelected(true)"
+        ng-style="{borderLeftColor: jfDockerV2Layer.COLOR_MAP[jfDockerV2Layer.data.command]}"
+        ng-class="{'selected':jfDockerV2Layer.isSelected(),'open-layer': !jfDockerV2Layer.collapsed}">
+    <div class="title"
+            ng-click="jfDockerV2Layer.collapsed = !jfDockerV2Layer.collapsed"
+            ng-class="{open: !jfDockerV2Layer.collapsed}">
+        <i class="icon icon-addons-arrow-right"></i>
+        {{jfDockerV2Layer.data.command}}
+        <span class="current-node-name"
+                ng-if="jfDockerV2Layer.isUpper">
+            {{jfDockerV2Layer.parent.currentPath.substr(jfDockerV2Layer.parent.currentPath.lastIndexOf('/') + 1)}}
+        </span>
+        <span class="layer-id-display">
+            {{jfDockerV2Layer.data.shortId}}
+        </span>
+    </div>
+    <ul class="layer-details" collapse="jfDockerV2Layer.collapsed">
+
+        <li class="id" ng-if="jfDockerV2Layer.data.id">
+            <i class="icon icon-docker-id" jf-tooltip="ID"></i>
+            <span jf-tooltip-on-overflow>
+                {{jfDockerV2Layer.data.id}}
+            </span>
+        </li>
+        <li class="id">
+            <i class="icon icon-docker-digest" jf-tooltip="Digest"></i>
+            <span jf-tooltip-on-overflow>
+                {{jfDockerV2Layer.data.digest}}
+            </span>
+        </li>
+        <li class="id">
+            <i class="icon icon-docker-command" jf-tooltip="Command"></i>
+            <span class="commandtext" jf-tooltip-on-overflow>
+                {{jfDockerV2Layer.data.commandText}}
+            </span>
+        </li>
+        <li class="inline-cells">
+            <div jf-tooltip-on-overflow>
+                <i class="icon icon-docker-created" jf-tooltip="Created"></i>
+                {{jfDockerV2Layer.created}}
+            </div>
+            <div jf-tooltip-on-overflow>
+                <i class="icon icon-docker-size" jf-tooltip="Size"></i>
+                {{jfDockerV2Layer.data.size}}
+            </div>
+        </li>
+
+    </ul>
+</li>

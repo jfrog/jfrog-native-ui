@@ -1,0 +1,133 @@
+.docker-v2-layers-visualization {
+  @ribbonWidth: 5px;
+  position: relative;
+  .layers-container {
+    width: 100%;
+    color: @grayPlaceholderLight;
+    jf-docker-v2-layer .layer {
+      border-left: @ribbonWidth solid @white;
+      transition: transform .1s ease-in;
+      &:hover:not(.open-layer) {
+        -webkit-transform: scale(1.01, 1.02);
+        transform: scale(1.01, 1.02);
+        z-index: 3;
+        box-shadow: 0 1px 4px 1px rgba(0, 0, 0, .17);
+      }
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        &.open-layer {
+          box-shadow: 0 1px 4px 1px rgba(0, 0, 0, .17);
+        }
+        margin-bottom: 10px;
+        .title {
+          color: @blackFontDark;
+          background: @grayBGLight;
+          position: relative;
+          height: 55px;
+          line-height: 55px;
+          font-size: 14px;
+          padding: 0 30px 0 40px;
+          cursor: pointer;
+          .icon.icon-addons-arrow-right {
+            transform: rotate(0deg) scale(1, 1);
+            transition: transform .25s ease-in;
+            display: inline-block;
+            position: relative;
+            left: -15px;
+          }
+          &.open {
+            &:hover {
+              transform: scale(1, 1);
+            }
+            background: @white;
+            .icon.icon-addons-arrow-right {
+              transform: rotate(90deg) scale(1, 1);
+              transition: transform .25s ease-in;
+            }
+          }
+
+          .current-node-name {
+            padding: 2px 6px;
+            margin-left: 10px;
+            color: @blackFontDark;
+            border: 1px solid #A9A9A9;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            position: relative;
+            top: 29%;
+            float: right;
+            line-height: 1.5;
+          }
+          .layer-id-display {
+            float: right;
+          }
+        }
+        .layer-details {
+          background: @white;
+          padding: 0px 30px 10px 40px;
+          list-style: none;
+          width: 100%;
+          li {
+            white-space: nowrap;
+            margin: -1px 0 0;
+            padding: 6px 0 16px 0;
+            &:last-child {
+              border-top: 1px solid @grayBorderLighter;
+            }
+
+            &.id {
+              padding: 6px 0;
+              i {
+                position: relative;
+                bottom: -2px;
+                font-size: 20px;
+                color: @grayPlaceholderLight;
+                margin: 0 12px;
+                &.icon-docker-command {
+                  font-size: 18px;
+                  margin: 0 10px 0 15px;
+                  bottom: 0px;
+                }
+                &.icon-docker-id {
+                  bottom: -1px;
+                }
+              }
+              span {
+                white-space: normal;
+                display: inline-block;
+                max-width: ~"calc(100% - 70px)";
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 12px;
+              }
+            }
+            span.commandtext {
+              white-space: unset;
+            }
+            &.inline-cells {
+              padding: 0;
+              & > div {
+                display: inline-block;
+                margin-right: 80px;
+                padding: 10px 0 6px;
+                max-width: ~"calc(50% - 80px)";
+                overflow: hidden;
+                text-overflow: ellipsis;
+                i {
+                  vertical-align: middle;
+                }
+              }
+
+            }
+          }
+        }
+      }
+    }
+  }
+}

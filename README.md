@@ -1,2 +1,3 @@
-# jfrog-native-ui
-Library of commons JFrog UI components  
+### jfrog-native-ui
+
+Common UI library for JFrog products
