@@ -7,7 +7,7 @@ export default function DockerImageModel(DockerTagModel) {
 	return class DockerImageModel extends PackageBaseModel {
 		constructor(data) {
 			super(data);
-			this.name = data.name;
+			this.name = data.name || data.packageName;
 			this.id = data.id;
 			this.repositories = data.repositories;
 			this.description = data.description;
