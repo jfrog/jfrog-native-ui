@@ -1,0 +1,46 @@
+<div class="jf-page-wrapper"
+        ng-class="{'with-xray': $ctrl.withXray}">
+    <div class="jf-page-header">
+        <div class="jf-header-item">
+            <h1>Package Viewer
+                <span>
+                    <i class="icon icon-{{$ctrl.packageType.toLowerCase()}}"></i>
+                    {{$ctrl.jFrogUIUtils.capitalizeFirstLetter($ctrl.packageType)}}
+                </span>
+            </h1>
+
+            <div class="back-link">
+                <a href ng-click="$ctrl.goBack()">
+                    <i class="icon icon-addons-arrow-left"></i>
+                    Back to list of versions
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="jf-page-summary">
+        <jf-summary-row
+                columns=$ctrl.summaryColumns
+                parent-scope="$ctrl.$scope">
+        </jf-summary-row>
+    </div>
+
+    <div class="jf-page-content">
+        <div class="jf-content-section">
+            <div class="jf-main-content-pane">
+                <div class="docker-layers">
+                    <h4>Layers</h4>
+                    <jf-docker-v2-layers
+                            controller="$ctrl"
+                            data="$ctrl.version.layers"
+                            current-path="a/latest">
+                    </jf-docker-v2-layers>
+                </div>
+            </div>
+        </div>
+        <div class="jf-content-section" ng-if="$ctrl.withXray">
+            <div class="jf-main-content-pane">
+                Xray stuff here
+            </div>
+        </div>
+    </div>
+</div>

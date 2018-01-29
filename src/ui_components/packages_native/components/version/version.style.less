@@ -1,0 +1,51 @@
+version-component {
+  .jf-page-wrapper {
+    .jf-page-summary {
+      .summary-row {
+        grid-template-columns: repeat(5, 1fr);
+        .version-security {
+          display: none;
+        }
+      }
+    }
+    .jf-page-content {
+      h4 {
+        margin-bottom: 55px;
+        font-weight: 600;
+        color: @blackFontDark;
+      }
+      .jf-content-section {
+        .jf-main-content-pane {
+          display: grid;
+          width: 100%;
+          height: 100%;
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    }
+
+    &.with-xray {
+      .jf-page-summary {
+        .summary-row {
+          grid-template-columns: repeat(6, 1fr);
+          .version-security {
+            display: inline-block;
+          }
+        }
+      }
+      .jf-page-content {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 15px;
+        .jf-content-section {
+          .jf-main-content-pane {
+            grid-template-columns: 1fr;
+          }
+        }
+      }
+    }
+  }
+
+}

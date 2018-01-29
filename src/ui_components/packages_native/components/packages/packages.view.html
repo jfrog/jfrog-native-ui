@@ -1,0 +1,77 @@
+<div class="jf-page-wrapper">
+    <div class="jf-page-header">
+        <div class="jf-header-item">
+            <h1>
+                Package Viewer
+                <span>
+                    <i class="icon icon-{{$ctrl.selectedPackageType.text.toLowerCase()}}"></i>
+                    {{$ctrl.jFrogUIUtils.capitalizeFirstLetter($ctrl.selectedPackageType.text)}}
+                </span>
+            </h1>
+            <span class="filter repo-type">
+                <jf-ui-select
+                        jf-select-disabled="true"
+                        jf-select-placeholder="Select package type..."
+                        jf-select-display-func="$ctrl.getPackageTypeTemplate($item)"
+                        jf-select-model="$ctrl.selectedPackageType"
+                        jf-select-change="$ctrl.onPackageTypeChange()"
+                        jf-select-options="$ctrl.packageTypes">
+                </jf-ui-select>
+            </span>
+            <div class="package-count">
+                {{$ctrl.packages.packageCount || 0}} {{$ctrl.packageAlias}}
+                {{$ctrl.packages.packageCount > 1 ? 's' : ''}}
+            </div>
+        </div>
+
+        <div class="jf-header-item">
+            <form>
+                <div class="filters">
+                    <span class="filter repos">
+                        <i class="icon icon-filter"></i>
+                        <jf-multi-dropdown
+                                title="Filter: Repositories"
+                                show-label-counter="true"
+                                no-items-message="No items"
+                                on-change="$ctrl.onRepoFilterChange()"
+                                items="$ctrl.reposList">
+                        </jf-multi-dropdown>
+                    </span>
+                    <span class="filter more-filters">
+                        <jf-multi-dropdown
+                                title="Search by:"
+                                show-label-counter="true"
+                                no-selected-first="true"
+                                no-items-message="No filters"
+                                single-selection="true"
+                                on-change="$ctrl.onExtraFilterChange()"
+                                items="$ctrl.moreFiltersList">
+                        </jf-multi-dropdown>
+                    </span>
+                    <span class="filter free-text">
+                         <input type="text"
+                                 placeholder="{{$ctrl.selectedFilter}}"
+                                 class="input-text"
+                                 id="free-text"
+                                 name="freeText"
+                                 ng-model="$ctrl.freeText"
+                                 ng-if="$ctrl.isExtraFilterSelected()"/>
+                    </span>
+                    <button class="btn btn-secondary"
+                            ng-disabled="!$ctrl.isValidFilterForm()"
+                            ng-click="$ctrl.refreshData()">
+                        Ok
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="jf-page-content">
+        <div class="jf-main-content-pane">
+            <jf-table-view
+                    options="$ctrl.tableViewOptions"
+                    object-name="Package">
+            </jf-table-view>
+        </div>
+    </div>
+</div>
