@@ -1,12 +1,12 @@
 const webpack = require('webpack');
-const CONFIG = require('./native_ui.config');
+const CONFIG = require('./jfrog-native-ui.config');
 const ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
 
 	context: __dirname + '/src',
 	entry: {
-		'native_ui': ['./main.js',
+		'jfrog-native-ui': ['./main.js',
 		              './directives/directives.module.js',
 		              './services/services.module.js',
 		              './ui_components/ui_components.module.js']

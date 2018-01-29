@@ -8,7 +8,7 @@ var html2js = require('gulp-html2js');
 var webpackConfig = require('./webpack.config');
 var less = require('gulp-less');
 var sourceMaps = require('gulp-sourcemaps');
-var CONFIG = require('./native_ui.config');
+var CONFIG = require('./jfrog-native-ui.config');
 var install = require("gulp-install");
 var iconfont = require('gulp-iconfont');
 var iconfontCss = require('gulp-iconfont-css');
@@ -117,13 +117,13 @@ gulp.task('watch', function () {
 });
 
 gulp.task('concatAllJS', function() {
-    return gulp.src([CONFIG.DESTINATIONS.TARGET + '/native_ui.js', CONFIG.DESTINATIONS.TARGET_TEMP + '/*.js'])
-        .pipe(concat('native_ui.js'))
+    return gulp.src([CONFIG.DESTINATIONS.TARGET + '/jfrog-native-ui.js', CONFIG.DESTINATIONS.TARGET_TEMP + '/*.js'])
+        .pipe(concat('jfrog-native-ui.js'))
         .pipe(uglify({mangle:false}))
         .pipe(gulp.dest(CONFIG.DESTINATIONS.TARGET));
 });
 gulp.task('preprocessJS', function() {
-    return gulp.src(CONFIG.DESTINATIONS.TARGET + '/native_ui.js')
+    return gulp.src(CONFIG.DESTINATIONS.TARGET + '/jfrog-native-ui.js')
         .pipe(preprocess())
         .pipe(gulp.dest(CONFIG.DESTINATIONS.TARGET));
 });
@@ -134,7 +134,7 @@ gulp.task('preprocessBowerJSON', function() {
 });
 gulp.task('concatAllCSS', function() {
     return gulp.src([CONFIG.DESTINATIONS.TARGET_TEMP + '/*.css', CONFIG.DESTINATIONS.TARGET + '/*.css'])
-        .pipe(concat('native_ui.css'))
+        .pipe(concat('jfrog-native-ui.css'))
         .pipe(minifyCss())
         .pipe(gulp.dest(CONFIG.DESTINATIONS.TARGET));
 });
@@ -226,7 +226,7 @@ gulp.task('vendorFonts', function () {
 gulp.task('templates', function () {
     return gulp.src(CONFIG.SOURCES.TEMPLATES)
             .pipe(html2js({
-                outputModuleName: 'native_ui.templates',
+                outputModuleName: 'templates',
                 base: 'src/',
                 useStrict: true
             }))
@@ -267,7 +267,7 @@ gulp.task('less', function () {
         inject(injectFiles, injectOptions),
         less({paths: [path.join(__dirname, 'less', 'includes')]}),
         prefixer(),
-        concat('native_ui.css'),
+        concat('jfrog-native-ui.css'),
         sourceMaps.write(),
         minifyCss(),
         gulp.dest(CONFIG.DESTINATIONS.TARGET)

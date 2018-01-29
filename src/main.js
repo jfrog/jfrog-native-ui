@@ -1,8 +1,8 @@
 
-angular.module('native_ui', [
+angular.module('jfrog.native.ui', [
     // Library modules
         'ui_components',
-        'native_ui.templates',
+        'templates',
         'directives',
         'services'
     ])
