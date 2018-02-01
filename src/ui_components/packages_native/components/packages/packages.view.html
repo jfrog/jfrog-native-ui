@@ -4,7 +4,7 @@
             <h1>
                 Package Viewer
                 <span>
-                    <i class="icon icon-{{$ctrl.selectedPackageType.text.toLowerCase()}}"></i>
+                    <i class="icon" ng-class="$ctrl.packageTypeIcon"></i>
                     {{$ctrl.jFrogUIUtils.capitalizeFirstLetter($ctrl.selectedPackageType.text)}}
                 </span>
             </h1>
@@ -19,8 +19,7 @@
                 </jf-ui-select>
             </span>
             <div class="package-count">
-                {{$ctrl.packages.packageCount || 0}} {{$ctrl.packageAlias}}
-                {{$ctrl.packages.packageCount > 1 ? 's' : ''}}
+                {{$ctrl.packages.packageCount || 0}} {{$ctrl.packageAlias}}{{$ctrl.packages.packageCount > 1 ? 's' : ''}}
             </div>
         </div>
 
@@ -30,6 +29,7 @@
                     <span class="filter repos">
                         <i class="icon icon-filter"></i>
                         <jf-multi-dropdown
+                                enable-select-all-checkbox="true"
                                 title="Filter: Repositories"
                                 show-label-counter="true"
                                 no-items-message="No items"
@@ -39,28 +39,20 @@
                     </span>
                     <span class="filter more-filters">
                         <jf-multi-dropdown
-                                title="Search by:"
+                                title="Search by"
+                                no-filter="true"
                                 show-label-counter="true"
                                 no-selected-first="true"
                                 no-items-message="No filters"
-                                single-selection="true"
+                                text-inputs="true"
                                 on-change="$ctrl.onExtraFilterChange()"
                                 items="$ctrl.moreFiltersList">
                         </jf-multi-dropdown>
                     </span>
-                    <span class="filter free-text">
-                         <input type="text"
-                                 placeholder="{{$ctrl.selectedFilter}}"
-                                 class="input-text"
-                                 id="free-text"
-                                 name="freeText"
-                                 ng-model="$ctrl.freeText"
-                                 ng-if="$ctrl.isExtraFilterSelected()"/>
-                    </span>
                     <button class="btn btn-secondary"
                             ng-disabled="!$ctrl.isValidFilterForm()"
-                            ng-click="$ctrl.refreshData()">
-                        Ok
+                            ng-click="$ctrl.getFilteredData()">
+                        Apply
                     </button>
                 </div>
             </form>

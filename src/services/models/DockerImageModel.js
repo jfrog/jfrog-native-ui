@@ -8,7 +8,6 @@ export default function DockerImageModel(DockerTagModel) {
 		constructor(data) {
 			super(data);
 			this.name = data.name || data.packageName;
-			this.id = data.id;
 			this.repositories = data.repositories;
 			this.description = data.description;
 			this.downloadsCount = data.totalDownloads;

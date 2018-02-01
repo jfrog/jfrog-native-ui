@@ -4,7 +4,7 @@
         <div class="jf-header-item">
             <h1>Package Viewer
                 <span>
-                    <i class="icon icon-{{$ctrl.packageType.toLowerCase()}}"></i>
+                    <i class="icon" ng-class="$ctrl.packageTypeIcon"></i>
                     {{$ctrl.jFrogUIUtils.capitalizeFirstLetter($ctrl.packageType)}}
                 </span>
             </h1>

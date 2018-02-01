@@ -1,3 +1,5 @@
+import {PACKAGE_NATIVE_CONSTANTS} from '../../constants/package.native.constants';
+
 export default class PackagesNativeController {
     constructor($q, $state, $stateParams, $scope, JFrogEventBus, $location) {
         this.$state = $state;
@@ -6,6 +8,7 @@ export default class PackagesNativeController {
         this.$q = $q;
         this.$stateParams = $stateParams;
         this.JFrogEventBus = JFrogEventBus;
+        this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
     }
 
     $onInit() {
@@ -24,7 +27,7 @@ export default class PackagesNativeController {
         if (daoParams.packageType) {
             this.packageType = daoParams.packageType;
             if (daoParams.package) {
-                if (daoParams.version) {
+                if (daoParams.version && daoParams.repo) {
                     this.initVersionViewData(daoParams);
                 } else {
                     this.initPackageViewData(daoParams);
@@ -76,7 +79,15 @@ export default class PackagesNativeController {
     }
 
     refreshPackages(daoParams) {
-        return this.getPackages({daoParams: daoParams}).then((packages) => {
+	    let searchValues = daoParams;
+        if(daoParams.packageType) {
+	        searchValues = {
+		        id:  daoParams.packageType,
+		        comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+		        values: ['*']
+	        };
+        }
+	    return this.getPackages({daoParams: searchValues}).then((packages) => {
             this.packages = packages;
         });
     }
@@ -104,6 +115,6 @@ export default class PackagesNativeController {
     }
 
     setStateParams(params) {
-        this.$location.search({package: params.package, version: params.version});
+        this.$location.search({package: params.package, version: params.version, repo:params.repo});
     }
 }
