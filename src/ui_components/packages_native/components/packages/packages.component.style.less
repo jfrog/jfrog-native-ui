@@ -7,13 +7,15 @@ packages-component {
       grid-template-rows: 120px;
       .jf-header-item {
         .filter.repo-type {
-          //display: inline-flex;
           display: none;
         }
         .filters {
           margin-top: 21px;
+          border-bottom: 1px solid @grayBGHover;
+          width: fit-content;
+          color: @blackBGLight;
           .icon-filter {
-            margin: 12px;
+            margin: 12px 12px 12px 0;
             float: left;
           }
           .filter {
@@ -23,18 +25,32 @@ packages-component {
             .free-text {
               width: 100px;
             }
-            jf-multi-dropdown {
-              &[no-filter="true"] {
-                .drop-down-container {
-                  top: 40px;
-                }
-              }
-              .jf-multi-dropdown {
+            &.more-filters {
+              .jf-multi-dropdown.with-text-inputs {
                 .main-box {
-                  width: 220px;
+                  width: 318px;
+                }
+                .drop-down-container {
+                  width: 380px;
                 }
               }
             }
+            &.repos-filters {
+              .jf-multi-dropdown {
+                .main-box {
+                  width: 250px;
+                }
+                .drop-down-container {
+                  width: 280px;
+                }
+              }
+            }
+          }
+          button.apply-button {
+            border: none;
+            text-align: right;
+            padding: 0;
+            min-width: 50px;
           }
         }
       }
@@ -75,9 +91,16 @@ packages-component {
             border: none;
             cursor: pointer;
             &:hover {
-              box-shadow: 0px 0px 6px 0 rgba(0,0,0,.37);
+              box-shadow: 0px 0px 6px 0 rgba(0, 0, 0, .37);
               transition: box-shadow .20s ease-in;
             }
+          }
+          .empty-table-placeholder {
+            height: 300px;
+            line-height: 230px;
+            margin-top: 0;
+            background-color: @grayBGDark;
+            color: @blackBGLight;
           }
         }
       }

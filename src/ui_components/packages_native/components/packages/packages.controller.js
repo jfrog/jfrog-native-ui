@@ -62,8 +62,9 @@ export default class PackagesController {
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
 		    .setRowsPerPage(20)
-		    .setEmptyTableText('No packages')
-		    .setData(this.packages.data);
+		    .setRowHeight(66)
+		    .setEmptyTableText(`No ${this.packageAlias}s`)
+		    .setData(this.packages.list.data);
 
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
 	}
@@ -115,14 +116,18 @@ export default class PackagesController {
 	getSelectedRepos() {
 		let selected = _.filter(this.reposList, (repo) => {
 			return repo.isSelected;
-		}).map((selectedRepo) => {
-			return {
+		});
+		if (selected.length) {
+			this.selectedRepos = [{
 				id: 'repo',
 				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
-				values: selectedRepo.text
-			};
-		});
-		this.selectedRepos = selected.length ? selected : null;
+				values: selected.map((selectedRepo) => {
+					return selectedRepo.text;
+				})
+			}];
+		} else {
+			this.selectedRepos = null;
+		}
 	}
 
 	getSelectedFilters() {
@@ -132,30 +137,25 @@ export default class PackagesController {
 			return {
 				id: this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].filters[filter.text],
 				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
-				values: filter.inputTextValue
+				values: [filter.inputTextValue || '']
 			};
 		});
-		this.selectedFilter = selected.length ? selected : null;
+		this.selectedFilters = selected.length ? selected : null;
 	}
 
 	getFilteredData() {
 		this.getSelectedFilters();
-
 		if (this.refreshPackages && typeof this.refreshPackages === 'function') {
-			let filters = [{
-				id: this.selectedPackageType.text,
-				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
-				values: ['*']
-			}];
-
-			if(this.selectedRepos || this.selectedFilter) {
-				filters = this.selectedRepos || this.selectedFilter;
-				if (this.selectedRepos && this.selectedFilter) {
-					filters = this.selectedRepos.concat(this.selectedFilter);
-				}
-			}
-
-			this.refreshPackages({daoParams: filters});
+			let filters = [];
+			filters = (this.selectedFilters ? filters.concat(this.selectedFilters) : filters);
+			filters = (this.selectedRepos ? filters.concat(this.selectedRepos) : filters);
+			let daoParams = {
+				filters: filters,
+				packageType: this.selectedPackageType.text
+			};
+			this.refreshPackages({daoParams: daoParams}).then(()=>{
+				this.tableViewOptions.setData(this.packages.list.data);
+			})
 		}
 	}
 
@@ -165,13 +165,14 @@ export default class PackagesController {
 	}
 
 	isExtraFilterSelected() {
-		return this.selectedFilter &&
-			this.selectedFilter.length;
+		return this.selectedFilters &&
+			this.selectedFilters.length;
 	}
 
 	isValidFilterForm() {
-		return ( this.isAnyRepoSelected() && !this.isExtraFilterSelected()) ||
-			(this.isExtraFilterSelected());
+		//return ( this.isAnyRepoSelected() && !this.isExtraFilterSelected()) ||
+		//	(this.isExtraFilterSelected());
+		return true;
 	}
 
 	onPackageTypeChange() {

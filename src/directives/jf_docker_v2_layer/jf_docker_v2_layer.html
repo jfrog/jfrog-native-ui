@@ -23,7 +23,7 @@
                 {{jfDockerV2Layer.data.id}}
             </span>
         </li>
-        <li class="id">
+        <li class="id" ng-if="jfDockerV2Layer.data.digest">
             <i class="icon icon-docker-digest" jf-tooltip="Digest"></i>
             <span jf-tooltip-on-overflow>
                 {{jfDockerV2Layer.data.digest}}

@@ -1,13 +1,5 @@
 version-component {
   .jf-page-wrapper {
-    .jf-page-summary {
-      .summary-row {
-        grid-template-columns: repeat(5, 1fr);
-        .version-security {
-          display: none;
-        }
-      }
-    }
     .jf-page-content {
       h4 {
         margin-bottom: 55px;
@@ -25,14 +17,6 @@ version-component {
     }
 
     &.with-xray {
-      .jf-page-summary {
-        .summary-row {
-          grid-template-columns: repeat(6, 1fr);
-          .version-security {
-            display: inline-block;
-          }
-        }
-      }
       .jf-page-content {
         display: grid;
         width: 100%;
@@ -46,6 +30,20 @@ version-component {
         }
       }
     }
+    jf-summary-row {
+      jf-summary-row-item {
+        .summary-icon-column {
+          i.icon.icon-docker-tags {
+            top: 30px;
+            left: -13px;
+            &:before {
+              transform: rotate(136deg);
+              -webkit-transform: rotate(136deg);
+              display: block;
+            }
+          }
+        }
+      }
+    }
   }
-
 }

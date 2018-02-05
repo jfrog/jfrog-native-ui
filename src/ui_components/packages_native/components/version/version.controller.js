@@ -19,6 +19,7 @@ export default class VersionController {
 			this.PACKAGE_NATIVE_CONSTANTS[this.packageType].version.alias
 		);
 		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].package.icon;
+		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].version.icon;
 	}
 
 	$onInit() {
@@ -35,7 +36,15 @@ export default class VersionController {
 	}
 
 	getSummaryColumns() {
-		return [{
+		return [
+		{
+			noWrap: true,
+			template: `<div class="summary-icon-column">
+							<i class="icon" ng-class="$ctrl.versionIcon"></i>
+						</div>`,
+			isActive: true,
+			width: '120px'
+		}, {
 			label: `${this.versionAlias} Name`,
 			class: 'version-name',
 			template: `{{$ctrl.version.name || 'No version'}}`,
@@ -71,11 +80,10 @@ export default class VersionController {
 			isActive: this.withXray
 		}, {
 			label: 'Last Modified',
-			class: 'package-modified-date',
+			noWrap: true,
 			template: `<span jf-tooltip-on-overflow>
                             {{$ctrl.version.lastModified ? ($ctrl.version.lastModified | date : 'medium') : '--'}}
                        </span>`,
-			noWrap: true,
 			isActive: true
 		}];
 	}

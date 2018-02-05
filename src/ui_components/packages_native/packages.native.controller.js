@@ -1,120 +1,118 @@
 import {PACKAGE_NATIVE_CONSTANTS} from '../../constants/package.native.constants';
 
 export default class PackagesNativeController {
-    constructor($q, $state, $stateParams, $scope, JFrogEventBus, $location) {
-        this.$state = $state;
-        this.$scope = $scope;
-        this.$location = $location;
-        this.$q = $q;
-        this.$stateParams = $stateParams;
-        this.JFrogEventBus = JFrogEventBus;
-        this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
-    }
+	constructor($q, $state, $stateParams, $scope, JFrogEventBus, $location, ModelFactory) {
+		this.$state = $state;
+		this.$scope = $scope;
+		this.$location = $location;
+		this.$q = $q;
+		this.$stateParams = $stateParams;
+		this.JFrogEventBus = JFrogEventBus;
+		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
+		this.ModelFactory = ModelFactory;
+		this.packages = {};
+	}
 
-    $onInit() {
-        this.registerEvents();
-    }
+	$onInit() {
+		this.registerEvents();
+	}
 
-    registerEvents() {
-        this.JFrogEventBus.registerOnScope(this.$scope,
-                this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, (daoParams) => {
-                    this.initComponentsData(daoParams);
-                });
-    }
+	registerEvents() {
+		this.JFrogEventBus.registerOnScope(this.$scope,
+			this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, (daoParams) => {
+				this.initComponentsData(daoParams);
+			});
+	}
 
-    initComponentsData(daoParams) {
-        this.daoParams = daoParams;
-        if (daoParams.packageType) {
-            this.packageType = daoParams.packageType;
-            if (daoParams.package) {
-                if (daoParams.version && daoParams.repo) {
-                    this.initVersionViewData(daoParams);
-                } else {
-                    this.initPackageViewData(daoParams);
-                }
-            } else {
-                this.initPackagesViewData(daoParams);
-            }
-        }
-    }
+	initComponentsData(daoParams) {
+		this.daoParams = daoParams;
+		if (daoParams.packageType) {
+			this.packageType = daoParams.packageType;
+			if (daoParams.package) {
+				if (daoParams.version && daoParams.repo) {
+					this.initVersionViewData(daoParams);
+				} else {
+					this.initPackageViewData(daoParams);
+				}
+			} else {
+				this.initPackagesViewData(daoParams);
+			}
+		}
+	}
 
-    hideAll() {
-        this.showPackages = false;
-        this.showPackage = false;
-        this.showVersion = false;
-    }
+	hideAll() {
+		this.showPackages = false;
+		this.showPackage = false;
+		this.showVersion = false;
+	}
 
-    initPackageViewData(daoParams) {
-        this.hideAll();
-        this.refreshPackage(daoParams).then(() => {
-            this.showPackage = true;
-            this.setStateParams(daoParams);
-        });
-    }
+	initPackageViewData(daoParams) {
+		this.hideAll();
+		this.refreshPackage(daoParams).then(() => {
+			this.showPackage = true;
+			this.setStateParams(daoParams);
+		});
+	}
 
-    initVersionViewData(daoParams) {
-        this.hideAll();
-        this.refreshVersion(daoParams).then(() => {
-            this.showVersion = true;
-            this.setStateParams(daoParams);
-        });
-    }
+	initVersionViewData(daoParams) {
+		this.hideAll();
+		this.refreshVersion(daoParams).then(() => {
+			this.showVersion = true;
+			this.setStateParams(daoParams);
+		});
+	}
 
-    initPackagesViewData(daoParams) {
-        this.hideAll();
-        this.$q.all([
-            this.refreshPackageTypes(daoParams),
-            this.refreshFilters(daoParams),
-            this.refreshPackages(daoParams)
-        ]).then(() => {
-            this.showPackages = true;
-            this.setStateParams(daoParams);
-        })
-    }
+	initPackagesViewData(daoParams) {
+		this.hideAll();
+		this.$q.all([
+			this.refreshPackageTypes(daoParams),
+			this.refreshFilters(daoParams),
+			this.refreshPackages(daoParams)
+		]).then(() => {
+			this.showPackages = true;
+			this.setStateParams(daoParams);
+		});
+	}
 
-    refreshPackageTypes(daoParams) {
-        return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
-            this.packageTypes = packageTypes;
-        });
-    }
+	refreshPackageTypes(daoParams) {
+		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
+			this.packageTypes = packageTypes;
+		});
+	}
 
-    refreshPackages(daoParams) {
-	    let searchValues = daoParams;
-        if(daoParams.packageType) {
-	        searchValues = {
-		        id:  daoParams.packageType,
-		        comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
-		        values: ['*']
-	        };
-        }
-	    return this.getPackages({daoParams: searchValues}).then((packages) => {
-            this.packages = packages;
-        });
-    }
+	refreshPackages(daoParams) {
+		let searchParams = {
+			packageType: daoParams.packageType,
+			filters: daoParams.filters || []
+		};
+		return this.getPackages({daoParams: searchParams}).then((packages) => {
+			this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, packages);
+		});
+	}
 
-    refreshFilters(daoParams) {
-        return this.getFilters({daoParams: daoParams}).then((filters) => {
-            this.filters = filters;
-        });
-    }
+	refreshFilters(daoParams) {
+		return this.getFilters({daoParams: daoParams}).then((filters) => {
+			this.filters = this.ModelFactory.getFiltersMedel(daoParams.packageType, filters);
+		});
+	}
 
-    refreshPackage(daoParams) {
-        return this.getPackage({daoParams: daoParams}).then((pkg) => {
-            this.package = pkg;
-        });
-    }
+	refreshPackage(daoParams) {
+		return this.getPackage({daoParams: daoParams}).then((pkg) => {
+			this.package = this.ModelFactory.getPackageMedel(daoParams.packageType, pkg);
+		});
+	}
 
-    refreshVersion(daoParams) {
-        return this.getVersion({daoParams: daoParams}).then((version) => {
-            this.version = version;
-        });
-    }
+	refreshVersion(daoParams) {
+		return this.getVersion({daoParams: daoParams}).then((version) => {
+			this.version = this.ModelFactory.getVersionMedel(daoParams.packageType, version);
+		});
+	}
 
-    manifestCb(daoParams) {
-        return this.getManifest({daoParams: daoParams});
-    }
+	manifestCb(daoParams) {
+		return this.getManifest({daoParams: daoParams});
+	}
 
-    setStateParams(params) {
-        this.$location.search({package: params.package, version: params.version, repo:params.repo});
-    }
+	setStateParams(params) {
+		this.$location.search({package: params.package, version: params.version, repo: params.repo});
+	}
 }

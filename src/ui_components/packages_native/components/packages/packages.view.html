@@ -26,11 +26,12 @@
         <div class="jf-header-item">
             <form>
                 <div class="filters">
-                    <span class="filter repos">
+                    <span class="filter repos-filters">
                         <i class="icon icon-filter"></i>
                         <jf-multi-dropdown
+                                borderless="true"
                                 enable-select-all-checkbox="true"
-                                title="Filter: Repositories"
+                                title="Filter repositories"
                                 show-label-counter="true"
                                 no-items-message="No items"
                                 on-change="$ctrl.onRepoFilterChange()"
@@ -39,6 +40,7 @@
                     </span>
                     <span class="filter more-filters">
                         <jf-multi-dropdown
+                                borderless="true"
                                 title="Search by"
                                 no-filter="true"
                                 show-label-counter="true"
@@ -49,7 +51,7 @@
                                 items="$ctrl.moreFiltersList">
                         </jf-multi-dropdown>
                     </span>
-                    <button class="btn btn-secondary"
+                    <button class="btn btn-secondary apply-button"
                             ng-disabled="!$ctrl.isValidFilterForm()"
                             ng-click="$ctrl.getFilteredData()">
                         Apply

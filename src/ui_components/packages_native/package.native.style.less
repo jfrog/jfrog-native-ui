@@ -1,14 +1,24 @@
-.jf-header-item {
-  .back-link a {
-    i:before {
-      font-size: 10px;
-      position: relative;
-      top: -1px;
+packages-native-component {
+  .jf-header-item {
+    .back-link a {
+      i:before {
+        font-size: 10px;
+        position: relative;
+        top: -1px;
+      }
+      &:hover {
+        color: @greenBGDark;
+      }
+      color: @blackFontDark;
     }
-    &:hover {
-      color: @greenBGDark;
+  }
+}
+
+.context-menu-list {
+  .context-menu-item.icon-docker-tags {
+    &:before {
+      .rotate-docker-tags()
     }
-    color: @blackFontDark;
   }
 }
 
@@ -22,13 +32,3 @@
   font-size: 17px;
   margin-right: 4px;
 }
-
-.context-menu-list {
-  .context-menu-item.icon-docker-tags {
-    &:before {
-      .rotate-docker-tags()
-    }
-  }
-}
-
-

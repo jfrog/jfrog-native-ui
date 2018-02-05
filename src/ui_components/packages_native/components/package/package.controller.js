@@ -29,6 +29,7 @@ export default class PackageController {
 			this.PACKAGE_NATIVE_CONSTANTS[this.packageType].version.alias
 		);
 		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].package.icon;
+		this.packagesIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].packages.icon;
 	}
 
 	initTable() {
@@ -152,6 +153,14 @@ export default class PackageController {
 
 	getSummaryColumns() {
 		return [{
+			class: 'package-icon',
+			template: `<div class="summary-icon-column">
+							<i class="icon" ng-class="$ctrl.packagesIcon"></i>
+						</div>`,
+			isActive: true,
+			noWrap: true,
+			width: '120px'
+		}, {
 			label: `${this.packageAlias} Name`,
 			class: 'package-name',
 			template: `{{$ctrl.package.name || 'No package'}}`,
