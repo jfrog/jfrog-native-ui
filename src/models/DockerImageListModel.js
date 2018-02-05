@@ -12,6 +12,6 @@ export default class DockerImageListModel extends BaseModel {
 				return new DockerImageModel(image);
 			});
 		}
-		this.packageCount = data.resultsCount;
+		this.itemsCount = data.resultsCount;
 	}
 }

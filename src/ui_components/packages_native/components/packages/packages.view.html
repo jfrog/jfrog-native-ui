@@ -19,7 +19,7 @@
                 </jf-ui-select>
             </span>
             <div class="package-count">
-                {{$ctrl.packages.packageCount || 0}} {{$ctrl.packageAlias}}{{$ctrl.packages.packageCount > 1 ? 's' : ''}}
+                {{$ctrl.packages.list.itemsCount || 0}} {{$ctrl.packageAlias}}{{$ctrl.packages.list.itemsCount === 1 ? '' : 's'}}
             </div>
         </div>
 
