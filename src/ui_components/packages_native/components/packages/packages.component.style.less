@@ -14,6 +14,7 @@ packages-component {
         .filters {
           margin-top: 21px;
           border-bottom: 1px solid @grayBGHover;
+          padding-bottom:4px;
           width: fit-content;
           color: @blackBGLight;
           .icon-filter {
@@ -30,20 +31,24 @@ packages-component {
             &.more-filters {
               .jf-multi-dropdown.with-text-inputs {
                 .main-box {
-                  width: 318px;
+                  width: 180px;
                 }
                 .drop-down-container {
                   width: 380px;
                 }
               }
             }
-            &.repos-filters {}
+            &.repos-filters {
+              .main-box {
+                width: 225px;
+              }
+              .drop-down-container {
+                width: 280px;
+              }
+            }
           }
-          button.apply-button {
-            border: none;
-            text-align: right;
-            padding: 0;
-            min-width: 50px;
+          .apply-button.some-filters-selected {
+            color: @greenBGPrimary;
           }
         }
       }

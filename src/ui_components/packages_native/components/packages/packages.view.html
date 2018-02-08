@@ -27,7 +27,6 @@
             <form>
                 <div class="filters">
                     <span class="filter repos-filters">
-                        <i class="icon icon-filter"></i>
                         <jf-multi-dropdown
                                 borderless="true"
                                 title="Filter repositories"
@@ -50,7 +49,8 @@
                                 items="$ctrl.moreFiltersList">
                         </jf-multi-dropdown>
                     </span>
-                    <button class="btn btn-secondary apply-button"
+                    <button class="btn apply-button btn-secondary"
+                            ng-class="{'some-filters-selected' : $ctrl.isAnyRepoSelected() || $ctrl.isExtraFilterSelected()}"
                             ng-disabled="!$ctrl.isValidFilterForm()"
                             ng-click="$ctrl.getFilteredData()">
                         Apply
