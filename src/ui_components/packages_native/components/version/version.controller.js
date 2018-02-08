@@ -24,8 +24,14 @@ export default class VersionController {
 
 	$onInit() {
 		this.initConstants();
-		this.withXray = false; // TODO: replace stab with footer data
-		this.summaryColumns = this.getSummaryColumns();
+		if (this.isWithXray && typeof this.isWithXray === 'function') {
+			this.isWithXray().then((response) => {
+				this.withXray = response;
+				this.summaryColumns = this.getSummaryColumns();
+			});
+		} else {
+			this.summaryColumns = this.getSummaryColumns();
+		}
 	}
 
 	goBack() {
@@ -37,34 +43,37 @@ export default class VersionController {
 
 	getSummaryColumns() {
 		return [
-		{
-			noWrap: true,
-			template: `<div class="summary-icon-column">
+			{
+				noWrap: true,
+				template: `<div class="summary-icon-column">
 							<i class="icon" ng-class="$ctrl.versionIcon"></i>
 						</div>`,
-			isActive: true,
-			width: '120px'
-		}, {
-			label: `${this.versionAlias} Name`,
-			class: 'version-name',
-			template: `{{$ctrl.version.name || 'No version'}}`,
-			isActive: true
-		}, {
-			label: 'Size',
-			class: 'version-size',
-			template: `{{$ctrl.version.size.length ? $ctrl.version.size : ($ctrl.version.size | filesize)}}`,
-			isActive: true
-		}, {
-			label: `${this.packageAlias} Name`,
-			class: 'package-name',
-			template: `{{$ctrl.version.packageName}}`,
-			isActive: true
-		}, {
-			label: `${this.packageAlias} ID`,
-			class: 'Package ID',
-			template: '{{$ctrl.version.packageId}}',
-			isActive: true
-		}, /*{
+				isActive: true,
+				width: '120px'
+			}, {
+				label: `${this.versionAlias} Name`,
+				class: 'version-name',
+				noWrap: true,
+				template: `<span jf-tooltip-on-overflow>{{$ctrl.version.name || 'No version'}}</span>`,
+				isActive: true
+			}, {
+				label: 'Size',
+				class: 'version-size',
+				template: `{{$ctrl.version.size.length ? $ctrl.version.size : ($ctrl.version.size | filesize)}}`,
+				isActive: true
+			}, {
+				label: `${this.packageAlias} Name`,
+				class: 'package-name',
+				noWrap: true,
+				template: `<span jf-tooltip-on-overflow>{{$ctrl.version.packageName}}</span>`,
+				isActive: true
+			}, {
+				label: `${this.packageAlias} ID`,
+				class: 'package-id',
+				noWrap: true,
+				template: `<span jf-tooltip-on-overflow>{{$ctrl.version.packageId}}</span>`,
+				isActive: true
+			}, /*{
             label: 'Labels',
             class: 'version-labels',
             template: `<span ng-if="$ctrl.version.labels"
@@ -74,18 +83,18 @@ export default class VersionController {
             noWrap: true,
             isActive: true
         },*/{
-			label: 'Security',
-			class: 'version-security',
-			template: `{{$ctrl.version.security}}`,
-			isActive: this.withXray
-		}, {
-			label: 'Last Modified',
-			noWrap: true,
-			template: `<span jf-tooltip-on-overflow>
+				label: 'Security',
+				class: 'version-security',
+				template: `{{$ctrl.version.security}}`,
+				isActive: this.withXray
+			}, {
+				label: 'Last Modified',
+				noWrap: true,
+				template: `<span jf-tooltip-on-overflow>
                             {{$ctrl.version.lastModified ? ($ctrl.version.lastModified | date : 'medium') : '--'}}
                        </span>`,
-			isActive: true
-		}];
+				isActive: true
+			}];
 	}
 
 }

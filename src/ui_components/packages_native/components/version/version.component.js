@@ -9,6 +9,7 @@ export default class VersionComponent {
             packageName: '<',
             version: '<',
             refreshVersion: '&?',
+	        isWithXray: '&?'
         };
     }
 }

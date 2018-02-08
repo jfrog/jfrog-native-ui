@@ -12,6 +12,11 @@ version-component {
           width: 100%;
           height: 100%;
           grid-template-columns: 1fr 1fr;
+          min-height: 0;
+          min-width: 0;
+          .docker-layers {
+            min-width: 0;
+          }
         }
       }
     }
@@ -30,6 +35,7 @@ version-component {
         }
       }
     }
+
     jf-summary-row {
       jf-summary-row-item {
         .summary-icon-column {

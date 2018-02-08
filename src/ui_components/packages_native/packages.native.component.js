@@ -13,6 +13,7 @@ export default class PackagesNativeComponent {
             getPackage: '&?',
             getVersion: '&?',
             getManifest: '&?',
+	        isWithXray: '&?',
         };
     }
 }

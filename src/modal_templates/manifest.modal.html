@@ -1,0 +1,36 @@
+<div class="modal-header">
+	<button type="button"
+	        class="close"
+	        data-dismiss="close"
+	        aria-label="Close"
+	        ng-click="$close(true)"><span
+			aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="modal-title">{{modalTitle}}</h3>
+</div>
+<div class="modal-body manifest-modal">
+	<div class="manifest">
+		<jf-clip-copy
+				text-to-copy="manifest"
+				object-name="manifest"
+				class="code-mirror-copy">
+		</jf-clip-copy>
+
+		<jf-code-mirror mime-type="xml"
+		                height="350px"
+		                model="manifest"
+		                allowEdit="false">
+		</jf-code-mirror>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-secondary"
+	        ng-click="$close(true)">
+		Close
+	</button>
+	<button class="btn btn-primary"
+	        ng-click="downloadManifest()">
+		Download
+	</button>
+</div>

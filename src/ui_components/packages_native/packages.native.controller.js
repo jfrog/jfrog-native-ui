@@ -47,28 +47,28 @@ export default class PackagesNativeController {
 	}
 
 	initPackageViewData(daoParams) {
-		this.hideAll();
 		this.refreshPackage(daoParams).then(() => {
+			this.hideAll();
 			this.showPackage = true;
 			this.setStateParams(daoParams);
 		});
 	}
 
 	initVersionViewData(daoParams) {
-		this.hideAll();
 		this.refreshVersion(daoParams).then(() => {
+			this.hideAll();
 			this.showVersion = true;
 			this.setStateParams(daoParams);
 		});
 	}
 
 	initPackagesViewData(daoParams) {
-		this.hideAll();
 		this.$q.all([
 			this.refreshPackageTypes(daoParams),
 			this.refreshFilters(daoParams),
 			this.refreshPackages(daoParams)
 		]).then(() => {
+			this.hideAll();
 			this.showPackages = true;
 			this.setStateParams(daoParams);
 		});

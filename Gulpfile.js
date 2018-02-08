@@ -266,7 +266,13 @@ gulp.task('less', function () {
         gulp.src(CONFIG.SOURCES.LESS_MAIN_FILE),
         inject(injectFiles, injectOptions),
         less({paths: [path.join(__dirname, 'less', 'includes')]}),
-        prefixer(),
+        prefixer({
+            grid:true,
+	        browsers:  [
+		        "> 1%",
+		        "last 2 versions"
+	        ]
+        }),
         concat('jfrog-native-ui.css'),
         sourceMaps.write(),
         minifyCss(),

@@ -1,11 +1,13 @@
 packages-component {
   .jf-page-wrapper {
     grid-template-rows: 120px 1fr;
+    -ms-grid-rows: 120px 15px 1fr;
     grid-template-areas: "header-area" "content-area";
 
     .jf-page-header {
       grid-template-rows: 120px;
       .jf-header-item {
+        -ms-grid-column: 1;
         .filter.repo-type {
           display: none;
         }
@@ -35,16 +37,7 @@ packages-component {
                 }
               }
             }
-            &.repos-filters {
-              .jf-multi-dropdown {
-                .main-box {
-                  width: 250px;
-                }
-                .drop-down-container {
-                  width: 280px;
-                }
-              }
-            }
+            &.repos-filters {}
           }
           button.apply-button {
             border: none;
@@ -54,9 +47,13 @@ packages-component {
           }
         }
       }
+      .jf-header-item + .jf-header-item {
+        -ms-grid-column: 3;
+      }
     }
 
     .jf-page-content {
+      -ms-grid-row: 3;
       .jf-table-view {
         .jf-table-top {
           display: none;

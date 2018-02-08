@@ -77,7 +77,7 @@ export default class PackagesController {
 
 	showAllRepos(e, text) {
 		e.stopPropagation();
-		this.fullTextService.showFullTextModal(text, 'Repositories');
+		this.fullTextService.showFullTextModal(text, 'Repositories', 590);
 	}
 
 	getColumns() {

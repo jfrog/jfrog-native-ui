@@ -17,7 +17,14 @@ export default class PackageController {
 
 	$onInit() {
 		this.initConstants();
-		this.initTable();
+		if (this.isWithXray && typeof this.isWithXray === 'function') {
+			this.isWithXray().then((response) => {
+				this.withXray = response;
+				this.initTable();
+			});
+		} else {
+			this.initTable();
+		}
 		this.summaryColumns = this.getSummaryColumns();
 	}
 
@@ -38,7 +45,7 @@ export default class PackageController {
 		this.tableViewOptions
 		    .setColumns(this.columns)
 		    .setRowsPerPage(20)
-		    .setEmptyTableText('No packages')
+		    .setEmptyTableText(`No ${this.versionAlias}s`)
 		    .setActions(this.getActions())
 		    .setData(this.package.versions);
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
@@ -97,7 +104,7 @@ export default class PackageController {
                            </div>`,
 			width: '15%'
 		}
-			// Xray is for phase 2
+			// Xray is for phase 2 $ctrl.withXray
 			/*{
 			field: 'xray',
 			header: 'Xray',
@@ -163,7 +170,8 @@ export default class PackageController {
 		}, {
 			label: `${this.packageAlias} Name`,
 			class: 'package-name',
-			template: `{{$ctrl.package.name || 'No package'}}`,
+			noWrap: true,
+			template: `<span jf-tooltip-on-overflow>{{$ctrl.package.name || 'No package'}}</span>`,
 			isActive: true
 		}, {
 			label: 'Number Of Downloads',
