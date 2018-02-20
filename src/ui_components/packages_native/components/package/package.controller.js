@@ -59,15 +59,31 @@ export default class PackageController {
 
 	getActions() {
 		// TODO: Export this to a constants json with all actions relevant to a repo type (and bind to ctrl)
-		return [
-			{
-				icon: 'icon icon-report',
-				tooltip: 'View manifest',
-				callback: (row) => {
-					this.showManifest(row.name, row.repo);
-				}
+		return [{
+			icon: 'icon icon-copy-to-clipboard',
+			tooltip: `Copy ${this.packageAlias} ID`,
+			callback: (row) => {
+				// TODO: COPY TO CLIPBOARD SERVICE
 			}
-		];
+		},{
+			icon: 'icon icon-show-in-tree',
+			tooltip: 'Show In Tree',
+			visibleWhen: () => this.showInTree && typeof this.showInTree === 'function',
+			callback: (row) => {
+				let pathParams = {
+					repo: row.repo,
+					package: this.package.name,
+					version: row.name
+				};
+				this.showInTree({pathParams: pathParams});
+			}
+		}, {
+			icon: 'icon icon-report',
+			tooltip: 'View manifest',
+			callback: (row) => {
+				this.showManifest(row.name, row.repo);
+			}
+		}];
 	}
 
 	getTableColumns() {
@@ -88,6 +104,9 @@ export default class PackageController {
 		}, {
 			field: 'packageId',
 			header: `${this.packageAlias} ID`,
+			cellTemplate: `<div>
+								{{ row.entity.packageId }}
+							</div>`,
 			width: '20%'
 		}, {
 			field: 'lastModified',
@@ -103,8 +122,12 @@ export default class PackageController {
                                 {{ row.entity.size | filesize }}
                            </div>`,
 			width: '15%'
-		}
-			// Xray is for phase 2 $ctrl.withXray
+		}, {
+			field: 'downloadsCount',
+			header: 'Downloads',
+			width: '20%'
+		},
+			// TODO: Xray is for phase 2 $ctrl.withXray
 			/*{
 			field: 'xray',
 			header: 'Xray',

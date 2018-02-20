@@ -1,0 +1,101 @@
+<div ng-class="{'disabled':$ctrl.disabled}" class="native-filters-dropdown">
+	<label ng-if="$ctrl.label">
+		{{$ctrl.label}}
+	</label>
+	<div class="main-box"
+	     ng-class="{'selected-view' : $ctrl.selectedItems().length}">
+		<span>
+			<input type="text"
+			       class="input-text"
+			       jf-disable-ng-animate
+			       ng-show="!$ctrl.isMainFilterDisabled()"
+			       ng-keypress="$ctrl.onKeyPress($event)"
+			       placeholder="{{$ctrl.getSelectedForTitle()}}"
+			       ng-model="$ctrl.extraFilters[0].inputTextValue"/>
+			<input type="text"
+			       class="input-text"
+			       jf-disable-ng-animate
+			       ng-show="$ctrl.isMainFilterDisabled()"
+			       placeholder="{{$ctrl.getSelectedForTitle()}}"
+			       disabled/>
+			<i class="icon icon-clear"
+			   ng-if="$ctrl.selectedItems().length"
+			   ng-click="$ctrl.clearSelection()"></i>
+			<i class="icon icon-addons-arrow-right pull-right" ng-click="$ctrl.onClick()"></i>
+			<i class="icon icon-search" ng-click="$ctrl.onSubmit()"></i>
+		</span>
+	</div>
+	<div ng-if="$ctrl.opened"
+	     class="drop-down-container">
+		<div class="extra-filters-container">
+			<div ng-if="$ctrl.extraFilters.length" class="list-container">
+				<div class="extra-filter form-group"
+				     ng-repeat="item in $ctrl.extraFilters track by $index"
+				     ng-class="{'disabled': item.disabled}">
+					<label>
+						{{ item.text }}
+					</label>
+					<div class="text-input-wrapper">
+						<input type="text"
+					       name="items-filter"
+					       class="input-text"
+					       ng-model="item.inputTextValue"
+					       placeholder="{{item.inputPlaceholder || 'Free text'}}" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="repos-container">
+			<div class="filter-container">
+				<form>
+					<jf-field autofocus="true">
+						<label>Repositories</label>
+						<input type="text"
+						       name="items-filter"
+						       class="input-text"
+						       ng-model="$ctrl.filterText"
+						       placeholder="Filter repositories"/>
+					</jf-field>
+				</form>
+			</div>
+			<div ng-if="$ctrl.repos.length" class="list-container">
+				<div class="drop-down-item"
+				     ng-repeat="item in $ctrl.repos | filter:{text: $ctrl.filterText} track by $index"
+				     ng-class="{'last-selected': $index === $ctrl.lastSelectedIndex && !$ctrl.filterText, 'disabled': item.disabled}">
+					<label class="jf-checkbox">
+						<input type="checkbox"
+						       ng-disabled="item.disabled"
+						       ng-change="$ctrl.onSelection()"
+						       ng-model="item.isSelected">
+						<span></span> <i ng-if="item.iconClass" class="item-icon" ng-class="item.iconClass"></i> {{ item.text }}
+					</label>
+				</div>
+			</div>
+			<div class="batch-action-buttons"
+			     ng-if="$ctrl.repos.length">
+				<button class="btn btn-default"
+				        ng-click="$ctrl.selectAll()">
+					<i class="icon icon-notif-success"></i>
+					Select All
+				</button>
+				<button class="btn btn-default"
+				        ng-click="$ctrl.unSelectAll()">
+					<i class="icon icon-trashcan"></i>
+					Clear All
+				</button>
+			</div>
+			<div ng-if="!$ctrl.repos.length"
+			     class="list-container">
+				<div class="no-items-message">
+					No Repositories
+				</div>
+			</div>
+		</div>
+		<div class="batch-actions">
+			<button class="btn btn-primary pull-right"
+					ng-click="$ctrl.clearSelection()">
+				Clear Form
+			</button>
+		</div>
+	</div>
+</div>

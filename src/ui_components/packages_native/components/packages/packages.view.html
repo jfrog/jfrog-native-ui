@@ -3,14 +3,12 @@
         <div class="jf-header-item">
             <h1>
                 Package Viewer
-                <span>
-                    <i class="icon" ng-class="$ctrl.packageTypeIcon"></i>
-                    {{$ctrl.jFrogUIUtils.capitalizeFirstLetter($ctrl.selectedPackageType.text)}}
+                <span class="package-count">
+                    {{$ctrl.packages.list.itemsCount ? '('+$ctrl.packages.list.itemsCount+')' : ''}}
                 </span>
             </h1>
             <span class="filter repo-type">
                 <jf-ui-select
-                        jf-select-disabled="true"
                         jf-select-placeholder="Select package type..."
                         jf-select-display-func="$ctrl.getPackageTypeTemplate($item)"
                         jf-select-model="$ctrl.selectedPackageType"
@@ -18,43 +16,21 @@
                         jf-select-options="$ctrl.packageTypes">
                 </jf-ui-select>
             </span>
-            <div class="package-count">
-                {{$ctrl.packages.list.itemsCount || 0}} {{$ctrl.packageAlias}}{{$ctrl.packages.list.itemsCount === 1 ? '' : 's'}}
-            </div>
         </div>
 
         <div class="jf-header-item">
             <form>
                 <div class="filters">
                     <span class="filter repos-filters">
-                        <jf-multi-dropdown
-                                borderless="true"
-                                title="Filter repositories"
-                                show-label-counter="true"
-                                no-items-message="No repositories"
+                        <native-filters-dropdown
+                                borderless="false"
+                                title="Image Name"
+                                on-search-submit="$ctrl.getFilteredData()"
                                 on-change="$ctrl.onRepoFilterChange()"
-                                items="$ctrl.reposList">
-                        </jf-multi-dropdown>
+                                repos="$ctrl.reposList"
+                                extra-filters="$ctrl.moreFiltersList">
+                        </native-filters-dropdown>
                     </span>
-                    <span class="filter more-filters">
-                        <jf-multi-dropdown
-                                borderless="true"
-                                title="Search by"
-                                no-filter="true"
-                                show-label-counter="true"
-                                no-selected-first="true"
-                                no-items-message="No filters"
-                                text-inputs="true"
-                                on-change="$ctrl.onExtraFilterChange()"
-                                items="$ctrl.moreFiltersList">
-                        </jf-multi-dropdown>
-                    </span>
-                    <button class="btn apply-button btn-secondary"
-                            ng-class="{'some-filters-selected' : $ctrl.isAnyRepoSelected() || $ctrl.isExtraFilterSelected()}"
-                            ng-disabled="!$ctrl.isValidFilterForm()"
-                            ng-click="$ctrl.getFilteredData()">
-                        Apply
-                    </button>
                 </div>
             </form>
         </div>

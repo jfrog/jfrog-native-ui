@@ -66,7 +66,9 @@ export default class PackagesNativeController {
 		this.$q.all([
 			this.refreshPackageTypes(daoParams),
 			this.refreshFilters(daoParams),
-			this.refreshPackages(daoParams)
+			//this.refreshPackages(daoParams)
+			// TODO: Alter the message
+			this.initEmptyPackagesPage(daoParams)
 		]).then(() => {
 			this.hideAll();
 			this.showPackages = true;
@@ -78,6 +80,10 @@ export default class PackagesNativeController {
 		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
 			this.packageTypes = packageTypes;
 		});
+	}
+
+	initEmptyPackagesPage(daoParams) {
+		this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, []);
 	}
 
 	refreshPackages(daoParams) {
@@ -110,6 +116,14 @@ export default class PackagesNativeController {
 
 	manifestCb(daoParams) {
 		return this.getManifest({daoParams: daoParams});
+	}
+
+	showInTreeCb(pathParams) {
+		return this.showInTree({pathParams: pathParams});
+	}
+
+	refreshPackageDownloadsCount(daoParams) {
+		return this.getPackageDownloadsCount({daoParams: daoParams});
 	}
 
 	setStateParams(params) {

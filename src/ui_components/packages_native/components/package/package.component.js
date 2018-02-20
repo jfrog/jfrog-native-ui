@@ -10,7 +10,8 @@ export default class PackageComponent {
             package: '<',
             getManifest: '&?',
             refreshPackage: '&?',
-	        isWithXray: '&?'
+	        isWithXray: '&?',
+	        showInTree: '&?'
         };
     }
 }

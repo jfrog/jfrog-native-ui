@@ -10,6 +10,7 @@ export default class DockerTagModel extends DockerTagInfoModel {
 		this.security = data.security;
 		this.labels = data.labels;
 		this.repo = data.repoKey;
+		this.downloadsCount = data.totalDownloads;
 
 		if (data.blobsInfo && data.blobsInfo.length) {
 			this.layers = data.blobsInfo.map((layer) => {

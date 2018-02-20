@@ -71,18 +71,16 @@ export default class VersionController {
 				label: `${this.packageAlias} ID`,
 				class: 'package-id',
 				noWrap: true,
-				template: `<span jf-tooltip-on-overflow>{{$ctrl.version.packageId}}</span>`,
+				template: `<span class="package-id-content" 
+								 jf-tooltip-on-overflow>
+								{{ $ctrl.version.packageId }}
+							</span>
+							<jf-clip-copy 
+								text-to-copy="$ctrl.version.packageId"
+							    object-name="{{$ctrl.packageAlias}} ID">
+							</jf-clip-copy>`,
 				isActive: true
-			}, /*{
-            label: 'Labels',
-            class: 'version-labels',
-            template: `<span ng-if="$ctrl.version.labels"
-			              jf-tooltip="{{$ctrl.jFrogUIUtils.formatHtmlList($ctrl.version.labels,4) || ''}}"
-		                  ng-bind-html="$ctrl.jFrogUIUtils.stringifyData($ctrl.version.labels)">
-		               </span>`,
-            noWrap: true,
-            isActive: true
-        },*/{
+			}, {
 				label: 'Security',
 				class: 'version-security',
 				template: `{{$ctrl.version.security}}`,
@@ -91,7 +89,7 @@ export default class VersionController {
 				label: 'Last Modified',
 				noWrap: true,
 				template: `<span jf-tooltip-on-overflow>
-                            {{$ctrl.version.lastModified ? ($ctrl.version.lastModified | date : 'medium') : '--'}}
+                            {{$ctrl.version.lastModified ? ($ctrl.version.lastModified | date : 'medium')  : '--'}}
                        </span>`,
 				isActive: true
 			}];

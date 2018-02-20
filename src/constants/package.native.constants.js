@@ -13,9 +13,9 @@ export const PACKAGE_NATIVE_CONSTANTS = {
 			icon: 'icon-docker-tags'
 		},
 		filters: {
+			'Image Name': 'pkg',
 			//'Image ID': 'pkgId', //Currently not working due to a bug in backend
 			'Tag': 'version',
-			'Image Name': 'pkg'
 		},
 	}
 };

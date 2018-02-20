@@ -2,7 +2,8 @@ import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.con
 
 export default class PackagesController {
 
-	constructor($state, $stateParams, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, JFrogEventBus) {
+	constructor($state, $stateParams, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, JFrogEventBus
+		, $location) {
 		this.$state = $state;
 		this.$scope = $scope;
 		this.$stateParams = $stateParams;
@@ -11,6 +12,7 @@ export default class PackagesController {
 		this.jFrogUIUtils = JFrogUIUtils;
 		this.JFrogEventBus = JFrogEventBus;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
+		this.$location = $location;
 	}
 
 	$onInit() {
@@ -37,17 +39,19 @@ export default class PackagesController {
 			return packageType.text === this.$stateParams.packageType;
 		});
 
+		let savedFilters = this.getSavedFiltersFromUrl();
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
 				text: value,
-				isSelected: false
+				isSelected: !!savedFilters.repos[value]
 			};
 		});
 
 		this.moreFiltersList = _.map(this.filters.extraFilters, (value) => {
 			return {
 				text: value,
-				isSelected: false
+				isSelected: !!savedFilters.otherFilters[value],
+				inputTextValue: savedFilters.otherFilters[value] || ''
 			};
 		});
 	}
@@ -61,9 +65,10 @@ export default class PackagesController {
 		    .showHeaders(false)
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
-		    .setRowsPerPage(900000000) // Temporary workaround inorder to use native (non virtual) scrolling, until full support for smooth virtual scrolling will be completed.
+		    .setRowsPerPage(20)
 		    .setRowHeight(66)
 		    .setEmptyTableText(`No ${this.packageAlias}s`)
+		    .sortBy(null)
 		    .setData(this.packages.list.data);
 
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
@@ -77,7 +82,7 @@ export default class PackagesController {
 
 	showAllRepos(e, text) {
 		e.stopPropagation();
-		this.fullTextService.showFullTextModal(text, 'Repositories');
+		this.fullTextService.showFullTextModal(text, 'Repositories', 590);
 	}
 
 	getColumns() {
@@ -89,27 +94,34 @@ export default class PackagesController {
                                 {{row.entity.name}}
                             </div>`
 		}, {
+			field: 'numOfRepos',
+			header: 'Repositories Count',
+			width: '10%',
+			cellTemplate: `<div>
+                                {{row.entity.numOfRepos}} {{row.entity.numOfRepos===1 ? 'Repository' : 'Repositories'}}
+                           </div>`
+		}, {
 			field: 'repositories',
 			header: 'Repositories',
 			cellTemplate: require('./cellTemplates/repositories.cell.template.html'),
 			width: '20%'
 		}, {
-			field: 'description',
-			header: 'Description',
-			cellTemplate: `<div class="description">
-                                {{row.entity.description}}
-                            </div>`,
-			width: '35%'
-		}, {
 			field: 'downloadsCount',
 			header: 'Download Count',
 			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
-			width: '15%'
+			width: '20%'
 		}, {
 			field: 'versionsCount',
 			header: 'Versions Count',
 			cellTemplate: require('./cellTemplates/versions.count.cell.template.html'),
 			width: '10%'
+		}, {
+			field: 'lastModified',
+			header: 'Last Modified',
+			cellTemplate: `<span jf-tooltip-on-overflow>
+                            {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
+                       </span>`,
+			width: '20%'
 		}];
 	}
 
@@ -132,7 +144,7 @@ export default class PackagesController {
 
 	getSelectedFilters() {
 		let selected = _.filter(this.moreFiltersList, (filter) => {
-			return filter.isSelected && !filter.isAllToggleCheckbox;
+			return filter.inputTextValue;
 		}).map((filter) => {
 			return {
 				id: this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].filters[filter.text],
@@ -146,33 +158,25 @@ export default class PackagesController {
 	getFilteredData() {
 		this.getSelectedFilters();
 		if (this.refreshPackages && typeof this.refreshPackages === 'function') {
-			let filters = [];
-			filters = (this.selectedFilters ? filters.concat(this.selectedFilters) : filters);
-			filters = (this.selectedRepos ? filters.concat(this.selectedRepos) : filters);
 			let daoParams = {
-				filters: filters,
+				filters: this.concatAllActiveFilters(),
 				packageType: this.selectedPackageType.text
 			};
-			this.refreshPackages({daoParams: daoParams}).then(()=>{
+			// TODO: Continue development of filters saving mechanism
+			//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
+			//this.saveFiltersInURL(daoParams.f);
+
+			this.refreshPackages({daoParams: daoParams}).then(() => {
 				this.tableViewOptions.setData(this.packages.list.data);
-			})
+			});
 		}
 	}
 
-	isAnyRepoSelected() {
-		return this.selectedRepos &&
-			this.selectedRepos.length;
-	}
-
-	isExtraFilterSelected() {
-		return this.selectedFilters &&
-			this.selectedFilters.length;
-	}
-
-	isValidFilterForm() {
-		//return ( this.isAnyRepoSelected() && !this.isExtraFilterSelected()) ||
-		//	(this.isExtraFilterSelected());
-		return true;
+	concatAllActiveFilters() {
+		let filters = [];
+		filters = (this.selectedFilters ? filters.concat(this.selectedFilters) : filters);
+		filters = (this.selectedRepos ? filters.concat(this.selectedRepos) : filters);
+		return filters;
 	}
 
 	onPackageTypeChange() {
@@ -198,6 +202,61 @@ export default class PackagesController {
 	goToPackage(packageName) {
 		this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER,
 			{packageType: this.selectedPackageType.text, package: packageName});
+	}
+
+	encodeJSONToBase64String(jsonObject) {
+		let jsonSting = JSON.stringify(jsonObject);
+		return btoa(jsonSting);
+	}
+
+	decodeJSONFromBase64String(encodedJsonSting) {
+		if (!encodedJsonSting) {
+			return [];
+		}
+		let jsonString = atob(encodedJsonSting);
+		return JSON.parse(jsonString);
+	}
+
+	getSavedFiltersFromJson(savedFiltersJson) {
+		let repos = [];
+		let otherFilters = [];
+		let selectedRepoTypeFilters = this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].filters;
+		_.forEach(savedFiltersJson, (savedFilter) => {
+			if (savedFilter.id === 'repo') {
+				repos = savedFilter.values;
+			} else {
+				let savedFilterName = _.findKey(selectedRepoTypeFilters, (v) => {
+					return v === savedFilter.id;
+				});
+				otherFilters[savedFilterName] = savedFilter.values[0];
+			}
+		});
+		return {repos: repos, otherFilters: otherFilters};
+	}
+
+	saveFiltersInURL(base64String) {
+		this.$location.search({f: base64String});
+	}
+
+	getSavedFiltersFromUrl() {
+		return this.getSavedFiltersFromJson(this.decodeJSONFromBase64String(this.$stateParams.f));
+	}
+
+	calcPackageDownloads(e, row) {
+		e.stopPropagation();
+		if (!this.getPackageDownloadsCount || !typeof this.getPackageDownloadsCount === 'function') {
+			return;
+		}
+
+		let pkgName = row.name;
+		let daoParams = {
+			package: pkgName,
+			packageType: this.selectedPackageType.text
+		};
+		this.getPackageDownloadsCount({daoParams: daoParams}).then((response) => {
+			row.downloadsCount = response.totalDownloads;
+			row.calculated = true;
+		});
 	}
 
 }

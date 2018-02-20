@@ -10,6 +10,7 @@ export default class PackagesComponent {
             packages: '<',
             filters: '<',
             refreshPackages: '&?',
+	        getPackageDownloadsCount: '&?',
         };
     }
 }

@@ -11,9 +11,11 @@ export default class PackagesNativeComponent {
             getFilters: '&?',
             getPackages: '&?',
             getPackage: '&?',
+	        getPackageDownloadsCount: '&?',
             getVersion: '&?',
             getManifest: '&?',
 	        isWithXray: '&?',
+	        showInTree: '&?',
         };
     }
 }

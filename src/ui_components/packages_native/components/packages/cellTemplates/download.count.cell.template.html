@@ -1,6 +1,14 @@
-<div class="downloads-count">
-    <i class="icon icon-download"></i>
-    <span>
-        {{row.entity.downloadsCount || 0 }} Download{{row.entity.downloadsCount > 1 ? 's' : ''}}
+<div class="downloads-count no-cm-action"
+     disable-tooltip-on-overflow
+     ng-click="appScope.$ctrl.calcPackageDownloads($event,row.entity)">
+	<i class="icon icon-download"></i>
+	<span class="show-download-count"
+	      jf-tooltip="Click to calculate"
+	      ng-if="!row.entity.calculated">
+        Show downloads count
+    </span>
+	<span ng-if="row.entity.calculated"
+	      jf-tooltip="Click to re-calculate">
+        {{ row.entity.downloadsCount || 0 }} Download{{row.entity.downloadsCount === 1 ? '' : 's' }}
     </span>
 </div>
