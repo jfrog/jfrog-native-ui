@@ -13,6 +13,7 @@ export default class PackagesNativeComponent {
             getPackage: '&?',
 	        getPackageDownloadsCount: '&?',
             getVersion: '&?',
+	        getVersionDownloadsCount: '&?',
             getManifest: '&?',
 	        isWithXray: '&?',
 	        showInTree: '&?',

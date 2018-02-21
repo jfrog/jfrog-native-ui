@@ -45,6 +45,10 @@
         width: 88%;
       }
     }
+
+    &.disabled-style {
+      background: @grayBGLighter;
+    }
   }
 
   i {
@@ -150,6 +154,7 @@
       border-right: 1px solid @grayBorderLighter;
       -ms-grid-row: 1;
       -ms-grid-row-span: 1;
+      -ms-grid-column: 1;
       .list-container {
         border-bottom: none;
         max-height: 600px;
@@ -158,6 +163,7 @@
 
     .repos-container {
       position: relative;
+      -ms-grid-column: 2;
       .batch-action-buttons {
         position: absolute;
         bottom: 20px;

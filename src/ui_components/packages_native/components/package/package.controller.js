@@ -52,7 +52,7 @@ export default class PackageController {
 	}
 
 	onRowClick(row) {
-		if (row && row.entity && row.entity.name && row.entity.name !== this.columns[0].header) {
+		if (row && row.entity && row.entity.name && !$(row.event.target).is('.copy-to-clip')) {
 			this.goToVersion(row.entity.name, row.entity.repo);
 		}
 	}
@@ -60,12 +60,6 @@ export default class PackageController {
 	getActions() {
 		// TODO: Export this to a constants json with all actions relevant to a repo type (and bind to ctrl)
 		return [{
-			icon: 'icon icon-copy-to-clipboard',
-			tooltip: `Copy ${this.packageAlias} ID`,
-			callback: (row) => {
-				// TODO: COPY TO CLIPBOARD SERVICE
-			}
-		},{
 			icon: 'icon icon-show-in-tree',
 			tooltip: 'Show In Tree',
 			visibleWhen: () => this.showInTree && typeof this.showInTree === 'function',
@@ -91,12 +85,7 @@ export default class PackageController {
 			field: 'name',
 			header: `${this.versionAlias} Name`,
 			width: '20%',
-			cellTemplate: `<div class="name"
-                                cm-additional-action="View version"
-                                cm-additional-action-icon="icon-docker-tags"
-                                ng-click="appScope.$ctrl.goToVersion(row.entity.name,row.entity.repo)">
-								    {{row.entity.name}}
-                            </div>`
+			cellTemplate: require('./cellTemplates/name.cell.template.html')
 		}, {
 			field: 'repo',
 			header: 'Repository',
@@ -104,9 +93,7 @@ export default class PackageController {
 		}, {
 			field: 'packageId',
 			header: `${this.packageAlias} ID`,
-			cellTemplate: `<div>
-								{{ row.entity.packageId }}
-							</div>`,
+			cellTemplate: require('./cellTemplates/package.id.cell.template.html'),
 			width: '20%'
 		}, {
 			field: 'lastModified',
@@ -119,13 +106,14 @@ export default class PackageController {
 			field: 'size',
 			header: 'Size',
 			cellTemplate: `<div class="size">
-                                {{ row.entity.size | filesize }}
+								{{ row.entity.size.length ? row.entity.size : (row.entity.size | filesize)}}
                            </div>`,
 			width: '15%'
 		}, {
 			field: 'downloadsCount',
 			header: 'Downloads',
-			width: '20%'
+			width: '20%',
+			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
 		},
 			// TODO: Xray is for phase 2 $ctrl.withXray
 			/*{
@@ -210,5 +198,23 @@ export default class PackageController {
 			noWrap: true,
 			isActive: true
 		}];
+	}
+
+	calcVersionDownloads(e, row) {
+		e.stopPropagation();
+		if (!this.getVersionDownloadsCount || !typeof this.getVersionDownloadsCount === 'function') {
+			return;
+		}
+
+		let daoParams = {
+			repo: row.repo,
+			package: this.package.name,
+			packageType: this.packageType,
+			version: row.name,
+		};
+		this.getVersionDownloadsCount({daoParams: daoParams}).then((response) => {
+			row.downloadsCount = response.totalDownloads;
+			row.calculated = true;
+		});
 	}
 }

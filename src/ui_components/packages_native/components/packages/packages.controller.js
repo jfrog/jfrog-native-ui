@@ -67,7 +67,7 @@ export default class PackagesController {
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
 		    .setRowsPerPage(900000000)
 		    .setRowHeight(66)
-		    .setEmptyTableText(`No ${this.packageAlias}s`)
+		    .setEmptyTableText(`No ${this.packageAlias}s found. You can broaden your search by using the * wildcard`)
 		    .sortBy(null)
 		    .setData(this.packages.list.data);
 
@@ -205,6 +205,7 @@ export default class PackagesController {
 			{packageType: this.selectedPackageType.text, package: packageName});
 	}
 
+	//TODO: Export these methods to jfUiUtils after dev is finished
 	encodeJSONToBase64String(jsonObject) {
 		let jsonSting = JSON.stringify(jsonObject);
 		return btoa(jsonSting);

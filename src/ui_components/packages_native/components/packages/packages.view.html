@@ -1,46 +1,46 @@
 <div class="jf-page-wrapper">
-    <div class="jf-page-header">
-        <div class="jf-header-item">
-            <h1>
-                Package Viewer
-                <span class="package-count">
+	<div class="jf-page-header">
+		<div class="jf-header-item">
+			<h1>
+				Package Viewer
+				<span class="package-count">
                     {{$ctrl.packages.list.itemsCount ? '('+$ctrl.packages.list.itemsCount+')' : ''}}
                 </span>
-            </h1>
-            <span class="filter repo-type">
+			</h1>
+			<span class="filter repo-type">
                 <jf-ui-select
-                        jf-select-placeholder="Select package type..."
-                        jf-select-display-func="$ctrl.getPackageTypeTemplate($item)"
-                        jf-select-model="$ctrl.selectedPackageType"
-                        jf-select-change="$ctrl.onPackageTypeChange()"
-                        jf-select-options="$ctrl.packageTypes">
+		                jf-select-placeholder="Select package type..."
+		                jf-select-display-func="$ctrl.getPackageTypeTemplate($item)"
+		                jf-select-model="$ctrl.selectedPackageType"
+		                jf-select-change="$ctrl.onPackageTypeChange()"
+		                jf-select-options="$ctrl.packageTypes">
                 </jf-ui-select>
             </span>
-        </div>
+		</div>
 
-        <div class="jf-header-item">
-            <form>
-                <div class="filters">
+		<div class="jf-header-item">
+			<form>
+				<div class="filters">
                     <span class="filter repos-filters">
                         <native-filters-dropdown
-                                borderless="false"
-                                title="Image Name"
-                                on-search-submit="$ctrl.getFilteredData()"
-                                on-change="$ctrl.onRepoFilterChange()"
-                                repos="$ctrl.reposList"
-                                extra-filters="$ctrl.moreFiltersList">
+		                        borderless="false"
+		                        title="Image Name"
+		                        on-search-submit="$ctrl.getFilteredData()"
+		                        on-change="$ctrl.onRepoFilterChange()"
+		                        repos="$ctrl.reposList"
+		                        extra-filters="$ctrl.moreFiltersList">
                         </native-filters-dropdown>
                     </span>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="jf-page-content">
-        <div class="jf-main-content-pane">
-            <jf-table-view
-                    options="$ctrl.tableViewOptions"
-                    object-name="Package">
-            </jf-table-view>
-        </div>
-    </div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="jf-page-content">
+		<div class="jf-main-content-pane">
+			<jf-table-view
+					options="$ctrl.tableViewOptions"
+					object-name="Package">
+			</jf-table-view>
+		</div>
+	</div>
 </div>

@@ -3,7 +3,7 @@
 		{{$ctrl.label}}
 	</label>
 	<div class="main-box"
-	     ng-class="{'selected-view' : $ctrl.selectedItems().length}">
+	     ng-class="{'selected-view' : $ctrl.selectedItems().length, 'disabled-style': $ctrl.isMainFilterDisabled()}">
 		<span>
 			<input type="text"
 			       class="input-text"
@@ -13,7 +13,7 @@
 			       placeholder="{{$ctrl.getSelectedForTitle()}}"
 			       ng-model="$ctrl.extraFilters[0].inputTextValue"/>
 			<input type="text"
-			       class="input-text"
+			       class="input-text not-disabled-style"
 			       jf-disable-ng-animate
 			       ng-show="$ctrl.isMainFilterDisabled()"
 			       placeholder="{{$ctrl.getSelectedForTitle()}}"
@@ -36,11 +36,12 @@
 						{{ item.text }}
 					</label>
 					<div class="text-input-wrapper">
-						<input type="text"
-					       name="items-filter"
-					       class="input-text"
-					       ng-model="item.inputTextValue"
-					       placeholder="{{item.inputPlaceholder || 'Free text'}}" />
+						<input autofocus="{{ ($index === 1) }}"
+								type="text"
+					            name="items-filter"
+					            class="input-text"
+					            ng-model="item.inputTextValue"
+					            placeholder="{{item.inputPlaceholder || 'Free text'}}" />
 					</div>
 				</div>
 			</div>
@@ -48,7 +49,7 @@
 		<div class="repos-container">
 			<div class="filter-container">
 				<form>
-					<jf-field autofocus="true">
+					<jf-field>
 						<label>Repositories</label>
 						<input type="text"
 						       name="items-filter"

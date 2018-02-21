@@ -11,7 +11,8 @@ export default class PackageComponent {
             getManifest: '&?',
             refreshPackage: '&?',
 	        isWithXray: '&?',
-	        showInTree: '&?'
+	        showInTree: '&?',
+	        getVersionDownloadsCount: '&?'
         };
     }
 }
