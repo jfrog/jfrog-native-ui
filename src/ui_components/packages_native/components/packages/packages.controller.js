@@ -65,7 +65,7 @@ export default class PackagesController {
 		    .showHeaders(false)
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
-		    .setRowsPerPage(20)
+		    .setRowsPerPage(900000000)
 		    .setRowHeight(66)
 		    .setEmptyTableText(`No ${this.packageAlias}s`)
 		    .sortBy(null)
@@ -162,6 +162,7 @@ export default class PackagesController {
 				filters: this.concatAllActiveFilters(),
 				packageType: this.selectedPackageType.text
 			};
+
 			// TODO: Continue development of filters saving mechanism
 			//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
 			//this.saveFiltersInURL(daoParams.f);
