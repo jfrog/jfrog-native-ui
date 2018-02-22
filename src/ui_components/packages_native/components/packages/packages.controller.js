@@ -16,6 +16,7 @@ export default class PackagesController {
 	}
 
 	$onInit() {
+		this.initSelectedPackageType();
 		this.refreshAll();
 	}
 
@@ -34,11 +35,13 @@ export default class PackagesController {
 		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].version.icon;
 	}
 
-	initFilters() {
+	initSelectedPackageType() {
 		this.selectedPackageType = _.find(this.packageTypes, (packageType) => {
 			return packageType.text === this.$stateParams.packageType;
 		});
+	}
 
+	initFilters() {
 		let savedFilters = this.getSavedFiltersFromUrl();
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
@@ -162,13 +165,13 @@ export default class PackagesController {
 				filters: this.concatAllActiveFilters(),
 				packageType: this.selectedPackageType.text
 			};
-
 			// TODO: Continue development of filters saving mechanism
 			//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
 			//this.saveFiltersInURL(daoParams.f);
 
 			this.refreshPackages({daoParams: daoParams}).then(() => {
 				this.tableViewOptions.setData(this.packages.list.data);
+				this.hasSelectedFilters = daoParams.filters.length > 0;
 			});
 		}
 	}
@@ -183,6 +186,10 @@ export default class PackagesController {
 	onPackageTypeChange() {
 		// Fire a refresh callback for getting packages and filters
 		this.refreshAll();
+		//TODO: when more package types would become available - figure out how to change the view
+		//this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, {
+		//	packageType: this.selectedPackageType
+		//});
 	}
 
 	onRepoFilterChange() {
@@ -196,7 +203,7 @@ export default class PackagesController {
 	getPackageTypeTemplate($item) {
 		return `<div>
                     <i class="icon ${$item.iconClass}"></i>
-                    <span>${$item.text}</span>
+                    <span>${$item.displayText}</span>
                 </div>`;
 	}
 

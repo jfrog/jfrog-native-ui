@@ -10,10 +10,10 @@ export default class PackagesNativeController {
 		this.JFrogEventBus = JFrogEventBus;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
 		this.ModelFactory = ModelFactory;
-		this.packages = {};
 	}
 
 	$onInit() {
+		this.packages = {};
 		this.registerEvents();
 	}
 
@@ -85,15 +85,12 @@ export default class PackagesNativeController {
 		this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, []);
 		defferd.resolve(this.packages.list);
 		return defferd.promise;
-
-		// TODO: Turn on a flag that displays a bg image inside the packages component
 	}
 
 	refreshPackages(daoParams) {
 		if(!daoParams.filters || !daoParams.filters.length) {
 			return this.initEmptyPackagesPage(daoParams);
 		}
-
 		let searchParams = {
 			packageType: daoParams.packageType,
 			filters: daoParams.filters || []

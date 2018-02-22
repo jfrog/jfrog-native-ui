@@ -38,9 +38,16 @@
 	<div class="jf-page-content">
 		<div class="jf-main-content-pane">
 			<jf-table-view
+					jf-disable-ng-animate
+					ng-show="$ctrl.hasSelectedFilters"
 					options="$ctrl.tableViewOptions"
 					object-name="Package">
 			</jf-table-view>
+			<div class="no-filters-message"
+			     jf-disable-ng-animate
+			     ng-show="!$ctrl.hasSelectedFilters">
+				<h1>Add search criteria to display image list</h1>
+			</div>
 		</div>
 	</div>
 </div>
