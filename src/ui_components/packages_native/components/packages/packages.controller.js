@@ -68,8 +68,8 @@ export default class PackagesController {
 		    .showHeaders(false)
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
-		    .setRowsPerPage(900000000)
-		    .setRowHeight(66)
+		    .setRowsPerPage('auto')
+		    .setRowHeight(76)
 		    .setEmptyTableText(`No ${this.packageAlias}s found. You can broaden your search by using the * wildcard`)
 		    .sortBy(null)
 		    .setData(this.packages.list.data);

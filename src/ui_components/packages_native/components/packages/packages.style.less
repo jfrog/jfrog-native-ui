@@ -41,6 +41,10 @@ packages-component {
 
     .jf-page-content {
       -ms-grid-row: 3;
+
+      .jf-main-content-pane {
+        overflow: hidden;
+      }
       .jf-table-view {
         .jf-table-top {
           display: none;
@@ -73,13 +77,21 @@ packages-component {
             border: none;
           }
           .jf-table-row {
-            background: @white;
-            margin: 10px 0;
             border: none;
             cursor: pointer;
             &:hover {
-              box-shadow: 0px 0px 6px 0 rgba(0, 0, 0, .37);
-              transition: box-shadow .20s ease-in;
+              .jf-table-cell {
+                .jf-table-cell-content {
+                  box-shadow: 0px 0px 6px 0 rgba(0, 0, 0, .37);
+                  transition: box-shadow .20s ease-in;
+                }
+              }
+            }
+            .jf-table-cell {
+              padding: 5px 0;
+              .jf-table-cell-content {
+                background: @white;
+              }
             }
           }
           .empty-table-placeholder {
