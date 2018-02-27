@@ -49,6 +49,21 @@ export default class PackageController {
 		    .setActions(this.getActions())
 		    .setData(this.package.versions);
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
+		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
+
+	}
+
+	onSortChange(field, dir) {
+		if (field === 'repo') field = 'repoKey';
+
+		this.refreshPackage({daoParams: {
+			packageType: this.packageType,
+			package: this.package.name,
+			sortBy: field,
+			order: dir
+		}}).then(() => {
+			this.tableViewOptions.setData(this.package.versions);
+		})
 	}
 
 	onRowClick(row) {
@@ -112,6 +127,7 @@ export default class PackageController {
 		}, {
 			field: 'downloadsCount',
 			header: 'Downloads',
+			sortable: false,
 			width: '20%',
 			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
 		},
