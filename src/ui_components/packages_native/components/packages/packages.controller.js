@@ -13,6 +13,7 @@ export default class PackagesController {
 		this.JFrogEventBus = JFrogEventBus;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
 		this.$location = $location;
+		this.sorting = {sortBy: 'name', order: 'asc'}
 	}
 
 	$onInit() {
@@ -65,16 +66,23 @@ export default class PackagesController {
 		    .setColumns(this.getColumns())
 		    .showFilter(false)
 		    .showCounter(false)
-		    .showHeaders(false)
+//		    .showHeaders(false)
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
 		    .setRowsPerPage('auto')
-		    .setRowHeight(76)
+		    .setRowHeight(76,25)
 		    .setEmptyTableText(`No ${this.packageAlias}s found. You can broaden your search by using the * wildcard`)
-		    .sortBy(null)
 		    .setData(this.packages.list.data);
 
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
+		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
+
+	}
+
+	onSortChange(field, dir) {
+		if (field === 'versionsCount') field = 'totalVersions';
+		this.sorting = {sortBy: field, order: dir};
+		this.getFilteredData();
 	}
 
 	onRowClick(row) {
@@ -93,6 +101,7 @@ export default class PackagesController {
 			field: 'name',
 			header: 'Name',
 			width: '20%',
+			headerCellTemplate: '<div></div>',
 			cellTemplate: `<div class="name">
                                 {{row.entity.name}}
                             </div>`
@@ -100,27 +109,34 @@ export default class PackagesController {
 			field: 'numOfRepos',
 			header: 'Repositories Count',
 			width: '10%',
+			headerCellTemplate: '<div></div>',
 			cellTemplate: `<div>
                                 {{row.entity.numOfRepos}} {{row.entity.numOfRepos===1 ? 'Repository' : 'Repositories'}}
                            </div>`
 		}, {
 			field: 'repositories',
 			header: 'Repositories',
+			sortable: false,
+			headerCellTemplate: '<div></div>',
 			cellTemplate: require('./cellTemplates/repositories.cell.template.html'),
 			width: '20%'
 		}, {
 			field: 'downloadsCount',
 			header: 'Download Count',
+			sortable: false,
+			headerCellTemplate: '<div></div>',
 			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
 			width: '20%'
 		}, {
 			field: 'versionsCount',
 			header: 'Versions Count',
+			headerCellTemplate: '<div></div>',
 			cellTemplate: require('./cellTemplates/versions.count.cell.template.html'),
 			width: '10%'
 		}, {
 			field: 'lastModified',
 			header: 'Last Modified',
+			headerCellTemplate: '<div></div>',
 			cellTemplate: `<span jf-tooltip-on-overflow>
                             {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
                        </span>`,
@@ -163,7 +179,9 @@ export default class PackagesController {
 		if (this.refreshPackages && typeof this.refreshPackages === 'function') {
 			let daoParams = {
 				filters: this.concatAllActiveFilters(),
-				packageType: this.selectedPackageType.text
+				packageType: this.selectedPackageType.text,
+				sortBy: this.sorting.sortBy,
+				order: this.sorting.order
 			};
 			// TODO: Continue development of filters saving mechanism
 			//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);

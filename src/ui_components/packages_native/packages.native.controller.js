@@ -93,7 +93,9 @@ export default class PackagesNativeController {
 		}
 		let searchParams = {
 			packageType: daoParams.packageType,
-			filters: daoParams.filters || []
+			filters: daoParams.filters || [],
+			sortBy: daoParams.sortBy || 'name',
+			order: daoParams.order || 'asc'
 		};
 
 		return this.getPackages({daoParams: searchParams}).then((packages) => {
