@@ -227,7 +227,7 @@ export default class PackagesController {
 
 	goToPackage(packageName) {
 		this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER,
-			{packageType: this.selectedPackageType.text, package: packageName});
+			{packageType: this.selectedPackageType.text, package: packageName, repoFilter: this.selectedRepos});
 	}
 
 	//TODO: Export these methods to jfUiUtils after dev is finished
