@@ -8,8 +8,8 @@ export default class PackageComponent {
         this.bindings = {
             packageType: '<',
             package: '<',
-            getManifest: '&?',
-            refreshPackage: '&?',
+	        getPackage: '&?',
+	        getManifest: '&?',
 	        isWithXray: '&?',
 	        showInTree: '&?',
 	        getVersionDownloadsCount: '&?'

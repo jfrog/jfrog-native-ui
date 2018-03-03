@@ -1,27 +1,69 @@
 import {PACKAGE_NATIVE_CONSTANTS} from '../../constants/package.native.constants';
 
 export default class PackagesNativeController {
-	constructor($q, $state, $stateParams, $scope, JFrogEventBus, $location, ModelFactory) {
-		this.$state = $state;
+	constructor($timeout, JFrogSubRouter, $q, $scope, ModelFactory) {
 		this.$scope = $scope;
-		this.$location = $location;
 		this.$q = $q;
-		this.$stateParams = $stateParams;
-		this.JFrogEventBus = JFrogEventBus;
+		this.$timeout = $timeout;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
 		this.ModelFactory = ModelFactory;
+
+		this.packagesReady = false;
+
+		this.JFrogSubRouter = JFrogSubRouter;
 	}
+
+
 
 	$onInit() {
 		this.packages = {};
-		this.registerEvents();
+		this.initSubRouter();
 	}
 
-	registerEvents() {
-		this.JFrogEventBus.registerOnScope(this.$scope,
-			this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, (daoParams) => {
-				this.initComponentsData(daoParams);
-			});
+	initSubRouter() {
+		this.subRouter = this.JFrogSubRouter.createLocalRouter({
+			parentScope: this.$scope,
+			urlStructure: '/:packageType/:package/:version/?:repo&:repos&:query',
+			hotSyncUrl: true,
+			states: [
+				{
+					name: 'packages',
+					params: {mandatory: ['packageType'], nullify: ['package', 'version', 'repo']}
+				},
+				{
+					name: 'package',
+					params: {mandatory: ['packageType', 'package'], nullify: ['version', 'repo',  'query']}
+				},
+				{
+					name: 'version',
+					params: {mandatory: ['packageType', 'package', 'version', 'repo'], nullify: ['repos', 'query']}
+				}
+			],
+			onInit: () => {
+//				console.log('Sub Router onInit')
+				if (!this.subRouter.params.packageType) {
+					this.subRouter.goto('packages', {packageType: 'docker'});
+				}
+				this.initComponentsData(this.subRouter.params);
+			},
+			onChangeFromUrl: (oldParams, newParams) => {
+//				console.log('Sub Router onChangeFromUrl', oldParams, newParams)
+				this.initComponentsData(this.subRouter.params);
+			},
+			onStateChange: (oldState, newState) => {
+//				console.log('Sub Router onStateChange', `${oldState} -> ${newState}`)
+				this.initComponentsData(this.subRouter.params);
+			},
+			onInvalidState: (oldState, params) => {
+//				console.log('Sub Router onInvalidState, oldState =', oldState, params)
+				if (oldState === 'version' && params.packageType === 'docker' && params.package && params.version && !params.repo) {
+					this.subRouter.goto('package', {packageType: params.packageType, package: params.package});
+				}
+				else {
+					this.subRouter.goto('packages', {packageType: 'docker'});
+				}
+			}
+		})
 	}
 
 	initComponentsData(daoParams) {
@@ -29,54 +71,31 @@ export default class PackagesNativeController {
 		if (daoParams.packageType) {
 			this.packageType = daoParams.packageType;
 			if (daoParams.package) {
-				if (daoParams.version && daoParams.repo) {
-					this.initVersionViewData(daoParams);
-				} else {
-					this.initPackageViewData(daoParams);
-				}
 			} else {
 				this.initPackagesViewData(daoParams);
 			}
 		}
 	}
 
-	hideAll() {
-		this.showPackages = false;
-		this.showPackage = false;
-		this.showVersion = false;
-	}
-
-	initPackageViewData(daoParams) {
-		this.refreshPackage(daoParams).then(() => {
-			this.hideAll();
-			this.showPackage = true;
-			this.setStateParams(daoParams);
-		});
-	}
-
-	initVersionViewData(daoParams) {
-		this.refreshVersion(daoParams).then(() => {
-			this.hideAll();
-			this.showVersion = true;
-			this.setStateParams(daoParams);
-		});
-	}
-
 	initPackagesViewData(daoParams) {
-		this.$q.all([
-			this.refreshPackageTypes(daoParams),
-			this.refreshFilters(daoParams),
-			this.refreshPackages(daoParams)
-		]).then(() => {
-			this.hideAll();
-			this.showPackages = true;
-			this.setStateParams(daoParams);
-		});
+		this.refreshPackageTypes(daoParams).then(() => {
+			this.$q.all([
+				this.refreshFilters(daoParams),
+				this.refreshPackages(daoParams)
+			]).then(() => {
+				this.setStateParams(daoParams);
+				this.packagesReady = true;
+			});
+		})
 	}
 
 	refreshPackageTypes(daoParams) {
 		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
 			this.packageTypes = packageTypes;
+			if (!this.packageTypes[this.subRouter.params.packageType]) {
+				this.subRouter.params.packageType = _.find(this.packageTypes, {disabled: false}).text;
+			}
+
 		});
 	}
 
@@ -109,18 +128,6 @@ export default class PackagesNativeController {
 		});
 	}
 
-	refreshPackage(daoParams) {
-		return this.getPackage({daoParams: daoParams}).then((pkg) => {
-			this.package = this.ModelFactory.getPackageMedel(daoParams.packageType, pkg);
-		});
-	}
-
-	refreshVersion(daoParams) {
-		return this.getVersion({daoParams: daoParams}).then((version) => {
-			this.version = this.ModelFactory.getVersionMedel(daoParams.packageType, version);
-		});
-	}
-
 	manifestCb(daoParams) {
 		return this.getManifest({daoParams: daoParams});
 	}
@@ -138,6 +145,6 @@ export default class PackagesNativeController {
 	}
 
 	setStateParams(params) {
-		this.$location.search({package: params.package, version: params.version, repo: params.repo});
+		_.extend(this.subRouter.params, {package: params.package, version: params.version, repo: params.repo});
 	}
 }

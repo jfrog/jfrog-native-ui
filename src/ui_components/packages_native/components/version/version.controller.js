@@ -2,11 +2,12 @@ import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.con
 
 export default class VersionController {
 
-	constructor($state, $scope, JFrogUIUtils, JFrogEventBus) {
-		this.$state = $state;
+	constructor(JFrogSubRouter, $scope, JFrogUIUtils, ModelFactory) {
+		this.subRouter = JFrogSubRouter.getActiveRouter();
+		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
+		this.ModelFactory = ModelFactory;
 		this.jFrogUIUtils = JFrogUIUtils;
-		this.JFrogEventBus = JFrogEventBus;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
 	}
 
@@ -23,22 +24,37 @@ export default class VersionController {
 	}
 
 	$onInit() {
-		this.initConstants();
-		if (this.isWithXray && typeof this.isWithXray === 'function') {
-			this.isWithXray().then((response) => {
-				this.withXray = response;
+		this.getVersionData(this.$stateParams).then(() => {
+			this.initConstants();
+			if (this.isWithXray && typeof this.isWithXray === 'function') {
+				this.isWithXray().then((response) => {
+					this.withXray = response;
+					this.summaryColumns = this.getSummaryColumns();
+				});
+			} else {
 				this.summaryColumns = this.getSummaryColumns();
-			});
-		} else {
-			this.summaryColumns = this.getSummaryColumns();
-		}
+			}
+
+			this.subRouter.on('params.change', (oldParams, newParams) => {
+				if ((oldParams.package !== newParams.package || oldParams.version !== newParams.version) && newParams.repo && this.subRouter.state === 'version' ) {
+					this.getVersionData(this.$stateParams);
+				}
+			}, this.$scope)
+
+		})
+	}
+
+	getVersionData(daoParams) {
+		return this.getVersion({daoParams: daoParams}).then((version) => {
+			this.version = this.ModelFactory.getVersionMedel(daoParams.packageType, version);
+		});
 	}
 
 	goBack() {
-		this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, {
+		this.subRouter.goto('package', {
 			packageType: this.packageType,
 			package: this.packageName
-		});
+		})
 	}
 
 	getSummaryColumns() {

@@ -18,7 +18,8 @@
     </div>
     <div class="jf-page-summary">
         <jf-summary-row
-                columns=$ctrl.summaryColumns
+                ng-if="$ctrl.summaryColumns"
+                columns="$ctrl.summaryColumns"
                 parent-scope="$ctrl.$scope">
         </jf-summary-row>
     </div>

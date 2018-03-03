@@ -2,23 +2,27 @@ import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.con
 
 export default class PackagesController {
 
-	constructor($state, $stateParams, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, JFrogEventBus
-		, $location) {
+	constructor(JFrogSubRouter, $state, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils) {
+		this.subRouter = JFrogSubRouter.getActiveRouter();
+		this.$stateParams = this.subRouter.params;
 		this.$state = $state;
 		this.$scope = $scope;
-		this.$stateParams = $stateParams;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.fullTextService = JfFullTextService;
 		this.jFrogUIUtils = JFrogUIUtils;
-		this.JFrogEventBus = JFrogEventBus;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
-		this.$location = $location;
 		this.sorting = {sortBy: 'name', order: 'asc'}
 	}
 
 	$onInit() {
 		this.initSelectedPackageType();
 		this.refreshAll();
+
+		this.subRouter.on('params.change', (oldParams, newParams) => {
+			if (oldParams.query !== newParams.query) {
+				this.initFilters();
+			}
+		}, this.$scope)
 	}
 
 	refreshAll() {
@@ -47,17 +51,21 @@ export default class PackagesController {
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
 				text: value,
-				isSelected: !!savedFilters.repos[value]
+				isSelected: !this.$stateParams.repos ? false : _.includes(this.$stateParams.repos.split(','), value)
 			};
 		});
 
 		this.moreFiltersList = _.map(this.filters.extraFilters, (value) => {
 			return {
 				text: value,
-				isSelected: !!savedFilters.otherFilters[value],
-				inputTextValue: savedFilters.otherFilters[value] || ''
+				isSelected: value === 'Image Name' ? !!this.$stateParams.query : !!savedFilters.otherFilters[value],
+				inputTextValue: value === 'Image Name' ? this.$stateParams.query : savedFilters.otherFilters[value] || ''
 			};
 		});
+
+		if (this.$stateParams.query) {
+			this.getFilteredData();
+		}
 	}
 
 	initTable() {
@@ -187,6 +195,11 @@ export default class PackagesController {
 			//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
 			//this.saveFiltersInURL(daoParams.f);
 
+			let pkgFilter = _.find(daoParams.filters, {id: 'pkg'});
+			if (pkgFilter && pkgFilter.values[0]) {
+				this.$stateParams.query = pkgFilter.values[0];
+			}
+
 			this.refreshPackages({daoParams: daoParams}).then(() => {
 				this.tableViewOptions.setData(this.packages.list.data);
 				this.hasSelectedFilters = daoParams.filters.length > 0;
@@ -203,15 +216,14 @@ export default class PackagesController {
 
 	onPackageTypeChange() {
 		// Fire a refresh callback for getting packages and filters
+		this.$stateParams.packageType = this.selectedPackageType.text;
 		this.refreshAll();
 		//TODO: when more package types would become available - figure out how to change the view
-		//this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, {
-		//	packageType: this.selectedPackageType
-		//});
 	}
 
 	onRepoFilterChange() {
 		this.getSelectedRepos();
+		this.$stateParams.repos = this.selectedRepos && this.selectedRepos[0] && this.selectedRepos[0].values ? this.selectedRepos[0].values.join(',') : null;
 	}
 
 	onExtraFilterChange() {
@@ -226,8 +238,7 @@ export default class PackagesController {
 	}
 
 	goToPackage(packageName) {
-		this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER,
-			{packageType: this.selectedPackageType.text, package: packageName, repoFilter: this.selectedRepos});
+		this.subRouter.goto('package', {packageType: this.selectedPackageType.text, package: packageName})
 	}
 
 	//TODO: Export these methods to jfUiUtils after dev is finished
@@ -262,7 +273,7 @@ export default class PackagesController {
 	}
 
 	saveFiltersInURL(base64String) {
-		this.$location.search({f: base64String});
+//		this.$location.search({f: base64String});
 	}
 
 	getSavedFiltersFromUrl() {

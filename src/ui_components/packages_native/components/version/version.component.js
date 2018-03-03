@@ -7,8 +7,7 @@ export default class VersionComponent {
         this.bindings = {
             packageType: '<',
             packageName: '<',
-            version: '<',
-            refreshVersion: '&?',
+	        getVersion: '&?',
 	        isWithXray: '&?'
         };
     }

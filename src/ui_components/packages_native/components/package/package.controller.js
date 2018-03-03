@@ -2,30 +2,59 @@ import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.con
 
 export default class PackageController {
 
-	constructor($state, $stateParams, $scope, JFrogTableViewOptions,
-	            JFrogUIUtils, JFrogEventBus, $rootScope, JFrogModal) {
-		this.$state = $state;
+	constructor(JFrogSubRouter, ModelFactory, $scope, JFrogTableViewOptions,
+	            JFrogUIUtils, $rootScope, JFrogModal) {
+		this.subRouter = JFrogSubRouter.getActiveRouter();
+		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
-		this.$stateParams = $stateParams;
+		this.ModelFactory = ModelFactory;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.jFrogUIUtils = JFrogUIUtils;
-		this.JFrogEventBus = JFrogEventBus;
 		this.$rootScope = $rootScope;
 		this.modal = JFrogModal;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
 	}
 
 	$onInit() {
-		this.initConstants();
-		if (this.isWithXray && typeof this.isWithXray === 'function') {
-			this.isWithXray().then((response) => {
-				this.withXray = response;
+		this.getPackageData().then(() => {
+			this.initConstants();
+			if (this.isWithXray && typeof this.isWithXray === 'function') {
+				this.isWithXray().then((response) => {
+					this.withXray = response;
+					this.initTable();
+				});
+			} else {
 				this.initTable();
-			});
-		} else {
-			this.initTable();
+			}
+
+			this.subRouter.on('params.change', (oldParams, newParams) => {
+				if (this.subRouter.state === 'package' && (oldParams.package !== newParams.package || oldParams.repos !== newParams.repos)) {
+					this.getPackageData().then(() => {
+						this.tableViewOptions.setData(this.package.versions);
+					})
+
+				}
+			}, this.$scope)
+
+			this.summaryColumns = this.getSummaryColumns();
+		})
+	}
+
+	getPackageData(additionalDaoParams) {
+		let daoParams = _.extend({}, this.$stateParams, additionalDaoParams);
+		delete daoParams.repos;
+		if (this.$stateParams.repos) {
+			daoParams.repoFilter = [{
+				id: 'repo',
+				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+				values: this.$stateParams.repos.split(',')
+			}];
 		}
-		this.summaryColumns = this.getSummaryColumns();
+		else daoParams.repoFilter = [];
+
+		return this.getPackage({daoParams}).then((pkg) => {
+			this.package = this.ModelFactory.getPackageMedel(this.$stateParams.packageType, pkg);
+		});
 	}
 
 	initConstants() {
@@ -56,12 +85,10 @@ export default class PackageController {
 	onSortChange(field, dir) {
 		if (field === 'repo') field = 'repoKey';
 
-		this.refreshPackage({daoParams: {
-			packageType: this.packageType,
-			package: this.package.name,
+		this.getPackageData({
 			sortBy: field,
 			order: dir
-		}}).then(() => {
+		}).then(() => {
 			this.tableViewOptions.setData(this.package.versions);
 		})
 	}
@@ -143,18 +170,16 @@ export default class PackageController {
 	}
 
 	goToVersion(versionName, repo) {
-		this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, {
+		this.subRouter.goto('version', {
 			packageType: this.packageType,
 			package: this.package.name,
 			repo: repo,
 			version: versionName
-		});
+		})
 	}
 
 	goBack() {
-		this.JFrogEventBus.dispatch(this.JFrogEventBus.getEventsDefinition().NATIVE_PACKAGES_ENTER, {
-			packageType: this.packageType
-		});
+		this.subRouter.goto('packages', {packageType: this.packageType})
 	}
 
 	showManifest(versionName, repo) {

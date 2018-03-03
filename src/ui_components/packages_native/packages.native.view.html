@@ -1,6 +1,6 @@
 
 <packages-component
-        ng-if="$ctrl.showPackages"
+        ng-if="$ctrl.packagesReady && $ctrl.subRouter.state === 'packages'"
         package-types="$ctrl.packageTypes"
         filters="$ctrl.filters"
         packages="$ctrl.packages"
@@ -9,9 +9,9 @@
 </packages-component>
 
 <package-component
-        ng-if="$ctrl.showPackage"
+        ng-if="$ctrl.subRouter.state === 'package'"
         package-type="$ctrl.packageType"
-        refresh-package="$ctrl.refreshPackage(daoParams)"
+        get-package="$ctrl.getPackage({daoParams: daoParams})"
         package="$ctrl.package"
         get-manifest="$ctrl.manifestCb(daoParams)"
 		show-in-tree="$ctrl.showInTreeCb(pathParams)"
@@ -19,10 +19,9 @@
 </package-component>
 
 <version-component
-        ng-if="$ctrl.showVersion"
+        ng-if="$ctrl.subRouter.state === 'version'"
         package-type="$ctrl.packageType"
-        refresh-version="$ctrl.refreshVersion(daoParams)"
+        get-version="$ctrl.getVersion({daoParams: daoParams})"
         package-name="$ctrl.daoParams.package"
-        version="$ctrl.version"
         is-with-xray="$ctrl.isWithXray()">
 </version-component>
