@@ -6,8 +6,6 @@ export default class PackageComponent {
         this.template = require('./package.view.html');
         this.controller = PackageController;
         this.bindings = {
-            packageType: '<',
-            package: '<',
 	        getPackage: '&?',
 	        getManifest: '&?',
 	        isWithXray: '&?',

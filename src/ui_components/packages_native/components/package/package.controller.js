@@ -51,7 +51,6 @@ export default class PackageController {
 			}];
 		}
 		else daoParams.repoFilter = [];
-
 		return this.getPackage({daoParams}).then((pkg) => {
 			this.package = this.ModelFactory.getPackageMedel(this.$stateParams.packageType, pkg);
 		});
@@ -59,13 +58,13 @@ export default class PackageController {
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.packageType].package.alias
+			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.alias
 		);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.packageType].version.alias
+			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].version.alias
 		);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].package.icon;
-		this.packagesIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].packages.icon;
+		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.icon;
+		this.packagesIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].packages.icon;
 	}
 
 	initTable() {
@@ -171,7 +170,7 @@ export default class PackageController {
 
 	goToVersion(versionName, repo) {
 		this.subRouter.goto('version', {
-			packageType: this.packageType,
+			packageType: this.$stateParams.packageType,
 			package: this.package.name,
 			repo: repo,
 			version: versionName
@@ -179,13 +178,13 @@ export default class PackageController {
 	}
 
 	goBack() {
-		this.subRouter.goto('packages', {packageType: this.packageType})
+		this.subRouter.goto('packages', {packageType: this.$stateParams.packageType})
 	}
 
 	showManifest(versionName, repo) {
 		if (this.getManifest && typeof this.getManifest === 'function') {
 			let daoParams = {
-				packageType: this.packageType,
+				packageType: this.$stateParams.packageType,
 				package: this.package.name,
 				version: versionName,
 				repo: repo,
@@ -250,7 +249,7 @@ export default class PackageController {
 		let daoParams = {
 			repo: row.repo,
 			package: this.package.name,
-			packageType: this.packageType,
+			packageType: this.$stateParams.packageType,
 			version: row.name,
 		};
 		this.getVersionDownloadsCount({daoParams: daoParams}).then((response) => {

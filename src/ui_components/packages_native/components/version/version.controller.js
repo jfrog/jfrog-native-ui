@@ -14,13 +14,13 @@ export default class VersionController {
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.packageType].package.alias
+			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.alias
 		);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.packageType].version.alias
+			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].version.alias
 		);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].package.icon;
-		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS[this.packageType].version.icon;
+		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.icon;
+		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].version.icon;
 	}
 
 	$onInit() {
@@ -52,8 +52,8 @@ export default class VersionController {
 
 	goBack() {
 		this.subRouter.goto('package', {
-			packageType: this.packageType,
-			package: this.packageName
+			packageType: this.$stateParams.packageType,
+			package: this.$stateParams.package
 		})
 	}
 

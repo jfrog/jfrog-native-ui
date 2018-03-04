@@ -6,7 +6,6 @@ export default class VersionComponent {
         this.controller = VersionController;
         this.bindings = {
             packageType: '<',
-            packageName: '<',
 	        getVersion: '&?',
 	        isWithXray: '&?'
         };

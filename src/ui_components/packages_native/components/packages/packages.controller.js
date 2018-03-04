@@ -2,11 +2,12 @@ import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.con
 
 export default class PackagesController {
 
-	constructor(JFrogSubRouter, $state, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils) {
+	constructor(JFrogSubRouter, ModelFactory, $q, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
-		this.$state = $state;
 		this.$scope = $scope;
+		this.$q = $q;
+		this.ModelFactory = ModelFactory;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.fullTextService = JfFullTextService;
 		this.jFrogUIUtils = JFrogUIUtils;
@@ -15,14 +16,65 @@ export default class PackagesController {
 	}
 
 	$onInit() {
-		this.initSelectedPackageType();
-		this.refreshAll();
+		this.packages = {};
+
+		this.initPackagesViewData(this.$stateParams);
 
 		this.subRouter.on('params.change', (oldParams, newParams) => {
-			if (oldParams.query !== newParams.query) {
-				this.initFilters();
+			if (oldParams.packageType !== newParams.packageType || oldParams.query !== newParams.query || oldParams.repos !== newParams.repos) {
+				this.initPackagesViewData(this.$stateParams);
 			}
 		}, this.$scope)
+	}
+
+	getPackagesData(daoParams) {
+		if(!daoParams.filters || !daoParams.filters.length) {
+			return this.initEmptyPackagesPage(daoParams);
+		}
+		let searchParams = {
+			packageType: daoParams.packageType,
+			filters: daoParams.filters || [],
+			sortBy: daoParams.sortBy || 'name',
+			order: daoParams.order || 'asc'
+		};
+
+		return this.getPackages({daoParams: searchParams}).then((packages) => {
+			this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, packages);
+		});
+	}
+
+	initPackagesViewData(daoParams) {
+		this.refreshPackageTypes(daoParams).then(() => {
+			this.$q.all([
+				this.refreshFilters(daoParams),
+			]).then(() => {
+				this.initSelectedPackageType();
+				this.refreshAll();
+			});
+		})
+	}
+
+	refreshPackageTypes(daoParams) {
+		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
+			this.packageTypes = packageTypes;
+			if (!this.packageTypes[this.subRouter.params.packageType]) {
+				this.subRouter.params.packageType = _.find(this.packageTypes, {disabled: false}).text;
+			}
+
+		});
+	}
+
+	refreshFilters(daoParams) {
+		return this.getFilters({daoParams: daoParams}).then((filters) => {
+			this.filters = this.ModelFactory.getFiltersMedel(daoParams.packageType, filters);
+		});
+	}
+
+	initEmptyPackagesPage(daoParams) {
+		let defferd = this.$q.defer();
+		this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, []);
+		defferd.resolve(this.packages.list);
+		return defferd.promise;
 	}
 
 	refreshAll() {
@@ -47,7 +99,7 @@ export default class PackagesController {
 	}
 
 	initFilters() {
-		let savedFilters = this.getSavedFiltersFromUrl();
+//		let savedFilters = this.getSavedFiltersFromUrl();
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
 				text: value,
@@ -58,12 +110,13 @@ export default class PackagesController {
 		this.moreFiltersList = _.map(this.filters.extraFilters, (value) => {
 			return {
 				text: value,
-				isSelected: value === 'Image Name' ? !!this.$stateParams.query : !!savedFilters.otherFilters[value],
-				inputTextValue: value === 'Image Name' ? this.$stateParams.query : savedFilters.otherFilters[value] || ''
+				isSelected: value === 'Image Name' ? !!this.$stateParams.query : false,
+				inputTextValue: value === 'Image Name' ? this.$stateParams.query : ''
 			};
 		});
 
-		if (this.$stateParams.query) {
+		if (this.$stateParams.query || this.$stateParams.repos) {
+			this.getSelectedRepos();
 			this.getFilteredData();
 		}
 	}
@@ -80,7 +133,6 @@ export default class PackagesController {
 		    .setRowsPerPage('auto')
 		    .setRowHeight(76,25)
 		    .setEmptyTableText(`No ${this.packageAlias}s found. You can broaden your search by using the * wildcard`)
-		    .setData(this.packages.list.data);
 
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
@@ -184,27 +236,31 @@ export default class PackagesController {
 
 	getFilteredData() {
 		this.getSelectedFilters();
-		if (this.refreshPackages && typeof this.refreshPackages === 'function') {
-			let daoParams = {
-				filters: this.concatAllActiveFilters(),
-				packageType: this.selectedPackageType.text,
-				sortBy: this.sorting.sortBy,
-				order: this.sorting.order
-			};
-			// TODO: Continue development of filters saving mechanism
-			//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
-			//this.saveFiltersInURL(daoParams.f);
+		let daoParams = {
+			filters: this.concatAllActiveFilters(),
+			packageType: this.selectedPackageType.text,
+			sortBy: this.sorting.sortBy,
+			order: this.sorting.order
+		};
+		// TODO: Continue development of filters saving mechanism
+		//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
+		//this.saveFiltersInURL(daoParams.f);
 
-			let pkgFilter = _.find(daoParams.filters, {id: 'pkg'});
-			if (pkgFilter && pkgFilter.values[0]) {
-				this.$stateParams.query = pkgFilter.values[0];
-			}
-
-			this.refreshPackages({daoParams: daoParams}).then(() => {
-				this.tableViewOptions.setData(this.packages.list.data);
-				this.hasSelectedFilters = daoParams.filters.length > 0;
-			});
+		let pkgFilter = _.find(daoParams.filters, {id: 'pkg'});
+		if (pkgFilter && pkgFilter.values[0]) {
+			this.$stateParams.query = pkgFilter.values[0];
 		}
+		else {
+			this.$stateParams.query = null;
+		}
+
+
+		this.$pendingData = true;
+		this.getPackagesData(daoParams).then(() => {
+			this.tableViewOptions.setData(this.packages.list.data);
+			this.hasSelectedFilters = daoParams.filters.length > 0;
+			this.$pendingData = false;
+		});
 	}
 
 	concatAllActiveFilters() {
@@ -276,9 +332,11 @@ export default class PackagesController {
 //		this.$location.search({f: base64String});
 	}
 
+/*
 	getSavedFiltersFromUrl() {
 		return this.getSavedFiltersFromJson(this.decodeJSONFromBase64String(this.$stateParams.f));
 	}
+*/
 
 	calcPackageDownloads(e, row) {
 		e.stopPropagation();

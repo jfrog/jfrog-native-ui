@@ -1,27 +1,22 @@
 
 <packages-component
-        ng-if="$ctrl.packagesReady && $ctrl.subRouter.state === 'packages'"
-        package-types="$ctrl.packageTypes"
-        filters="$ctrl.filters"
-        packages="$ctrl.packages"
-        refresh-packages="$ctrl.refreshPackages(daoParams)"
-		get-package-downloads-count="$ctrl.refreshPackageDownloadsCount(daoParams)">
+        ng-if="$ctrl.subRouter.state === 'packages'"
+        get-package-types="$ctrl.getPackageTypes({daoParams})"
+        get-filters="$ctrl.getFilters({daoParams})"
+        get-packages="$ctrl.getPackages({daoParams})"
+		get-package-downloads-count="$ctrl.getPackageDownloadsCount({daoParams})">
 </packages-component>
 
 <package-component
         ng-if="$ctrl.subRouter.state === 'package'"
-        package-type="$ctrl.packageType"
-        get-package="$ctrl.getPackage({daoParams: daoParams})"
-        package="$ctrl.package"
-        get-manifest="$ctrl.manifestCb(daoParams)"
-		show-in-tree="$ctrl.showInTreeCb(pathParams)"
-        get-version-downloads-count="$ctrl.refreshVersionDownloadsCount(daoParams)">
+        get-package="$ctrl.getPackage({daoParams})"
+        get-manifest="$ctrl.getManifest({daoParams})"
+		show-in-tree="$ctrl.showInTree({pathParams})"
+        get-version-downloads-count="$ctrl.getVersionDownloadsCount({daoParams})">
 </package-component>
 
 <version-component
         ng-if="$ctrl.subRouter.state === 'version'"
-        package-type="$ctrl.packageType"
-        get-version="$ctrl.getVersion({daoParams: daoParams})"
-        package-name="$ctrl.daoParams.package"
+        get-version="$ctrl.getVersion({daoParams})"
         is-with-xray="$ctrl.isWithXray()">
 </version-component>

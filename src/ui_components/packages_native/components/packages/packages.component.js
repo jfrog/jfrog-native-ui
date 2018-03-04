@@ -6,10 +6,9 @@ export default class PackagesComponent {
         this.template = require('./packages.view.html');
         this.controller = PackagesController;
         this.bindings = {
-            packageTypes: '<',
-            packages: '<',
-            filters: '<',
-            refreshPackages: '&?',
+            getPackages: '&?',
+            getPackageTypes: '&?',
+            getFilters: '&?',
 	        getPackageDownloadsCount: '&?',
         };
     }

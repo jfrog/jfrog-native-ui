@@ -45,7 +45,7 @@
 			</jf-table-view>
 			<div class="no-filters-message"
 			     jf-disable-ng-animate
-			     ng-show="!$ctrl.hasSelectedFilters">
+			     ng-show="!$ctrl.hasSelectedFilters && !$ctrl.$pendingData">
 				<h1>Add search criteria to display image list</h1>
 			</div>
 		</div>
