@@ -12,7 +12,8 @@ export default class PackagesController {
 		this.fullTextService = JfFullTextService;
 		this.jFrogUIUtils = JFrogUIUtils;
 		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
-		this.sorting = {sortBy: 'name', order: 'asc'}
+		this.sorting = {sortBy: 'name', order: 'asc'};
+		this.ready = false;
 	}
 
 	$onInit() {
@@ -20,11 +21,15 @@ export default class PackagesController {
 
 		this.initPackagesViewData(this.$stateParams);
 
-		this.subRouter.on('params.change', (oldParams, newParams) => {
-			if (oldParams.packageType !== newParams.packageType || oldParams.query !== newParams.query || oldParams.repos !== newParams.repos) {
-				this.initPackagesViewData(this.$stateParams);
+		this.subRouter.listenForChanges(['packageType', 'query', 'repos'], 'packages', (oldP, newP) => {
+			this.initPackagesViewData(this.$stateParams);
+			if (!!oldP.query && !newP.query) {
+				this.initFilters();
+				this.getSelectedRepos();
+				this.getFilteredData();
 			}
-		}, this.$scope)
+		}, this.$scope);
+
 	}
 
 	getPackagesData(daoParams) {
@@ -38,8 +43,10 @@ export default class PackagesController {
 			order: daoParams.order || 'asc'
 		};
 
+		this.$pendingData = true;
 		return this.getPackages({daoParams: searchParams}).then((packages) => {
 			this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, packages);
+			this.$pendingData = false;
 		});
 	}
 
@@ -50,6 +57,7 @@ export default class PackagesController {
 			]).then(() => {
 				this.initSelectedPackageType();
 				this.refreshAll();
+				this.ready = true;
 			});
 		})
 	}
@@ -127,7 +135,6 @@ export default class PackagesController {
 		    .setColumns(this.getColumns())
 		    .showFilter(false)
 		    .showCounter(false)
-//		    .showHeaders(false)
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
 		    .setRowsPerPage('auto')
@@ -242,9 +249,6 @@ export default class PackagesController {
 			sortBy: this.sorting.sortBy,
 			order: this.sorting.order
 		};
-		// TODO: Continue development of filters saving mechanism
-		//daoParams.f = this.encodeJSONToBase64String(daoParams.filters);
-		//this.saveFiltersInURL(daoParams.f);
 
 		let pkgFilter = _.find(daoParams.filters, {id: 'pkg'});
 		if (pkgFilter && pkgFilter.values[0]) {
@@ -255,11 +259,9 @@ export default class PackagesController {
 		}
 
 
-		this.$pendingData = true;
 		this.getPackagesData(daoParams).then(() => {
 			this.tableViewOptions.setData(this.packages.list.data);
 			this.hasSelectedFilters = daoParams.filters.length > 0;
-			this.$pendingData = false;
 		});
 	}
 
@@ -296,47 +298,6 @@ export default class PackagesController {
 	goToPackage(packageName) {
 		this.subRouter.goto('package', {packageType: this.selectedPackageType.text, package: packageName})
 	}
-
-	//TODO: Export these methods to jfUiUtils after dev is finished
-	encodeJSONToBase64String(jsonObject) {
-		let jsonSting = JSON.stringify(jsonObject);
-		return btoa(jsonSting);
-	}
-
-	decodeJSONFromBase64String(encodedJsonSting) {
-		if (!encodedJsonSting) {
-			return [];
-		}
-		let jsonString = atob(encodedJsonSting);
-		return JSON.parse(jsonString);
-	}
-
-	getSavedFiltersFromJson(savedFiltersJson) {
-		let repos = [];
-		let otherFilters = [];
-		let selectedRepoTypeFilters = this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].filters;
-		_.forEach(savedFiltersJson, (savedFilter) => {
-			if (savedFilter.id === 'repo') {
-				repos = savedFilter.values;
-			} else {
-				let savedFilterName = _.findKey(selectedRepoTypeFilters, (v) => {
-					return v === savedFilter.id;
-				});
-				otherFilters[savedFilterName] = savedFilter.values[0];
-			}
-		});
-		return {repos: repos, otherFilters: otherFilters};
-	}
-
-	saveFiltersInURL(base64String) {
-//		this.$location.search({f: base64String});
-	}
-
-/*
-	getSavedFiltersFromUrl() {
-		return this.getSavedFiltersFromJson(this.decodeJSONFromBase64String(this.$stateParams.f));
-	}
-*/
 
 	calcPackageDownloads(e, row) {
 		e.stopPropagation();

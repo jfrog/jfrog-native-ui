@@ -1,19 +1,8 @@
-import {PACKAGE_NATIVE_CONSTANTS} from '../../constants/package.native.constants';
-
 export default class PackagesNativeController {
-	constructor($timeout, JFrogSubRouter, $q, $scope, ModelFactory) {
+	constructor(JFrogSubRouter, $scope) {
 		this.$scope = $scope;
-		this.$q = $q;
-		this.$timeout = $timeout;
-		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
-		this.ModelFactory = ModelFactory;
-
-		this.packagesReady = false;
-
 		this.JFrogSubRouter = JFrogSubRouter;
 	}
-
-
 
 	$onInit() {
 		this.initSubRouter();
@@ -24,6 +13,7 @@ export default class PackagesNativeController {
 			parentScope: this.$scope,
 			urlStructure: '/:packageType/:package/:version/?:repo&:repos&:query',
 			hotSyncUrl: true,
+			encodeSearchParamsAsBase64: 'state',
 			states: [
 				{
 					name: 'packages',

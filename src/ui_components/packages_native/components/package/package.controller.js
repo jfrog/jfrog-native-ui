@@ -27,14 +27,11 @@ export default class PackageController {
 				this.initTable();
 			}
 
-			this.subRouter.on('params.change', (oldParams, newParams) => {
-				if (this.subRouter.state === 'package' && (oldParams.package !== newParams.package || oldParams.repos !== newParams.repos)) {
-					this.getPackageData().then(() => {
-						this.tableViewOptions.setData(this.package.versions);
-					})
-
-				}
-			}, this.$scope)
+			this.subRouter.listenForChanges(['package', 'repos'], 'package', () => {
+				this.getPackageData().then(() => {
+					this.tableViewOptions.setData(this.package.versions);
+				})
+			}, this.$scope);
 
 			this.summaryColumns = this.getSummaryColumns();
 		})

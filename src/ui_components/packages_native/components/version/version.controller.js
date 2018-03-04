@@ -35,11 +35,9 @@ export default class VersionController {
 				this.summaryColumns = this.getSummaryColumns();
 			}
 
-			this.subRouter.on('params.change', (oldParams, newParams) => {
-				if ((oldParams.package !== newParams.package || oldParams.version !== newParams.version) && newParams.repo && this.subRouter.state === 'version' ) {
-					this.getVersionData(this.$stateParams);
-				}
-			}, this.$scope)
+			this.subRouter.listenForChanges(['package', 'version'], 'version', () => {
+				this.getVersionData(this.$stateParams);
+			}, this.$scope);
 
 		})
 	}
