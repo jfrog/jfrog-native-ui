@@ -4,7 +4,7 @@
 	</label>
 	<div class="main-box"
 	     ng-class="{'selected-view' : $ctrl.selectedItems().length, 'disabled-style': $ctrl.isMainFilterDisabled()}">
-		<span>
+		<span ng-click="$ctrl.isMainFilterDisabled() && $ctrl.onClick()">
 			<input type="text"
 			       class="input-text"
 			       jf-disable-ng-animate
@@ -21,8 +21,8 @@
 			<i class="icon icon-clear"
 			   ng-if="$ctrl.selectedItems().length"
 			   ng-click="$ctrl.clearSelection()"></i>
-			<i class="icon icon-addons-arrow-right pull-right" ng-click="$ctrl.onClick()"></i>
-			<i class="icon icon-search" ng-click="$ctrl.onSubmit()"></i>
+			<i class="icon icon-addons-arrow-right pull-right" ng-click="!$ctrl.isMainFilterDisabled() && $ctrl.onClick()"></i>
+			<i class="icon icon-search" ng-click="$ctrl.onSubmit(); $event.stopPropagation();"></i>
 		</span>
 	</div>
 	<div ng-if="$ctrl.opened"
