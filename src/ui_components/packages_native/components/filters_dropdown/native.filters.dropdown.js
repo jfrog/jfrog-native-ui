@@ -3,7 +3,7 @@ export default class NativeFiltersDropdown {
 		this.template = require('./native.filters.dropdown.view.html');
 		this.controller = NativeFiltersDropdownController;
 		this.bindings = {
-			title: '@',
+			initialTitle: '@',
 			label: '@',
 			filterPlaceholder: '@',
 			repos: '=',
@@ -79,7 +79,7 @@ class NativeFiltersDropdownController {
 	getSelectedForTitle() {
 		let selected = this.selectedItems();
 		if (!selected || !selected.length) {
-			return this.title;
+			return this.initialTitle;
 		}
 		return selected.join('; ');
 	}

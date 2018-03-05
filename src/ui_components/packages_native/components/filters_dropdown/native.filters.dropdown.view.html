@@ -75,12 +75,14 @@
 			</div>
 			<div class="batch-action-buttons"
 			     ng-if="$ctrl.repos.length">
-				<button class="btn btn-default"
+				<button type="button"
+						class="btn btn-default"
 				        ng-click="$ctrl.selectAll()">
 					<i class="icon icon-notif-success"></i>
 					Select All
 				</button>
 				<button class="btn btn-default"
+				        type="button"
 				        ng-click="$ctrl.unSelectAll()">
 					<i class="icon icon-trashcan"></i>
 					Clear All
@@ -93,10 +95,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="batch-actions">
-			<button class="btn btn-primary pull-right"
+		<div class="batch-actions pull-right">
+			<button class="btn btn-secondary"
+			        type="button"
 					ng-click="$ctrl.clearSelection()">
 				Clear Form
+			</button>
+			<button class="btn btn-primary"
+			        type="submit"
+					ng-click="$ctrl.onSubmit()">
+				Search
 			</button>
 		</div>
 	</div>
