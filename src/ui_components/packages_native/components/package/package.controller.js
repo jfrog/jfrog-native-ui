@@ -40,16 +40,38 @@ export default class PackageController {
 	getPackageData(additionalDaoParams) {
 		let daoParams = _.extend({}, this.$stateParams, additionalDaoParams);
 		delete daoParams.repos;
+		daoParams.repoFilter = [];
 		if (this.$stateParams.repos) {
-			daoParams.repoFilter = [{
+			daoParams.repoFilter.push({
 				id: 'repo',
 				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
 				values: this.$stateParams.repos.split(',')
-			}];
+			});
 		}
-		else daoParams.repoFilter = [];
+		if (this.$stateParams.versionQuery) {
+			daoParams.repoFilter.push({
+				id: 'version',
+				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+				values: [this.$stateParams.versionQuery]
+			});
+		}
+
+		this.calcPackageDownloads();
+
 		return this.getPackage({daoParams}).then((pkg) => {
+			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
 			this.package = this.ModelFactory.getPackageMedel(this.$stateParams.packageType, pkg);
+		});
+	}
+
+	calcPackageDownloads() {
+		let daoParams = {
+			package: this.$stateParams.package,
+			packageType: this.$stateParams.packageType
+		};
+		this.getPackageDownloadsCount({daoParams}).then((response) => {
+			if (this.package) this.package.totalDownloads = response.totalDownloads;
+			this.totalDownloadsForPackage = response.totalDownloads;
 		});
 	}
 
@@ -254,4 +276,5 @@ export default class PackageController {
 			row.calculated = true;
 		});
 	}
+
 }

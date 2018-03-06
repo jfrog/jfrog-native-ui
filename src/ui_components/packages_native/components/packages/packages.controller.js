@@ -21,9 +21,9 @@ export default class PackagesController {
 
 		this.initPackagesViewData(this.$stateParams);
 
-		this.subRouter.listenForChanges(['packageType', 'query', 'repos'], 'packages', (oldP, newP) => {
+		this.subRouter.listenForChanges(['packageType', 'packageQuery', 'versionQuery', 'repos'], 'packages', (oldP, newP) => {
 			this.initPackagesViewData(this.$stateParams);
-			if (!!oldP.query && !newP.query) {
+			if (!!oldP.packageQuery && !newP.packageQuery || !!oldP.versionQuery && !newP.versionQuery) {
 				this.initFilters();
 				this.getSelectedRepos();
 				this.getFilteredData();
@@ -118,12 +118,12 @@ export default class PackagesController {
 		this.moreFiltersList = _.map(this.filters.extraFilters, (value) => {
 			return {
 				text: value,
-				isSelected: value === 'Image Name' ? !!this.$stateParams.query : false,
-				inputTextValue: value === 'Image Name' ? this.$stateParams.query : ''
+				isSelected: value === 'Image Name' ? !!this.$stateParams.packageQuery : value === 'Tag' ? !!this.$stateParams.versionQuery : false,
+				inputTextValue: value === 'Image Name' ? this.$stateParams.packageQuery : value === 'Tag' ? this.$stateParams.versionQuery : ''
 			};
 		});
 
-		if (this.$stateParams.query || this.$stateParams.repos) {
+		if (this.$stateParams.packageQuery || this.$stateParams.versionQuery || this.$stateParams.repos) {
 			this.getSelectedRepos();
 			this.getFilteredData();
 		}
@@ -139,6 +139,7 @@ export default class PackagesController {
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
 		    .setRowsPerPage('auto')
 		    .setRowHeight(76,25)
+		    .alwaysShowSortingArrows()
 		    .setEmptyTableText(`No ${this.packageAlias}s found. You can broaden your search by using the * wildcard`)
 
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
@@ -168,7 +169,7 @@ export default class PackagesController {
 			field: 'name',
 			header: 'Name',
 			width: '20%',
-			headerCellTemplate: '<div></div>',
+			headerCellTemplate: '<div style="padding-right:0px"></div>',
 			cellTemplate: `<div class="name">
                                 {{row.entity.name}}
                             </div>`
@@ -176,7 +177,7 @@ export default class PackagesController {
 			field: 'numOfRepos',
 			header: 'Repositories Count',
 			width: '10%',
-			headerCellTemplate: '<div></div>',
+			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: `<div>
                                 {{row.entity.numOfRepos}} {{row.entity.numOfRepos===1 ? 'Repository' : 'Repositories'}}
                            </div>`
@@ -184,26 +185,26 @@ export default class PackagesController {
 			field: 'repositories',
 			header: 'Repositories',
 			sortable: false,
-			headerCellTemplate: '<div></div>',
+			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: require('./cellTemplates/repositories.cell.template.html'),
 			width: '20%'
 		}, {
 			field: 'downloadsCount',
 			header: 'Download Count',
 			sortable: false,
-			headerCellTemplate: '<div></div>',
+			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
 			width: '20%'
 		}, {
 			field: 'versionsCount',
 			header: 'Versions Count',
-			headerCellTemplate: '<div></div>',
+			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: require('./cellTemplates/versions.count.cell.template.html'),
 			width: '10%'
 		}, {
 			field: 'lastModified',
 			header: 'Last Modified',
-			headerCellTemplate: '<div></div>',
+			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: `<span jf-tooltip-on-overflow>
                             {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
                        </span>`,
@@ -252,10 +253,18 @@ export default class PackagesController {
 
 		let pkgFilter = _.find(daoParams.filters, {id: 'pkg'});
 		if (pkgFilter && pkgFilter.values[0]) {
-			this.$stateParams.query = pkgFilter.values[0];
+			this.$stateParams.packageQuery = pkgFilter.values[0];
 		}
 		else {
-			this.$stateParams.query = null;
+			this.$stateParams.packageQuery = null;
+		}
+
+		let versionFilter = _.find(daoParams.filters, {id: 'version'});
+		if (versionFilter && versionFilter.values[0]) {
+			this.$stateParams.versionQuery = versionFilter.values[0];
+		}
+		else {
+			this.$stateParams.versionQuery = null;
 		}
 
 
@@ -301,7 +310,7 @@ export default class PackagesController {
 
 	calcPackageDownloads(e, row) {
 		e.stopPropagation();
-		if (!this.getPackageDownloadsCount || !typeof this.getPackageDownloadsCount === 'function') {
+		if (!this.getPackageDownloadsCount || !(typeof this.getPackageDownloadsCount === 'function')) {
 			return;
 		}
 

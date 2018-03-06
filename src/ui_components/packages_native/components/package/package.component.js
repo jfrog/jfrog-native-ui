@@ -10,6 +10,7 @@ export default class PackageComponent {
 	        getManifest: '&?',
 	        isWithXray: '&?',
 	        showInTree: '&?',
+	        getPackageDownloadsCount: '&?',
 	        getVersionDownloadsCount: '&?'
         };
     }
