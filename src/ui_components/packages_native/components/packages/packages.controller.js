@@ -169,7 +169,7 @@ export default class PackagesController {
 			field: 'name',
 			header: 'Name',
 			width: '20%',
-			headerCellTemplate: '<div style="padding-right:0px"></div>',
+			headerCellTemplate: '<div style="padding-right:30px"></div>',
 			cellTemplate: `<div class="name">
                                 {{row.entity.name}}
                             </div>`
