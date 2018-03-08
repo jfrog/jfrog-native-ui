@@ -38,6 +38,11 @@ export default class PackageController {
 	}
 
 	getPackageData(additionalDaoParams) {
+
+		additionalDaoParams = additionalDaoParams || {};
+		additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
+		additionalDaoParams.order = additionalDaoParams.order || 'desc';
+
 		let daoParams = _.extend({}, this.$stateParams, additionalDaoParams);
 		delete daoParams.repos;
 		daoParams.repoFilter = [];
@@ -94,6 +99,7 @@ export default class PackageController {
 		    .setRowsPerPage(20)
 		    .setEmptyTableText(`No ${this.versionAlias}s`)
 		    .setActions(this.getActions())
+		    .sortBy('lastModified').reverseSortingDir()
 		    .setData(this.package.versions);
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
