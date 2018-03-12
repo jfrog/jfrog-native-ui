@@ -1,8 +1,13 @@
 <div class="versions-count">
-    <div class="icon-wrapper">
-        <i class="icon"
-           ng-class="appScope.$ctrl.versionIcon">
-        </i>
+    <div ng-if="row.entity.calculated">
+        <div class="icon-wrapper">
+            <i class="icon"
+               ng-class="appScope.$ctrl.versionIcon">
+            </i>
+        </div>
+        {{row.entity.versionsCount || 0 }} {{appScope.$ctrl.versionAlias}}{{row.entity.versionsCount === 1 ? '' : 's'}}
     </div>
-    {{row.entity.versionsCount || 0 }} {{appScope.$ctrl.versionAlias}}{{row.entity.versionsCount === 1 ? '' : 's'}}
+    <div ng-if="!row.entity.calculated">
+        --
+    </div>
 </div>

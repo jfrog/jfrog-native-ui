@@ -11,6 +11,7 @@ export default class PackagesNativeComponent {
             getFilters: '&?',
             getPackages: '&?',
             getPackage: '&?',
+	        getPackageExtraInfo: '&?',
 	        getPackageDownloadsCount: '&?',
             getVersion: '&?',
 	        getVersionDownloadsCount: '&?',

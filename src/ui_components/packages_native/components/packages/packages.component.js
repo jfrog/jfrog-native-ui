@@ -9,6 +9,7 @@ export default class PackagesComponent {
             getPackages: '&?',
             getPackageTypes: '&?',
             getFilters: '&?',
+	        getPackageExtraInfo: '&?',
 	        getPackageDownloadsCount: '&?',
         };
     }

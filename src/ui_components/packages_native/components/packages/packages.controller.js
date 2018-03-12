@@ -145,6 +145,9 @@ export default class PackagesController {
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
 
+		this.tableViewOptions.on('row.in.view', row => {
+			if (row.downloadsCount === undefined) this.calcPackageDownloads(null, row);
+		});
 	}
 
 	onSortChange(field, dir) {
@@ -309,8 +312,9 @@ export default class PackagesController {
 	}
 
 	calcPackageDownloads(e, row) {
-		e.stopPropagation();
-		if (!this.getPackageDownloadsCount || !(typeof this.getPackageDownloadsCount === 'function')) {
+		if (row.calculated || row.calculationPending) return;
+		if (e) e.stopPropagation();
+		if (!this.getPackageExtraInfo || !(typeof this.getPackageExtraInfo === 'function')) {
 			return;
 		}
 
@@ -319,9 +323,13 @@ export default class PackagesController {
 			package: pkgName,
 			packageType: this.selectedPackageType.text
 		};
-		this.getPackageDownloadsCount({daoParams: daoParams}).then((response) => {
+		row.calculationPending = true;
+		this.getPackageExtraInfo({daoParams: daoParams}).then((response) => {
 			row.downloadsCount = response.totalDownloads;
+			row.lastModified = response.lastModified;
+			row.versionsCount = response.totalVersions;
 			row.calculated = true;
+			row.calculationPending = false;
 		});
 	}
 
