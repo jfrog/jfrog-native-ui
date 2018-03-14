@@ -277,9 +277,11 @@ export default class PackageController {
 			packageType: this.$stateParams.packageType,
 			version: row.name,
 		};
+		row.pendingCalculation = true;
 		this.getVersionDownloadsCount({daoParams: daoParams}).then((response) => {
 			row.downloadsCount = response.totalDownloads;
 			row.calculated = true;
+			row.pendingCalculation = false;
 		});
 	}
 

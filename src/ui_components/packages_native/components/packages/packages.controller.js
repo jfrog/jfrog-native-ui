@@ -21,19 +21,20 @@ export default class PackagesController {
 
 		this.initPackagesViewData(this.$stateParams);
 
-		this.subRouter.listenForChanges(['packageType', 'packageQuery', 'versionQuery', 'repos'], 'packages', (oldP, newP) => {
-			this.initPackagesViewData(this.$stateParams);
-			if (!!oldP.packageQuery && !newP.packageQuery || !!oldP.versionQuery && !newP.versionQuery) {
-				this.initFilters();
-				this.getSelectedRepos();
-				this.getFilteredData();
-			}
-		}, this.$scope);
+		this.subRouter.listenForChanges(['packageType', 'packageQuery', 'versionQuery', 'repos'], 'packages',
+			(oldP, newP) => {
+				this.initPackagesViewData(this.$stateParams);
+				if (!!oldP.packageQuery && !newP.packageQuery || !!oldP.versionQuery && !newP.versionQuery) {
+					this.initFilters();
+					this.getSelectedRepos();
+					this.getFilteredData();
+				}
+			}, this.$scope);
 
 	}
 
 	getPackagesData(daoParams) {
-		if(!daoParams.filters || !daoParams.filters.length) {
+		if (!daoParams.filters || !daoParams.filters.length) {
 			return this.initEmptyPackagesPage(daoParams);
 		}
 		let searchParams = {
@@ -107,7 +108,7 @@ export default class PackagesController {
 	}
 
 	initFilters() {
-//		let savedFilters = this.getSavedFiltersFromUrl();
+		//		let savedFilters = this.getSavedFiltersFromUrl();
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
 				text: value,
@@ -138,7 +139,7 @@ export default class PackagesController {
 		    .showPagination(false)
 		    .setPaginationMode(this.tableViewOptions.VIRTUAL_SCROLL)
 		    .setRowsPerPage('auto')
-		    .setRowHeight(76,25)
+		    .setRowHeight(76, 25)
 		    .alwaysShowSortingArrows()
 		    .setEmptyTableText(`No ${this.packageAlias}s found. You can broaden your search by using the * wildcard`)
 
@@ -146,7 +147,7 @@ export default class PackagesController {
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
 
 		this.tableViewOptions.on('row.in.view', row => {
-			if (row.downloadsCount === undefined) this.calcPackageDownloads(null, row);
+			if (row.downloadsCount === undefined) this.calcPackageExtraData(row);
 		});
 	}
 
@@ -201,12 +202,14 @@ export default class PackagesController {
 		}, {
 			field: 'versionsCount',
 			header: 'Versions Count',
+			sortable: false,
 			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: require('./cellTemplates/versions.count.cell.template.html'),
 			width: '10%'
 		}, {
 			field: 'lastModified',
 			header: 'Last Modified',
+			sortable: false,
 			headerCellTemplate: '<div style="padding-right:0"></div>',
 			cellTemplate: `<span jf-tooltip-on-overflow>
                             {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
@@ -293,7 +296,8 @@ export default class PackagesController {
 
 	onRepoFilterChange() {
 		this.getSelectedRepos();
-		this.$stateParams.repos = this.selectedRepos && this.selectedRepos[0] && this.selectedRepos[0].values ? this.selectedRepos[0].values.join(',') : null;
+		this.$stateParams.repos = this.selectedRepos && this.selectedRepos[0] && this.selectedRepos[0].values ? this.selectedRepos[0].values.join(
+			',') : null;
 	}
 
 	onExtraFilterChange() {
@@ -311,9 +315,9 @@ export default class PackagesController {
 		this.subRouter.goto('package', {packageType: this.selectedPackageType.text, package: packageName})
 	}
 
-	calcPackageDownloads(e, row) {
+	calcPackageExtraData(row) {
 		if (row.calculated || row.calculationPending) return;
-		if (e) e.stopPropagation();
+
 		if (!this.getPackageExtraInfo || !(typeof this.getPackageExtraInfo === 'function')) {
 			return;
 		}
@@ -325,12 +329,36 @@ export default class PackagesController {
 		};
 		row.calculationPending = true;
 		this.getPackageExtraInfo({daoParams: daoParams}).then((response) => {
-			row.downloadsCount = response.totalDownloads;
+			if (response.totalDownloads !== undefined) {
+				row.downloadsCount = response.totalDownloads;
+			}
+			else {
+				row.manualOnDemendDownloadsCount = true;
+			}
 			row.lastModified = response.lastModified;
 			row.versionsCount = response.totalVersions;
 			row.calculated = true;
 			row.calculationPending = false;
 		});
+	}
+
+	calcPackageDownloads(e, row) {
+		e.stopPropagation();
+		if (!this.getPackageDownloadsCount || !(typeof this.getPackageDownloadsCount === 'function')) {
+			return;
+		}
+
+		let pkgName = row.name;
+		let daoParams = {
+			package: pkgName,
+			packageType: this.selectedPackageType.text
+		};
+		this.getPackageDownloadsCount({daoParams: daoParams}).then((response) => {
+			row.downloadsCount = response.totalDownloads;
+			delete row.manualOnDemendDownloadsCount;
+		});
+
+
 	}
 
 }
