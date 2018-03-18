@@ -45,7 +45,9 @@ export default class VersionController {
 	getVersionData(daoParams) {
 		return this.getVersion({daoParams: daoParams}).then((version) => {
 			this.version = this.ModelFactory.getVersionMedel(daoParams.packageType, version);
-		});
+		}).catch(() => {
+			delete this.version;
+		})
 	}
 
 	goBack() {
