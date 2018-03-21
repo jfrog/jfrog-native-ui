@@ -265,8 +265,8 @@ export default class PackageController {
 		}];
 	}
 
-	calcVersionDownloads(e, row) {
-		e.stopPropagation();
+	calcVersionDownloads(row, e) {
+		if (e) e.stopPropagation();
 		if (!this.getVersionDownloadsCount || !typeof this.getVersionDownloadsCount === 'function') {
 			return;
 		}

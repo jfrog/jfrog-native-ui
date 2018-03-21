@@ -1,9 +1,9 @@
-<div class="downloads-count no-cm-action"
+<div class="downloads-count"
      disable-tooltip-on-overflow>
 	<i class="icon icon-download"></i>
-	<span class="show-download-count"
+	<span class="show-download-count no-cm-action"
 	      jf-tooltip="Click to calculate"
-	      ng-click="appScope.$ctrl.calcVersionDownloads($event,row.entity)"
+	      ng-click="appScope.$ctrl.calcVersionDownloads(row.entity, $event)"
 	      ng-if="!row.entity.calculated && !row.entity.pendingCalculation">
         Show downloads count
     </span>
