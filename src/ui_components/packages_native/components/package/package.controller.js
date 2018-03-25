@@ -150,7 +150,7 @@ export default class PackageController {
 		return [{
 			field: 'name',
 			header: `${this.versionAlias} Name`,
-			width: '20%',
+			width: '30%',
 			cellTemplate: require('./cellTemplates/name.cell.template.html')
 		}, {
 			field: 'repo',
@@ -167,15 +167,15 @@ export default class PackageController {
 			cellTemplate: `<div class="last-modified">
                                 {{ row.entity.lastModified | date : 'medium'}}
                             </div>`,
-			width: '25%'
-		}, {
+			width: '30%'
+		}/*, {
 			field: 'size',
 			header: 'Size',
 			cellTemplate: `<div class="size">
 								{{ row.entity.size.length ? row.entity.size : (row.entity.size | filesize)}}
                            </div>`,
 			width: '15%'
-		}, {
+		}*/, {
 			field: 'downloadsCount',
 			header: 'Downloads',
 			sortable: false,
