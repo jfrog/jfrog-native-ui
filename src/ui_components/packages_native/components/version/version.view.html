@@ -10,7 +10,7 @@
             </h1>
 
             <div class="back-link">
-                <a href ng-click="$ctrl.goBack()">
+                <a href ng-click="$ctrl.goBack()" ng-show="$ctrl.versionAlias">
                     <i class="icon icon-addons-arrow-left"></i>
                     Back to list of {{$ctrl.versionAlias.toLowerCase()}}s
                 </a>

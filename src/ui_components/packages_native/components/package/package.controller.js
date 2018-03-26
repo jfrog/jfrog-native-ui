@@ -159,6 +159,7 @@ export default class PackageController {
 		}, {
 			field: 'packageId',
 			header: `${this.packageAlias} ID`,
+			sortable: false,
 			cellTemplate: require('./cellTemplates/package.id.cell.template.html'),
 			width: '20%'
 		}, {

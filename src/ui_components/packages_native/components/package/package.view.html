@@ -9,7 +9,7 @@
             </h1>
 
             <div class="back-link">
-                <a href ng-click="$ctrl.goBack()">
+                <a href ng-click="$ctrl.goBack()" ng-show="$ctrl.packageAlias">
                     <i class="icon icon-addons-arrow-left"></i>
                     Back to list of {{$ctrl.packageAlias.toLowerCase()}}s
                 </a>
