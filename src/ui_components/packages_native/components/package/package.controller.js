@@ -158,7 +158,7 @@ export default class PackageController {
 			width: '20%'
 		}, {
 			field: 'packageId',
-			header: `${this.packageAlias} ID`,
+			header: `Digest`,
 			sortable: false,
 			cellTemplate: require('./cellTemplates/package.id.cell.template.html'),
 			width: '20%'
@@ -180,7 +180,7 @@ export default class PackageController {
 			field: 'downloadsCount',
 			header: 'Downloads',
 			sortable: false,
-			width: '20%',
+			width: '25%',
 			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
 		},
 			// TODO: Xray is for phase 2 $ctrl.withXray

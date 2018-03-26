@@ -37,12 +37,18 @@ export default class PackagesController {
 		if (!daoParams.filters || !daoParams.filters.length) {
 			return this.initEmptyPackagesPage(daoParams);
 		}
+
 		let searchParams = {
 			packageType: daoParams.packageType,
 			filters: daoParams.filters || [],
 			sortBy: daoParams.sortBy || 'name',
 			order: daoParams.order || 'asc'
 		};
+
+		let pkgFilter = _.find(searchParams.filters, {id: 'pkg'});
+		if (pkgFilter && pkgFilter.values[0] && !pkgFilter.values[0].endsWith('*')) {
+			pkgFilter.values[0] = pkgFilter.values[0] + '*'
+		}
 
 		this.$pendingData = true;
 		return this.getPackages({daoParams: searchParams}).then((packages) => {
