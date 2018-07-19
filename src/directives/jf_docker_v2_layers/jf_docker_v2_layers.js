@@ -7,6 +7,9 @@ class jfDockerV2LayersController {
         this.selectedLayer = null;
         this.layerDirectives = [];
 
+    }
+
+    $onInit() {
         this.controller.layersController = this;
     }
 

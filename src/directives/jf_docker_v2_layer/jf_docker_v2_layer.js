@@ -13,6 +13,9 @@ import COLOR_MAP from './cmd_color_map.js';
 class jfDockerV2LayerController {
 
     constructor() {
+    }
+
+    $onInit() {
         this.data.commandText = this.data.command + ' ' + this.data.commandText;
         this.selected = false;
         this.COLOR_MAP = COLOR_MAP;

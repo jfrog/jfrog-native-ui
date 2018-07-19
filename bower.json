@@ -13,11 +13,11 @@
     "!LICENSE"
   ],
   "dependencies": {
-    "angular": "1.5.11",
-    "jfrog-ui-essentials": "1.2.14"
+    "angular": "1.6.10",
+    "jfrog-ui-essentials": "2.0.0"
   },
   "resolutions": {
-    "angular": "1.5.11",
+    "angular": "1.7.2",
     "jquery": "3.2.1",
     "codemirror": "5.0.0"
   }
