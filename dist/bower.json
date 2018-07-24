@@ -1,6 +1,6 @@
 {
   "name": "jfrog-native-ui",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "homepage": "http://www.jfrog.com",
   "description": "JFrog Native UI",
   "license": "AGPL-3.0",
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "angular": "1.6.10",
-    "jfrog-ui-essentials": "2.0.0"
+    "jfrog-ui-essentials": "2.0.1"
   },
   "resolutions": {
     "angular": "1.7.2",
