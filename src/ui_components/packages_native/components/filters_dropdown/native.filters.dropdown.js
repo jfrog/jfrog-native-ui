@@ -3,7 +3,7 @@ export default class NativeFiltersDropdown {
 		this.template = require('./native.filters.dropdown.view.html');
 		this.controller = NativeFiltersDropdownController;
 		this.bindings = {
-			initialTitle: '@',
+			initialTitle: '=',
 			label: '@',
 			filterPlaceholder: '@',
 			repos: '=',

@@ -10,6 +10,6 @@ export default class PackageListFiltersModel extends BaseModel {
         super(data);
         this.repos = data.results;
         this.reposCount = data.resultsCount;
-        this.extraFilters = Object.keys(PACKAGE_NATIVE_CONSTANTS.typeSpecific[packageType].filters);
+        this.extraFilters = PACKAGE_NATIVE_CONSTANTS.typeSpecific[packageType].filters;
     }
 }

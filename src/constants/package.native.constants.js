@@ -8,7 +8,7 @@ export const PACKAGE_NATIVE_CONSTANTS = {
                 headerCellTemplate: '<div style="padding-right:30px"></div>',
                 cellTemplate: `<div class="name">
                                 {{row.entity.name}}
-                            </div>`
+                               </div>`
             },
             numOfRepos: {
                 header: 'Repositories Count',
@@ -16,7 +16,7 @@ export const PACKAGE_NATIVE_CONSTANTS = {
                 headerCellTemplate: '<div style="padding-right:0"></div>',
                 cellTemplate: `<div>
                                 {{row.entity.numOfRepos}} {{row.entity.numOfRepos===1 ? 'Repository' : 'Repositories'}}
-                           </div>`
+                               </div>`
             },
             repositories: {
                 header: 'Repositories',
@@ -44,8 +44,8 @@ export const PACKAGE_NATIVE_CONSTANTS = {
                 sortable: false,
                 headerCellTemplate: '<div style="padding-right:0"></div>',
                 cellTemplate: `<span jf-tooltip-on-overflow>
-                            {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
-                       </span>`,
+                                    {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
+                               </span>`,
                 width: '20%'
             }
         }
@@ -87,13 +87,21 @@ export const PACKAGE_NATIVE_CONSTANTS = {
                 version: 'icon-docker-tags'
             },
             filters: {
-                'Package Name': 'pkg',
-                'Version': 'version',
+                'Package Name': 'npmName',
+                'Version': 'npmVersion',
                 'Repository': 'repo',
-                'Keyword': 'keyword',
-                'Scope': 'scope',
-                'Checksum': 'checksum',
+                'Keyword': 'npmKeywords',
+                'Scope': 'npmScope',
+                'Checksum': 'npmChecksum',
             },
-		}
+            packagesTableColumns: [
+                'name',
+                'numOfRepos',
+                'repositories',
+                'downloadsCount',
+                'versionsCount',
+                'lastModified',
+            ]
+        }
 	}
 };

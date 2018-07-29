@@ -90,7 +90,6 @@ export default class PackagesController {
 	refreshFilters(daoParams) {
 		return this.getFilters({daoParams: daoParams}).then((filters) => {
 			this.filters = this.ModelFactory.getFiltersModel(daoParams.packageType, filters);
-            console.log(this.filters, '???');
         });
 	}
 
@@ -130,13 +129,16 @@ export default class PackagesController {
 			};
 		});
 
-		this.moreFiltersList = _.map(this.filters.extraFilters, (value) => {
+		this.moreFiltersList = _.map(Object.keys(this.filters.extraFilters), (value) => {
 			return {
 				text: value,
+                id: this.filters.extraFilters[value],
 				isSelected: value === 'Image Name' ? !!this.$stateParams.packageQuery : value === 'Tag' ? !!this.$stateParams.versionQuery : false,
 				inputTextValue: value === 'Image Name' ? this.$stateParams.packageQuery : value === 'Tag' ? this.$stateParams.versionQuery : ''
 			};
 		});
+
+		this.initialDropDownPlaceholder = this.moreFiltersList[0].text;
 
 		if (this.$stateParams.packageQuery || this.$stateParams.versionQuery || this.$stateParams.repos) {
 			this.getSelectedRepos();
@@ -161,7 +163,7 @@ export default class PackagesController {
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
 
 		this.tableViewOptions.on('row.in.view', row => {
-			if (row.downloadsCount === undefined) this.calcPackageExtraData(row);
+//			if (row.downloadsCount === undefined) this.calcPackageExtraData(row);
 		});
 	}
 
@@ -232,7 +234,7 @@ export default class PackagesController {
 			order: this.sorting.order
 		};
 
-		let pkgFilter = _.find(daoParams.filters, {id: 'pkg'});
+        let pkgFilter = _.find(daoParams.filters, {id: this.moreFiltersList[0].id});
 		if (pkgFilter && pkgFilter.values[0]) {
 			this.$stateParams.packageQuery = pkgFilter.values[0];
 		}

@@ -13,7 +13,7 @@ export default class PackagesNativeController {
 			parentScope: this.$scope,
 			urlStructure: '/:packageType/:package/:version/?:repo&:repos&:packageQuery&:versionQuery',
 			hotSyncUrl: true,
-			encodeSearchParamsAsBase64: 'state',
+//			encodeSearchParamsAsBase64: 'state',
 			states: [
 				{
 					name: 'packages',
