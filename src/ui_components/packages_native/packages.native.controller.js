@@ -31,7 +31,7 @@ export default class PackagesNativeController {
 			onInit: () => {
 //				console.log('Sub Router onInit')
 				if (!this.subRouter.params.packageType) {
-					this.subRouter.goto('packages', {packageType: 'docker'});
+                    this.subRouter.goto('packages', {packageType: 'docker'});
 				}
 			},
 			onChangeFromUrl: (oldParams, newParams) => {
@@ -46,7 +46,7 @@ export default class PackagesNativeController {
 					this.subRouter.goto('package', {packageType: params.packageType, package: params.package});
 				}
 				else {
-					this.subRouter.goto('packages', {packageType: 'docker'});
+                    this.subRouter.goto('packages', {packageType: 'docker'});
 				}
 			}
 		})

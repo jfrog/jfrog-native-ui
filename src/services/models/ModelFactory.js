@@ -5,19 +5,19 @@ export default class ModelFactory {
 		this.MODELS = MODELS;
 	}
 
-	getPackageListMedel(packageType, data) {
+	getPackageListModel(packageType, data) {
 		return new this.MODELS[packageType].packages(data);
 	}
 
-	getPackageMedel(packageType, data) {
+	getPackageModel(packageType, data) {
 		return new this.MODELS[packageType].package(data);
 	}
 
-	getVersionMedel(packageType, data) {
+	getVersionModel(packageType, data) {
 		return new this.MODELS[packageType].version(data);
 	}
 
-	getFiltersMedel(packageType, data) {
-		return new this.MODELS[packageType].filters(data);
+	getFiltersModel(packageType, data) {
+		return new this.MODELS.common.filters(data, packageType);
 	}
 }

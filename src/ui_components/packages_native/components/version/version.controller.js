@@ -14,13 +14,13 @@ export default class VersionController {
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.alias
+			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.package
 		);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].version.alias
+			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.version
 		);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.icon;
-		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].version.icon;
+		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.package;
+		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.version;
 	}
 
 	$onInit() {
@@ -44,7 +44,7 @@ export default class VersionController {
 
 	getVersionData(daoParams) {
 		return this.getVersion({daoParams: daoParams}).then((version) => {
-			this.version = this.ModelFactory.getVersionMedel(daoParams.packageType, version);
+			this.version = this.ModelFactory.getVersionModel(daoParams.packageType, version);
 		}).catch(() => {
 			delete this.version;
 		})

@@ -52,28 +52,36 @@ export default class PackagesController {
 
 		this.$pendingData = true;
 		return this.getPackages({daoParams: searchParams}).then((packages) => {
-			this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, packages);
+			this.packages.list = this.ModelFactory.getPackageListModel(daoParams.packageType, packages);
 			this.$pendingData = false;
 		});
 	}
 
 	initPackagesViewData(daoParams) {
-		this.refreshPackageTypes(daoParams).then(() => {
+        this.refreshPackageTypes(daoParams).then(() => {
 			this.$q.all([
 				this.refreshFilters(daoParams),
 			]).then(() => {
 				this.initSelectedPackageType();
 				this.refreshAll();
 				this.ready = true;
-			});
+			}).catch(e => console.error(e))
 		})
 	}
 
 	refreshPackageTypes(daoParams) {
 		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
-			this.packageTypes = packageTypes;
-			if (!this.packageTypes[this.subRouter.params.packageType]) {
-				this.subRouter.params.packageType = _.find(this.packageTypes, {disabled: false}).text;
+            packageTypes = _.map(packageTypes, pt => {
+                if (!this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[pt.value] || this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[pt.value].disabled) {
+                    pt.disabled = true;
+                }
+                return pt;
+            })
+
+            this.packageTypes = _.sortBy(packageTypes, pt => !!pt.disabled)
+
+            if (!_.find(this.packageTypes, {value: this.subRouter.params.packageType})) {
+                this.subRouter.params.packageType = _.find(this.packageTypes, pt => !pt.disabled).value;
 			}
 
 		});
@@ -81,40 +89,40 @@ export default class PackagesController {
 
 	refreshFilters(daoParams) {
 		return this.getFilters({daoParams: daoParams}).then((filters) => {
-			this.filters = this.ModelFactory.getFiltersMedel(daoParams.packageType, filters);
-		});
+			this.filters = this.ModelFactory.getFiltersModel(daoParams.packageType, filters);
+            console.log(this.filters, '???');
+        });
 	}
 
 	initEmptyPackagesPage(daoParams) {
 		let defferd = this.$q.defer();
-		this.packages.list = this.ModelFactory.getPackageListMedel(daoParams.packageType, []);
+		this.packages.list = this.ModelFactory.getPackageListModel(daoParams.packageType, []);
 		defferd.resolve(this.packages.list);
 		return defferd.promise;
 	}
 
 	refreshAll() {
-		this.initFilters();
+        this.initFilters();
 		this.initConstants();
 		this.initTable();
 	}
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].package.alias);
+			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].aliases.package);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].version.alias);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].package.icon;
-		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].version.icon;
+			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].aliases.version);
+		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].icons.package;
+		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].icons.version;
 	}
 
 	initSelectedPackageType() {
 		this.selectedPackageType = _.find(this.packageTypes, (packageType) => {
-			return packageType.text === this.$stateParams.packageType;
+			return packageType.value === this.$stateParams.packageType;
 		});
-	}
+    }
 
 	initFilters() {
-		//		let savedFilters = this.getSavedFiltersFromUrl();
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
 				text: value,
@@ -175,53 +183,14 @@ export default class PackagesController {
 	}
 
 	getColumns() {
-		return [{
-			field: 'name',
-			header: 'Name',
-			width: '20%',
-			headerCellTemplate: '<div style="padding-right:30px"></div>',
-			cellTemplate: `<div class="name">
-                                {{row.entity.name}}
-                            </div>`
-		}, {
-			field: 'numOfRepos',
-			header: 'Repositories Count',
-			width: '10%',
-			headerCellTemplate: '<div style="padding-right:0"></div>',
-			cellTemplate: `<div>
-                                {{row.entity.numOfRepos}} {{row.entity.numOfRepos===1 ? 'Repository' : 'Repositories'}}
-                           </div>`
-		}, {
-			field: 'repositories',
-			header: 'Repositories',
-			sortable: false,
-			headerCellTemplate: '<div style="padding-right:0"></div>',
-			cellTemplate: require('./cellTemplates/repositories.cell.template.html'),
-			width: '20%'
-		}, {
-			field: 'downloadsCount',
-			header: 'Download Count',
-			sortable: false,
-			headerCellTemplate: '<div style="padding-right:0"></div>',
-			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
-			width: '20%'
-		}, {
-			field: 'versionsCount',
-			header: 'Versions Count',
-			sortable: false,
-			headerCellTemplate: '<div style="padding-right:0"></div>',
-			cellTemplate: require('./cellTemplates/versions.count.cell.template.html'),
-			width: '10%'
-		}, {
-			field: 'lastModified',
-			header: 'Last Modified',
-			sortable: false,
-			headerCellTemplate: '<div style="padding-right:0"></div>',
-			cellTemplate: `<span jf-tooltip-on-overflow>
-                            {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
-                       </span>`,
-			width: '20%'
-		}];
+        return _.map(this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].packagesTableColumns, column => {
+            if (_.isString(column)) {
+                let columnObj = this.PACKAGE_NATIVE_CONSTANTS.common.packagesTableColumns[column];
+                columnObj.field = column;
+                return columnObj;
+            }
+            else return column;
+        });
 	}
 
 	getSelectedRepos() {
@@ -246,7 +215,7 @@ export default class PackagesController {
 			return filter.inputTextValue;
 		}).map((filter) => {
 			return {
-				id: this.PACKAGE_NATIVE_CONSTANTS[this.selectedPackageType.text].filters[filter.text],
+				id: this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].filters[filter.text],
 				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
 				values: [filter.inputTextValue || '']
 			};
@@ -258,7 +227,7 @@ export default class PackagesController {
 		this.getSelectedFilters();
 		let daoParams = {
 			filters: this.concatAllActiveFilters(),
-			packageType: this.selectedPackageType.text,
+			packageType: this.selectedPackageType.value,
 			sortBy: this.sorting.sortBy,
 			order: this.sorting.order
 		};
@@ -295,7 +264,8 @@ export default class PackagesController {
 
 	onPackageTypeChange() {
 		// Fire a refresh callback for getting packages and filters
-		this.$stateParams.packageType = this.selectedPackageType.text;
+		this.$stateParams.packageType = this.selectedPackageType.value;
+        this.initPackagesViewData(this.$stateParams);
 		this.refreshAll();
 		//TODO: when more package types would become available - figure out how to change the view
 	}
@@ -318,7 +288,7 @@ export default class PackagesController {
 	}
 
 	goToPackage(packageName) {
-		this.subRouter.goto('package', {packageType: this.selectedPackageType.text, package: packageName})
+		this.subRouter.goto('package', {packageType: this.selectedPackageType.value, package: packageName})
 	}
 
 	calcPackageExtraData(row) {
@@ -331,7 +301,7 @@ export default class PackagesController {
 		let pkgName = row.name;
 		let daoParams = {
 			package: pkgName,
-			packageType: this.selectedPackageType.text
+			packageType: this.selectedPackageType.value
 		};
 		row.calculationPending = true;
 		this.getPackageExtraInfo({daoParams: daoParams}).then((response) => {
@@ -357,7 +327,7 @@ export default class PackagesController {
 		let pkgName = row.name;
 		let daoParams = {
 			package: pkgName,
-			packageType: this.selectedPackageType.text
+			packageType: this.selectedPackageType.value
 		};
 		this.getPackageDownloadsCount({daoParams: daoParams}).then((response) => {
 			row.downloadsCount = response.totalDownloads;

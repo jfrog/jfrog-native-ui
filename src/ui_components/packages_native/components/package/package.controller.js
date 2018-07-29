@@ -65,7 +65,7 @@ export default class PackageController {
 
 		return this.getPackage({daoParams}).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
-			this.package = this.ModelFactory.getPackageMedel(this.$stateParams.packageType, pkg);
+			this.package = this.ModelFactory.getPackageModel(this.$stateParams.packageType, pkg);
 		});
 	}
 
@@ -82,13 +82,13 @@ export default class PackageController {
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.alias
+			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.package
 		);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].version.alias
+			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.version
 		);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].package.icon;
-		this.packagesIcon = this.PACKAGE_NATIVE_CONSTANTS[this.$stateParams.packageType].packages.icon;
+		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.package;
+		this.packagesIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.packages;
 	}
 
 	initTable() {

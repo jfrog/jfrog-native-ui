@@ -1,13 +1,20 @@
 import DockerImageListModel from '../../models/DockerImageListModel';
 import DockerImageModel from '../../models/DockerImageModel';
 import DockerTagModel from '../../models/DockerTagModel';
-import DockerImageListFiltersModel from '../../models/DockerImageListFiltersModel';
+import PackageListFiltersModel from '../../models/PackageListFiltersModel';
 
 export const MODELS = {
+	common: {
+		filters: PackageListFiltersModel
+	},
 	docker: {
 		packages: DockerImageListModel,
 		package: DockerImageModel,
 		version: DockerTagModel,
-		filters: DockerImageListFiltersModel
+	},
+	npm: {
+		packages: DockerImageListModel,
+		package: DockerImageModel,
+		version: DockerTagModel,
 	}
 };
