@@ -12,6 +12,7 @@ export default class NpmImageModel extends PackageBaseModel {
         this.downloadsCount = data.totalDownloads;
         this.versionsCount = data.numOfVersions;
         this.lastModified = data.lastModified;
+        this.keywords = data.keywords;
     }
 
 }

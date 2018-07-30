@@ -47,6 +47,16 @@ export const PACKAGE_NATIVE_CONSTANTS = {
                                     {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
                                </span>`,
                 width: '20%'
+            },
+            keywords: {
+                header: 'Keywords',
+                sortable: false,
+                headerCellTemplate: '<div style="padding-right:0"></div>',
+                cellTemplate: `<span jf-tooltip-on-overflow
+                                    ng-click="appScope.$ctrl.showAll($event,row.entity.keywords, 'Keywords')">
+                                    {{row.entity.keywords.length + ' Keywords'}}
+                               </span>`,
+                width: '20%'
             }
         }
 	},
@@ -100,6 +110,7 @@ export const PACKAGE_NATIVE_CONSTANTS = {
                 'downloadsCount',
                 'versionsCount',
                 'lastModified',
+                'keywords'
             ]
         }
 	}

@@ -180,9 +180,9 @@ export default class PackagesController {
 		}
 	}
 
-	showAllRepos(e, text) {
+	showAll(e, text, title) {
 		e.stopPropagation();
-		this.fullTextService.showFullTextModal(text, 'Repositories', 590);
+		this.fullTextService.showFullTextModal(text, title, 590);
 	}
 
 	getColumns() {
