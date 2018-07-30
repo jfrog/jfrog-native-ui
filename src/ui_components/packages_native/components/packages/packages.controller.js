@@ -125,22 +125,23 @@ export default class PackagesController {
 		this.reposList = _.map(this.filters.repos, (value) => {
 			return {
 				text: value,
-				isSelected: !this.$stateParams.repos ? false : _.includes(this.$stateParams.repos.split(','), value)
+				isSelected: !this.$stateParams.query.repos ? false : _.includes(this.$stateParams.query.repos.split(','), value)
 			};
 		});
 
 		this.moreFiltersList = _.map(Object.keys(this.filters.extraFilters), (value) => {
+		    let id = this.filters.extraFilters[value];
 			return {
 				text: value,
-                id: this.filters.extraFilters[value],
-				isSelected: value === 'Image Name' ? !!this.$stateParams.packageQuery : value === 'Tag' ? !!this.$stateParams.versionQuery : false,
-				inputTextValue: value === 'Image Name' ? this.$stateParams.packageQuery : value === 'Tag' ? this.$stateParams.versionQuery : ''
+                id: id,
+				isSelected: !!this.$stateParams.query[id],
+				inputTextValue: this.$stateParams.query[id] || ''
 			};
 		});
 
 		this.initialDropDownPlaceholder = this.moreFiltersList[0].text;
 
-		if (this.$stateParams.packageQuery || this.$stateParams.versionQuery || this.$stateParams.repos) {
+		if (!_.isEmpty(this.$stateParams.query)) {
 			this.getSelectedRepos();
 			this.getFilteredData();
 		}
@@ -163,7 +164,7 @@ export default class PackagesController {
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
 
 		this.tableViewOptions.on('row.in.view', row => {
-//			if (row.downloadsCount === undefined) this.calcPackageExtraData(row);
+			if (row.downloadsCount === undefined) this.calcPackageExtraData(row);
 		});
 	}
 
@@ -234,22 +235,15 @@ export default class PackagesController {
 			order: this.sorting.order
 		};
 
-        let pkgFilter = _.find(daoParams.filters, {id: this.moreFiltersList[0].id});
-		if (pkgFilter && pkgFilter.values[0]) {
-			this.$stateParams.packageQuery = pkgFilter.values[0];
-		}
-		else {
-			this.$stateParams.packageQuery = null;
-		}
-
-		let versionFilter = _.find(daoParams.filters, {id: 'version'});
-		if (versionFilter && versionFilter.values[0]) {
-			this.$stateParams.versionQuery = versionFilter.values[0];
-		}
-		else {
-			this.$stateParams.versionQuery = null;
-		}
-
+        this.moreFiltersList.forEach(filter => {
+            let actualFilter = _.find(daoParams.filters, {id: filter.id});
+            if (actualFilter && actualFilter.values[0]) {
+                this.$stateParams.query[filter.id] = actualFilter.values[0];
+            }
+            else {
+                delete this.$stateParams.query[filter.id];
+            }
+        })
 
 		this.getPackagesData(daoParams).then(() => {
 			this.tableViewOptions.setData(this.packages.list.data);
@@ -267,6 +261,8 @@ export default class PackagesController {
 	onPackageTypeChange() {
 		// Fire a refresh callback for getting packages and filters
 		this.$stateParams.packageType = this.selectedPackageType.value;
+        this.$stateParams.query = {};
+        delete this.hasSelectedFilters;
         this.initPackagesViewData(this.$stateParams);
 		this.refreshAll();
 		//TODO: when more package types would become available - figure out how to change the view
@@ -274,8 +270,13 @@ export default class PackagesController {
 
 	onRepoFilterChange() {
 		this.getSelectedRepos();
-		this.$stateParams.repos = this.selectedRepos && this.selectedRepos[0] && this.selectedRepos[0].values ? this.selectedRepos[0].values.join(
-			',') : null;
+
+		if (this.selectedRepos && this.selectedRepos[0] && this.selectedRepos[0].values) {
+            this.$stateParams.query.repos = this.selectedRepos[0].values.join(',');
+        }
+        else {
+		    delete this.$stateParams.query.repos;
+        }
 	}
 
 	onExtraFilterChange() {

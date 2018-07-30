@@ -89,7 +89,6 @@ export const PACKAGE_NATIVE_CONSTANTS = {
             filters: {
                 'Package Name': 'npmName',
                 'Version': 'npmVersion',
-                'Repository': 'repo',
                 'Keyword': 'npmKeywords',
                 'Scope': 'npmScope',
                 'Checksum': 'npmChecksum',

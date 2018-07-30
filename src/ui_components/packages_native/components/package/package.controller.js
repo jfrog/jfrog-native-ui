@@ -46,18 +46,18 @@ export default class PackageController {
 		let daoParams = _.extend({}, this.$stateParams, additionalDaoParams);
 		delete daoParams.repos;
 		daoParams.repoFilter = [];
-		if (this.$stateParams.repos) {
+		if (this.$stateParams.query.repos) {
 			daoParams.repoFilter.push({
 				id: 'repo',
 				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
-				values: this.$stateParams.repos.split(',')
+				values: this.$stateParams.query.repos.split(',')
 			});
 		}
-		if (this.$stateParams.versionQuery) {
+		if (this.$stateParams.query.version) {
 			daoParams.repoFilter.push({
 				id: 'version',
 				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
-				values: [this.$stateParams.versionQuery]
+				values: [this.$stateParams.query.version]
 			});
 		}
 

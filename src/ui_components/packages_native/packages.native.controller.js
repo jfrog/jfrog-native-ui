@@ -11,9 +11,9 @@ export default class PackagesNativeController {
 	initSubRouter() {
 		this.subRouter = this.JFrogSubRouter.createLocalRouter({
 			parentScope: this.$scope,
-			urlStructure: '/:packageType/:package/:version/?:repo&:repos&:packageQuery&:versionQuery',
+			urlStructure: '/:packageType/:package/:version/?:repo&:query',
 			hotSyncUrl: true,
-//			encodeSearchParamsAsBase64: 'state',
+			encodeSearchParamsAsBase64: 'state',
 			states: [
 				{
 					name: 'packages',
@@ -33,7 +33,12 @@ export default class PackagesNativeController {
 				if (!this.subRouter.params.packageType) {
                     this.subRouter.goto('packages', {packageType: 'docker'});
 				}
-			},
+                if (!this.subRouter.params.query) this.subRouter.params.query = {};
+				else {
+                    this.subRouter.params.query = _.pick(this.subRouter.params.query, _.identity);
+                }
+
+            },
 			onChangeFromUrl: (oldParams, newParams) => {
 //				console.log('Sub Router onChangeFromUrl', oldParams, newParams)
 			},
