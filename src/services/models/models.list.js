@@ -1,5 +1,7 @@
 import DockerImageListModel from '../../models/DockerImageListModel';
 import DockerImageModel from '../../models/DockerImageModel';
+import NpmImageListModel from '../../models/NpmImageListModel';
+import NpmImageModel from '../../models/NpmImageModel';
 import DockerTagModel from '../../models/DockerTagModel';
 import PackageListFiltersModel from '../../models/PackageListFiltersModel';
 
@@ -13,8 +15,8 @@ export const MODELS = {
 		version: DockerTagModel,
 	},
 	npm: {
-		packages: DockerImageListModel,
-		package: DockerImageModel,
+		packages: NpmImageListModel,
+		package: NpmImageModel,
 		version: DockerTagModel,
 	}
 };

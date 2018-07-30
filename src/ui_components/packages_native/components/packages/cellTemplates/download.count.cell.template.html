@@ -1,12 +1,12 @@
 <div class="downloads-count no-cm-action"
      disable-tooltip-on-overflow>
-	<div ng-if="row.entity.calculated && !row.entity.manualOnDemendDownloadsCount">
+	<div ng-if="row.entity.downloadsCount !== undefined">
 		<i class="icon icon-download"></i>
-		<span ng-if="row.entity.calculated">
-            {{ row.entity.downloadsCount || 0 }} Download{{row.entity.downloadsCount === 1 ? '' : 's' }}
+		<span>
+            {{ row.entity.downloadsCount}} Download{{row.entity.downloadsCount === 1 ? '' : 's' }}
 	    </span>
 	</div>
-	<div ng-if="row.entity.calculated && row.entity.manualOnDemendDownloadsCount">
+	<div ng-if="row.entity.downloadsCount === undefined && row.entity.manualOnDemendDownloadsCount">
 		<i class="icon icon-download"></i>
 		<span class="show-download-count"
 		      jf-tooltip="Click to calculate"
@@ -14,7 +14,7 @@
         Show downloads count
     </span>
 	</div>
-	<div ng-if="!row.entity.calculated">
+	<div ng-if="row.entity.downloadsCount === undefined && !row.entity.manualOnDemendDownloadsCount">
         --
 	</div>
 </div>

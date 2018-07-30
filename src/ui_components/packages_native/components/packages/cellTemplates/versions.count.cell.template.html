@@ -1,5 +1,5 @@
 <div class="versions-count">
-    <div ng-if="row.entity.calculated">
+    <div ng-if="row.entity.versionsCount !== undefined">
         <div class="icon-wrapper">
             <i class="icon"
                ng-class="appScope.$ctrl.versionIcon">
@@ -7,7 +7,7 @@
         </div>
         {{row.entity.versionsCount || 0 }} {{appScope.$ctrl.versionAlias}}{{row.entity.versionsCount === 1 ? '' : 's'}}
     </div>
-    <div ng-if="!row.entity.calculated">
+    <div ng-if="row.entity.versionsCount === undefined">
         --
     </div>
 </div>

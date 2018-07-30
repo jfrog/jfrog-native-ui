@@ -318,7 +318,10 @@ export default class PackagesController {
 			row.versionsCount = response.totalVersions;
 			row.calculated = true;
 			row.calculationPending = false;
-		});
+		}).catch(() => {
+            row.calculated = true;
+            row.calculationPending = false;
+        })
 	}
 
 	calcPackageDownloads(e, row) {
