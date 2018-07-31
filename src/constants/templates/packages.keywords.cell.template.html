@@ -1,0 +1,15 @@
+<div class="keywords-wrap" disable-tooltip-on-overflow>
+	<div class="keyword"
+	     ng-repeat="keyword in row.entity.keywords.slice(0,3)"
+	     ng-click="appScope.$ctrl.filterByKeyword(keyword); $event.stopPropagation()"
+	     jf-tooltip-on-overflow>
+        {{keyword}}
+	</div>
+
+	<div class="keyword"
+	     ng-if="row.entity.keywords.length > 3"
+	     jf-tooltip="{{'Show All (' + row.entity.keywords.length + ')'}}"
+	     ng-click="appScope.$ctrl.showAll($event,row.entity.keywords, 'Keywords', true, appScope.$ctrl.filterByKeyword.bind(appScope.$ctrl))">
+        ...
+	</div>
+</div>

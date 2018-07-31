@@ -1,7 +1,8 @@
 import {MODELS} from './models.list';
 
 export default class ModelFactory {
-	constructor() {
+	constructor(NativeUIDescriptor) {
+        this.descriptor = NativeUIDescriptor.getDescriptor();
 		this.MODELS = MODELS;
 	}
 
@@ -18,6 +19,6 @@ export default class ModelFactory {
 	}
 
 	getFiltersModel(packageType, data) {
-		return new this.MODELS.common.filters(data, packageType);
+		return new this.MODELS.common.filters(data, packageType, this.descriptor);
 	}
 }

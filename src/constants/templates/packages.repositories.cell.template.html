@@ -1,5 +1,5 @@
 <div class="repositories no-cm-action"
-        ng-click="appScope.$ctrl.showAllRepos($event,row.entity.repositories, 'Repositories')"
+        ng-click="appScope.$ctrl.showAll($event,row.entity.repositories, 'Repositories')"
         disable-tooltip-on-overflow>
 	<span jf-tooltip="Click text for full list">
 		{{appScope.$ctrl.jFrogUIUtils.stringifyData(row.entity.repositories,' : ')}}

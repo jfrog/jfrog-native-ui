@@ -1,8 +1,6 @@
-import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.constants';
-
 export default class PackagesController {
 
-	constructor(JFrogSubRouter, ModelFactory, $q, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils) {
+	constructor(JFrogSubRouter, ModelFactory, $q, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
@@ -11,7 +9,7 @@ export default class PackagesController {
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.fullTextService = JfFullTextService;
 		this.jFrogUIUtils = JFrogUIUtils;
-		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
+        this.descriptor = NativeUIDescriptor.getDescriptor();
 		this.sorting = {sortBy: 'name', order: 'asc'};
 		this.ready = false;
 	}
@@ -21,7 +19,7 @@ export default class PackagesController {
 
 		this.initPackagesViewData(this.$stateParams);
 
-		this.subRouter.listenForChanges(['packageType', 'packageQuery', 'versionQuery', 'repos'], 'packages',
+		this.subRouter.listenForChanges(['packageType', 'query'], 'packages',
 			(oldP, newP) => {
 				this.initPackagesViewData(this.$stateParams);
 				if (!!oldP.packageQuery && !newP.packageQuery || !!oldP.versionQuery && !newP.versionQuery) {
@@ -72,7 +70,7 @@ export default class PackagesController {
 	refreshPackageTypes(daoParams) {
 		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
             packageTypes = _.map(packageTypes, pt => {
-                if (!this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[pt.value] || this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[pt.value].disabled) {
+                if (!this.descriptor.typeSpecific[pt.value] || this.descriptor.typeSpecific[pt.value].disabled) {
                     pt.disabled = true;
                 }
                 return pt;
@@ -108,11 +106,11 @@ export default class PackagesController {
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].aliases.package);
+			this.descriptor.typeSpecific[this.selectedPackageType.value].aliases.package);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].aliases.version);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].icons.package;
-		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].icons.version;
+			this.descriptor.typeSpecific[this.selectedPackageType.value].aliases.version);
+		this.packageTypeIcon = this.descriptor.typeSpecific[this.selectedPackageType.value].icons.package;
+		this.versionIcon = this.descriptor.typeSpecific[this.selectedPackageType.value].icons.version;
 	}
 
 	initSelectedPackageType() {
@@ -180,15 +178,15 @@ export default class PackagesController {
 		}
 	}
 
-	showAll(e, text, title) {
+	showAll(e, text, title, asList = false, itemClickCB = null) {
 		e.stopPropagation();
-		this.fullTextService.showFullTextModal(text, title, 590);
+		this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB);
 	}
 
 	getColumns() {
-        return _.map(this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].packagesTableColumns, column => {
+        return _.map(this.descriptor.typeSpecific[this.selectedPackageType.value].packagesTableColumns, column => {
             if (_.isString(column)) {
-                let columnObj = this.PACKAGE_NATIVE_CONSTANTS.common.packagesTableColumns[column];
+                let columnObj = this.descriptor.common.packagesTableColumns[column];
                 columnObj.field = column;
                 return columnObj;
             }
@@ -203,7 +201,7 @@ export default class PackagesController {
 		if (selected.length) {
 			this.selectedRepos = [{
 				id: 'repo',
-				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+				comparator: this.descriptor.defaultComparator,
 				values: selected.map((selectedRepo) => {
 					return selectedRepo.text;
 				})
@@ -218,8 +216,8 @@ export default class PackagesController {
 			return filter.inputTextValue;
 		}).map((filter) => {
 			return {
-				id: this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.selectedPackageType.value].filters[filter.text],
-				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+				id: this.descriptor.typeSpecific[this.selectedPackageType.value].filters[filter.text],
+				comparator: this.descriptor.defaultComparator,
 				values: [filter.inputTextValue || '']
 			};
 		});
@@ -342,5 +340,14 @@ export default class PackagesController {
 
 
 	}
+
+    filterByKeyword(keyword) {
+        console.log(this.moreFiltersList);
+        let keywordsId = this.filters.extraFilters['Keywords'];
+        if (keywordsId) {
+            this.$stateParams.query = {[keywordsId]: keyword};
+        }
+        this.initPackagesViewData(this.$stateParams);
+    }
 
 }

@@ -1,9 +1,7 @@
-import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.constants';
-
 export default class PackageController {
 
 	constructor(JFrogSubRouter, ModelFactory, $scope, JFrogTableViewOptions,
-	            JFrogUIUtils, $rootScope, JFrogModal) {
+	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
@@ -12,7 +10,7 @@ export default class PackageController {
 		this.jFrogUIUtils = JFrogUIUtils;
 		this.$rootScope = $rootScope;
 		this.modal = JFrogModal;
-		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
+		this.descriptor = NativeUIDescriptor.getDescriptor();
 	}
 
 	$onInit() {
@@ -49,14 +47,14 @@ export default class PackageController {
 		if (this.$stateParams.query.repos) {
 			daoParams.repoFilter.push({
 				id: 'repo',
-				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+				comparator: this.descriptor.defaultComparator,
 				values: this.$stateParams.query.repos.split(',')
 			});
 		}
 		if (this.$stateParams.query.version) {
 			daoParams.repoFilter.push({
 				id: 'version',
-				comparator: this.PACKAGE_NATIVE_CONSTANTS.defaultComparator,
+				comparator: this.descriptor.defaultComparator,
 				values: [this.$stateParams.query.version]
 			});
 		}
@@ -82,13 +80,13 @@ export default class PackageController {
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.package
+			this.descriptor.typeSpecific[this.$stateParams.packageType].aliases.package
 		);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.version
+			this.descriptor.typeSpecific[this.$stateParams.packageType].aliases.version
 		);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.package;
-		this.packagesIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.packages;
+		this.packageTypeIcon = this.descriptor.typeSpecific[this.$stateParams.packageType].icons.package;
+		this.packagesIcon = this.descriptor.typeSpecific[this.$stateParams.packageType].icons.packages;
 	}
 
 	initTable() {

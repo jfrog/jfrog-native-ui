@@ -1,26 +1,24 @@
-import {PACKAGE_NATIVE_CONSTANTS} from '../../../../constants/package.native.constants';
-
 export default class VersionController {
 
-	constructor(JFrogSubRouter, $scope, JFrogUIUtils, ModelFactory) {
+	constructor(JFrogSubRouter, $scope, JFrogUIUtils, ModelFactory, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
 		this.ModelFactory = ModelFactory;
 		this.jFrogUIUtils = JFrogUIUtils;
-		this.PACKAGE_NATIVE_CONSTANTS = PACKAGE_NATIVE_CONSTANTS;
+        this.descriptor = NativeUIDescriptor.getDescriptor();
 	}
 
 
 	initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.package
+			this.descriptor.typeSpecific[this.$stateParams.packageType].aliases.package
 		);
 		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].aliases.version
+			this.descriptor.typeSpecific[this.$stateParams.packageType].aliases.version
 		);
-		this.packageTypeIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.package;
-		this.versionIcon = this.PACKAGE_NATIVE_CONSTANTS.typeSpecific[this.$stateParams.packageType].icons.version;
+		this.packageTypeIcon = this.descriptor.typeSpecific[this.$stateParams.packageType].icons.package;
+		this.versionIcon = this.descriptor.typeSpecific[this.$stateParams.packageType].icons.version;
 	}
 
 	$onInit() {
