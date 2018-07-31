@@ -11,6 +11,7 @@
 <package-component
         ng-if="$ctrl.subRouter.state === 'package'"
         get-package="$ctrl.getPackage({daoParams})"
+        get-package-summary="$ctrl.getPackageSummary({daoParams})"
         get-manifest="$ctrl.getManifest({daoParams})"
 		show-in-tree="$ctrl.showInTree({pathParams})"
         get-package-downloads-count="$ctrl.getPackageDownloadsCount({daoParams})"

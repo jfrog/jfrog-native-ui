@@ -64,6 +64,45 @@ export default class NativeUIDescriptor {
                         cellTemplate: cellTemplates.packages.keywords,
                         width: '15%'
                     }
+                },
+                versionsTableColumns: {
+                    name: {
+                        header: `@{VERSION_ALIAS} Name`,
+                        width: '30%',
+                        cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/name.cell.template.html')
+                    },
+                    repo: {
+                        header: 'Repository',
+                        width: '20%'
+                    },
+                    packageId: {
+                        header: `Digest`,
+                        sortable: false,
+                        cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/package.id.cell.template.html'),
+                        width: '20%'
+                    },
+                    lastModified: {
+                        header: 'Last Modified',
+                        cellTemplate: `<div class="last-modified">
+                                    {{ row.entity.lastModified | date : 'medium'}}
+                                </div>`,
+                        width: '30%'
+                    },
+                    /*
+                                        size: {
+                                            header: 'Size',
+                                            cellTemplate: `<div class="size">
+                                                                {{ row.entity.size.length ? row.entity.size : (row.entity.size | filesize)}}
+                                                           </div>`,
+                                            width: '15%'
+                                        },
+                    */
+                    downloadsCount: {
+                        header: 'Downloads',
+                        sortable: false,
+                        width: '25%',
+                        cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/download.count.cell.template.html'),
+                    }
                 }
             },
             typeSpecific: {
@@ -89,6 +128,13 @@ export default class NativeUIDescriptor {
                         'downloadsCount',
                         'versionsCount',
                         'lastModified',
+                    ],
+                    versionsTableColumns: [
+                        'name',
+                        'repo',
+                        'packageId',
+                        'lastModified',
+                        'downloadsCount'
                     ]
                 },
                 npm: {

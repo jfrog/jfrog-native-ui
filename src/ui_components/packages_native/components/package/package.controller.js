@@ -11,9 +11,15 @@ export default class PackageController {
 		this.$rootScope = $rootScope;
 		this.modal = JFrogModal;
 		this.descriptor = NativeUIDescriptor.getDescriptor();
+
+
 	}
 
 	$onInit() {
+        this.getPackageSummary({daoParams: this.$stateParams}).then(summary => {
+            console.log('!!!!!', summary);
+        })
+
 		this.getPackageData().then(() => {
 			this.initConstants();
 			if (this.isWithXray && typeof this.isWithXray === 'function') {
@@ -145,51 +151,20 @@ export default class PackageController {
 	}
 
 	getTableColumns() {
-		return [{
-			field: 'name',
-			header: `${this.versionAlias} Name`,
-			width: '30%',
-			cellTemplate: require('./cellTemplates/name.cell.template.html')
-		}, {
-			field: 'repo',
-			header: 'Repository',
-			width: '20%'
-		}, {
-			field: 'packageId',
-			header: `Digest`,
-			sortable: false,
-			cellTemplate: require('./cellTemplates/package.id.cell.template.html'),
-			width: '20%'
-		}, {
-			field: 'lastModified',
-			header: 'Last Modified',
-			cellTemplate: `<div class="last-modified">
-                                {{ row.entity.lastModified | date : 'medium'}}
-                            </div>`,
-			width: '30%'
-		}/*, {
-			field: 'size',
-			header: 'Size',
-			cellTemplate: `<div class="size">
-								{{ row.entity.size.length ? row.entity.size : (row.entity.size | filesize)}}
-                           </div>`,
-			width: '15%'
-		}*/, {
-			field: 'downloadsCount',
-			header: 'Downloads',
-			sortable: false,
-			width: '25%',
-			cellTemplate: require('./cellTemplates/download.count.cell.template.html'),
-		},
-			// TODO: Xray is for phase 2 $ctrl.withXray
-			/*{
-			field: 'xray',
-			header: 'Xray',
-			cellTemplate: `<div class="xray">
-								{{row.entity.xray}}
-							</div>`,
-			width: '20%'
-		}*/];
+        return _.map(this.descriptor.typeSpecific[this.$stateParams.packageType].versionsTableColumns, column => {
+            let columnObj;
+        	if (_.isString(column)) {
+                columnObj = this.descriptor.common.versionsTableColumns[column];
+                columnObj.field = column;
+            }
+            else columnObj = column;
+
+        	if (columnObj.header.indexOf('@{VERSION_ALIAS}') !== -1) {
+                columnObj.header = columnObj.header.replace('@{VERSION_ALIAS}', this.versionAlias);
+	        }
+
+	        return columnObj;
+        });
 	}
 
 	goToVersion(versionName, repo) {

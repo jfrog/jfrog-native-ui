@@ -7,6 +7,7 @@ export default class PackageComponent {
         this.controller = PackageController;
         this.bindings = {
 	        getPackage: '&?',
+	        getPackageSummary: '&?',
 	        getManifest: '&?',
 	        isWithXray: '&?',
 	        showInTree: '&?',
