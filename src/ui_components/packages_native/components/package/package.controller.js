@@ -1,7 +1,8 @@
 export default class PackageController {
 
 	constructor(JFrogSubRouter, ModelFactory, $scope, JFrogTableViewOptions,
-	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor) {
+	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor, JfFullTextService) {
+        this.fullTextService = JfFullTextService;
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
@@ -16,30 +17,46 @@ export default class PackageController {
 	}
 
 	$onInit() {
-        this.getPackageSummary({daoParams: this.$stateParams}).then(summary => {
-            console.log('!!!!!', summary);
-        })
 
+		let init = () => {
+            this.initConstants();
+            if (this.isWithXray && typeof this.isWithXray === 'function') {
+                this.isWithXray().then((response) => {
+                    this.withXray = response;
+                    this.initTable();
+                });
+            } else {
+                this.initTable();
+            }
+
+            this.subRouter.listenForChanges(['package', 'repos'], 'package', () => {
+                this.getPackageData().then(() => {
+                    this.tableViewOptions.setData(this.package.versions);
+                })
+            }, this.$scope);
+
+            this.summaryColumns = this.getSummaryColumns();
+            this.getSummaryData();
+
+        }
 		this.getPackageData().then(() => {
-			this.initConstants();
-			if (this.isWithXray && typeof this.isWithXray === 'function') {
-				this.isWithXray().then((response) => {
-					this.withXray = response;
-					this.initTable();
-				});
-			} else {
-				this.initTable();
-			}
-
-			this.subRouter.listenForChanges(['package', 'repos'], 'package', () => {
-				this.getPackageData().then(() => {
-					this.tableViewOptions.setData(this.package.versions);
-				})
-			}, this.$scope);
-
-			this.summaryColumns = this.getSummaryColumns();
+			init();
+		}).catch(() => {
+            this.package = {};
+            init();
 		})
 	}
+
+	getSummaryData() {
+        this.getPackageSummary({daoParams: this.$stateParams}).then(summaryData => {
+            console.log(summaryData);
+            this.summaryData = summaryData
+        }).catch(() => {
+            this.summaryData = {}
+        }).finally(() => {
+            this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
+        })
+    }
 
 	getPackageData(additionalDaoParams) {
 
@@ -154,7 +171,7 @@ export default class PackageController {
         return _.map(this.descriptor.typeSpecific[this.$stateParams.packageType].versionsTableColumns, column => {
             let columnObj;
         	if (_.isString(column)) {
-                columnObj = this.descriptor.common.versionsTableColumns[column];
+                columnObj = _.cloneDeep(this.descriptor.common.versionsTableColumns[column]);
                 columnObj.field = column;
             }
             else columnObj = column;
@@ -209,34 +226,20 @@ export default class PackageController {
 	}
 
 	getSummaryColumns() {
-		return [{
-			class: 'package-icon',
-			template: `<div class="summary-icon-column">
-							<i class="icon" ng-class="$ctrl.packagesIcon"></i>
-						</div>`,
-			isActive: true,
-			noWrap: true,
-			width: '120px'
-		}, {
-			label: `${this.packageAlias} Name`,
-			class: 'package-name',
-			noWrap: true,
-			template: `<span jf-tooltip-on-overflow>{{$ctrl.package.name || 'No package'}}</span>`,
-			isActive: true
-		}, {
-			label: 'Number Of Downloads',
-			class: 'package-downloads-count',
-			template: `{{$ctrl.package.downloadsCount}}`,
-			isActive: true
-		}, {
-			label: 'Last Modified',
-			class: 'package-modified-date',
-			template: `<span jf-tooltip-on-overflow>
-                        {{$ctrl.package.lastModified ? ($ctrl.package.lastModified | date : 'medium') : '--'}}
-                       </span>`,
-			noWrap: true,
-			isActive: true
-		}];
+        return _.map(this.descriptor.typeSpecific[this.$stateParams.packageType].packageSummaryColumns, column => {
+            let columnObj;
+            if (_.isString(column)) {
+                columnObj = _.cloneDeep(this.descriptor.common.packageSummaryColumns[column]);
+            }
+            else columnObj = column;
+
+            if (columnObj.label && columnObj.label.indexOf('@{PACKAGE_ALIAS}') !== -1) {
+                columnObj.label = columnObj.label.replace('@{PACKAGE_ALIAS}', this.packageAlias);
+            }
+
+            return columnObj;
+
+        });
 	}
 
 	calcVersionDownloads(row, e) {
@@ -258,5 +261,17 @@ export default class PackageController {
 			row.pendingCalculation = false;
 		});
 	}
+    filterByKeyword(keyword) {
+        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters['Keywords'];
+        if (keywordsId) {
+            this.$stateParams.package = null;
+            this.$stateParams.query = {[keywordsId]: keyword};
+        }
+    }
+
+    showAll(e, text, title, asList = false, itemClickCB = null) {
+        e.stopPropagation();
+        this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB);
+    }
 
 }

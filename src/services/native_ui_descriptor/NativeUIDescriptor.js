@@ -11,9 +11,9 @@ export default class NativeUIDescriptor {
             common: {
                 packagesTableColumns: {
                     name: {
-                        header: 'Name',
+                        header: '@{PACKAGE_ALIAS} Name',
                         width: '15%',
-                        headerCellTemplate: '<div style="padding-right:30px"></div>',
+//                        headerCellTemplate: '<div style="padding-right:30px"></div>',
                         cellTemplate: `<div class="name">
                                 {{row.entity.name}}
                                </div>`
@@ -21,7 +21,7 @@ export default class NativeUIDescriptor {
                     numOfRepos: {
                         header: 'Repositories Count',
                         width: '15%',
-                        headerCellTemplate: '<div style="padding-right:0"></div>',
+//                        headerCellTemplate: '<div style="padding-right:0"></div>',
                         cellTemplate: `<div>
                                 {{row.entity.numOfRepos}} {{row.entity.numOfRepos===1 ? 'Repository' : 'Repositories'}}
                                </div>`
@@ -29,7 +29,7 @@ export default class NativeUIDescriptor {
                     repositories: {
                         header: 'Repositories',
                         sortable: false,
-                        headerCellTemplate: '<div style="padding-right:0"></div>',
+//                        headerCellTemplate: '<div style="padding-right:0"></div>',
 //                        cellTemplate: cellTemplates.packages.repositories,
                         cellTemplate: this.cellTemplatesGenerators.listableColumn('row.entity.repositories','row.entity.name'),
                         width: '15%'
@@ -37,21 +37,21 @@ export default class NativeUIDescriptor {
                     downloadsCount: {
                         header: 'Download Count',
                         sortable: false,
-                        headerCellTemplate: '<div style="padding-right:0"></div>',
+//                        headerCellTemplate: '<div style="padding-right:0"></div>',
                         cellTemplate: cellTemplates.packages.downloadsCount,
                         width: '15%'
                     },
                     versionsCount: {
                         header: 'Versions Count',
                         sortable: false,
-                        headerCellTemplate: '<div style="padding-right:0"></div>',
+//                        headerCellTemplate: '<div style="padding-right:0"></div>',
                         cellTemplate: cellTemplates.packages.versionsCount,
                         width: '15%'
                     },
                     lastModified: {
                         header: 'Last Modified',
                         sortable: false,
-                        headerCellTemplate: '<div style="padding-right:0"></div>',
+//                        headerCellTemplate: '<div style="padding-right:0"></div>',
                         cellTemplate: `<span jf-tooltip-on-overflow>
                                     {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
                                </span>`,
@@ -60,7 +60,7 @@ export default class NativeUIDescriptor {
                     keywords: {
                         header: 'Keywords',
                         sortable: false,
-                        headerCellTemplate: '<div style="padding-right:0"></div>',
+//                        headerCellTemplate: '<div style="padding-right:0"></div>',
                         cellTemplate: cellTemplates.packages.keywords,
                         width: '15%'
                     }
@@ -103,6 +103,81 @@ export default class NativeUIDescriptor {
                         width: '25%',
                         cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/download.count.cell.template.html'),
                     }
+                },
+                packageSummaryColumns: {
+                    packageIcon: {
+                        class: 'package-icon',
+                        template: `<div class="summary-icon-column">
+                                        <i class="icon" ng-class="$ctrl.packagesIcon"></i>
+                                    </div>`,
+                        isActive: true,
+                        noWrap: true,
+                        width: '120px'
+                    },
+                    packageName: {
+                        label: `@{PACKAGE_ALIAS} Name`,
+                        class: 'package-name',
+                        noWrap: true,
+                        template: `<span jf-tooltip-on-overflow>{{$ctrl.summaryData.name || $ctrl.package.name || 'No package'}}</span>`,
+                        isActive: true,
+                        width: '180px'
+                    },
+                    numberOfDownloads: {
+                        label: 'Number Of Downloads',
+                        class: 'package-downloads-count',
+                        template: `{{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.package.downloadsCount}}`,
+                        isActive: true
+                    },
+                    lastModified: {
+                        label: 'Last Modified',
+                        class: 'package-modified-date',
+                        template: `<span jf-tooltip-on-overflow>
+                            {{($ctrl.summaryData.lastModified || $ctrl.package.lastModified) ? (($ctrl.summaryData.lastModified || $ctrl.package.lastModified) | date : 'medium') : '--'}}
+                           </span>`,
+                        noWrap: true,
+                        isActive: true
+                    },
+                    installCommand: {
+                        label: 'Installation command',
+                        class: 'package-install-command',
+                        template: `<span jf-tooltip-on-overflow>
+                                    <div class="install-command">{{$ctrl.summaryData.installCommand}}</div>
+                                   </span>`,
+                        noWrap: true,
+                        isActive: true
+                    },
+                    keywords: {
+                        label: 'Related keywords',
+                        class: 'related-keywords',
+                        template: `<span>
+                                        <div class="keywords-wrap">
+                                            <div class="keyword"
+                                                 ng-repeat="keyword in $ctrl.summaryData.keywords.slice(0,4)"
+                                                 ng-click="$ctrl.filterByKeyword(keyword)"
+                                                 jf-tooltip-on-overflow>
+                                                {{keyword}}
+                                            </div>
+                                        
+                                            <div class="keyword"
+                                                 ng-if="$ctrl.summaryData.keywords.length > 4"
+                                                 jf-tooltip="{{'Show All (' + $ctrl.summaryData.keywords.length + ')'}}"
+                                                 ng-click="$ctrl.showAll($event,$ctrl.summaryData.keywords, 'Keywords', true, $ctrl.filterByKeyword.bind($ctrl))">
+                                                ...
+                                            </div>
+                                        </div>    
+                                   </span>`,
+                        noWrap: true,
+                        isActive: true
+                    },
+                    description: {
+                        label: 'Description',
+                        class: 'summary-description',
+                        template: `<span jf-tooltip-on-overflow>
+                                        {{$ctrl.summaryData.description}}
+                                   </span>`,
+                        noWrap: true,
+                        isActive: true
+                    }
                 }
             },
             typeSpecific: {
@@ -122,6 +197,7 @@ export default class NativeUIDescriptor {
                         'Tag': 'version',
                         'Checksum': 'checksum',
                     },
+                    installPrefix: 'docker pull',
                     packagesTableColumns: [
                         'name',
                         'repositories',
@@ -135,6 +211,13 @@ export default class NativeUIDescriptor {
                         'packageId',
                         'lastModified',
                         'downloadsCount'
+                    ],
+                    packageSummaryColumns: [
+                        'packageIcon',
+                        'packageName',
+                        'numberOfDownloads',
+                        'lastModified',
+                        'installCommand'
                     ]
                 },
                 npm: {
@@ -144,7 +227,7 @@ export default class NativeUIDescriptor {
                     },
                     icons: {
                         packages: 'icon-navigation-products',
-                        package: 'icon-docker',
+                        package: 'icon-npm',
                         version: 'icon-docker-tags'
                     },
                     filters: {
@@ -154,6 +237,7 @@ export default class NativeUIDescriptor {
                         'Scope': 'npmScope',
                         'Checksum': 'npmChecksum',
                     },
+                    installPrefix: 'npm i',
                     packagesTableColumns: [
                         'name',
                         'repositories',
@@ -161,7 +245,17 @@ export default class NativeUIDescriptor {
                         'versionsCount',
                         'lastModified',
                         'keywords'
+                    ],
+                    packageSummaryColumns: [
+                        'packageIcon',
+                        'packageName',
+                        'description',
+                        'keywords',
+                        'numberOfDownloads',
+                        'lastModified',
+                        'installCommand'
                     ]
+
                 }
             }
         }

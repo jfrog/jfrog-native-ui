@@ -185,12 +185,19 @@ export default class PackagesController {
 
 	getColumns() {
         return _.map(this.descriptor.typeSpecific[this.selectedPackageType.value].packagesTableColumns, column => {
+            let columnObj;
             if (_.isString(column)) {
-                let columnObj = this.descriptor.common.packagesTableColumns[column];
+                columnObj = _.cloneDeep(this.descriptor.common.packagesTableColumns[column]);
                 columnObj.field = column;
-                return columnObj;
             }
-            else return column;
+            else columnObj = column;
+
+            if (columnObj.header.indexOf('@{PACKAGE_ALIAS}') !== -1) {
+                columnObj.header = columnObj.header.replace('@{PACKAGE_ALIAS}', this.packageAlias);
+            }
+
+            return columnObj;
+
         });
 	}
 

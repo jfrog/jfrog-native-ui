@@ -44,6 +44,7 @@ body.packagesNative {
   }
 }
 
+.summary-row,
 .jf-table-cell-content {
   .keywords-wrap {
     padding: 4px 0;
@@ -57,6 +58,19 @@ body.packagesNative {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      cursor: pointer;
+    }
+  }
+}
+.summary-row {
+  .keywords-wrap {
+    .keyword {
+      border: 1px solid @grayBGLight;
+      background-color: @grayBGLight;
+      height: 25px;
+      line-height: 20px;
+      font-size: 80%;
+      max-width: 20%;
     }
   }
 }
