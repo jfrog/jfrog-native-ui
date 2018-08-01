@@ -7,7 +7,16 @@ export default class VersionController {
 		this.ModelFactory = ModelFactory;
 		this.jFrogUIUtils = JFrogUIUtils;
         this.descriptor = NativeUIDescriptor.getDescriptor();
-	}
+
+        this.widgetsOptions = {
+            outerPadding: 0,
+	        padding: 15,
+	        sharedModel: {
+            	versionCtrl: this
+	        }
+        };
+
+    }
 
 
 	initConstants() {

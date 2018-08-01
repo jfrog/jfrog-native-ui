@@ -230,6 +230,24 @@ export default class NativeUIDescriptor {
                        </span>`,
                         isActive: true
                     }
+                },
+                widgets: {
+                    dockerLayers: {
+                        name: 'Docker Layers',
+                        id: 'docker-layers',
+                        template: `
+                                    <div class="docker-layers">
+                                       <h4>Layers</h4>
+                                       <jf-docker-v2-layers
+                                               controller="ctrl.$scope.versionCtrl"
+                                               data="ctrl.$scope.versionCtrl.version.layers"
+                                               current-path="a/latest">
+                                       </jf-docker-v2-layers>
+                                    </div>
+`,
+                        scroll: true,
+                        showSpinner: false
+                    }
                 }
             },
             typeSpecific: {
@@ -278,7 +296,36 @@ export default class NativeUIDescriptor {
                         'packageName',
                         'packageId',
                         'lastModified'
-                    ]
+                    ],
+                    widgetsLayout: {
+                        main: {
+                            rows: [
+                                {
+                                    size: '100%',
+//                                    cells: ['50% @dockerLayers', '50% #rightSide']
+                                    cells: ['100% @dockerLayers']
+                                }
+                            ]
+                        },
+/*
+                        rightSide: {
+                            rows: [
+                                {
+                                    size: '33%',
+                                    cells: ['100% @dockerLayers']
+                                },
+                                {
+                                    size: '33%',
+                                    cells: ['100% @dockerLayers']
+                                },
+                                {
+                                    size: '33%',
+                                    cells: ['100% @dockerLayers']
+                                },
+                            ]
+                        }
+*/
+                    }
                 },
                 npm: {
                     aliases: {
