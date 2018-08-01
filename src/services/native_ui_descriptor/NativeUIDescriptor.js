@@ -178,6 +178,58 @@ export default class NativeUIDescriptor {
                         noWrap: true,
                         isActive: true
                     }
+                },
+                versionSummaryColumns: {
+                    versionIcon: {
+                        noWrap: true,
+                        template: `<div class="summary-icon-column">
+							<i class="icon" ng-class="$ctrl.versionIcon"></i>
+						</div>`,
+                        isActive: true,
+                        width: '120px'
+                    },
+                    versionName: {
+                        label: `@{VERSION_ALIAS} Name`,
+                        class: 'version-name',
+                        noWrap: true,
+                        template: `<span jf-tooltip-on-overflow>{{$ctrl.version.name || 'No version'}}</span>`,
+                        isActive: true
+                    },
+                    size: {
+                        label: 'Size',
+                        class: 'version-size',
+                        template: `{{$ctrl.version.size.length ? $ctrl.version.size : ($ctrl.version.size | filesize)}}`,
+                        isActive: true
+                    },
+                    packageName: {
+                        label: `@{PACKAGE_ALIAS} Name`,
+                        class: 'package-name',
+                        noWrap: true,
+                        template: `<span jf-tooltip-on-overflow>{{$ctrl.version.packageName}}</span>`,
+                        isActive: true
+                    },
+                    packageId: {
+                        label: `@{PACKAGE_ALIAS} ID`,
+                        class: 'package-id',
+                        noWrap: true,
+                        template: `<span class="package-id-content" 
+								 jf-tooltip-on-overflow>
+								{{ $ctrl.version.packageId }}
+							</span>
+							<jf-clip-copy 
+								text-to-copy="$ctrl.version.packageId"
+							    object-name="{{$ctrl.packageAlias}} ID">
+							</jf-clip-copy>`,
+                        isActive: true
+                    },
+                    lastModified: {
+                        label: 'Last Modified',
+                        noWrap: true,
+                        template: `<span jf-tooltip-on-overflow>
+                            {{$ctrl.version.lastModified ? ($ctrl.version.lastModified | date : 'medium')  : '--'}}
+                       </span>`,
+                        isActive: true
+                    }
                 }
             },
             typeSpecific: {
@@ -218,6 +270,14 @@ export default class NativeUIDescriptor {
                         'numberOfDownloads',
                         'lastModified',
                         'installCommand'
+                    ],
+                    versionSummaryColumns: [
+                        'versionIcon',
+                        'versionName',
+                        'size',
+                        'packageName',
+                        'packageId',
+                        'lastModified'
                     ]
                 },
                 npm: {
