@@ -60,7 +60,6 @@ export default class NativeUIDescriptor {
                     keywords: {
                         header: 'Keywords',
                         sortable: false,
-//                        headerCellTemplate: '<div style="padding-right:0"></div>',
                         cellTemplate: cellTemplates.packages.keywords,
                         width: '15%'
                     }
@@ -68,40 +67,43 @@ export default class NativeUIDescriptor {
                 versionsTableColumns: {
                     name: {
                         header: `@{VERSION_ALIAS} Name`,
-                        width: '30%',
-                        cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/name.cell.template.html')
+                        width: '15%',
+                        cellTemplate: cellTemplates.versions.name
                     },
                     repo: {
                         header: 'Repository',
-                        width: '20%'
+                        width: '15%'
+                    },
+                    repositories: {
+                        header: 'Repositories',
+                        sortable: false,
+                        cellTemplate: this.cellTemplatesGenerators.listableColumn('row.entity.repositories','row.entity.name'),
+                        width: '15%'
                     },
                     packageId: {
                         header: `Digest`,
                         sortable: false,
-                        cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/package.id.cell.template.html'),
-                        width: '20%'
+                        cellTemplate: cellTemplates.versions.packageId,
+                        width: '15%'
                     },
                     lastModified: {
                         header: 'Last Modified',
                         cellTemplate: `<div class="last-modified">
                                     {{ row.entity.lastModified | date : 'medium'}}
                                 </div>`,
-                        width: '30%'
+                        width: '15%'
                     },
-                    /*
-                                        size: {
-                                            header: 'Size',
-                                            cellTemplate: `<div class="size">
-                                                                {{ row.entity.size.length ? row.entity.size : (row.entity.size | filesize)}}
-                                                           </div>`,
-                                            width: '15%'
-                                        },
-                    */
                     downloadsCount: {
                         header: 'Downloads',
                         sortable: false,
-                        width: '25%',
-                        cellTemplate: require('../../ui_components/packages_native/components/package/cellTemplates/download.count.cell.template.html'),
+                        width: '15%',
+                        cellTemplate: cellTemplates.versions.downloadsCount
+                    },
+                    keywords: {
+                        header: 'Keywords',
+                        sortable: false,
+                        cellTemplate: cellTemplates.packages.keywords,
+                        width: '15%'
                     }
                 },
                 packageSummaryColumns: {
@@ -247,7 +249,35 @@ export default class NativeUIDescriptor {
 `,
                         scroll: true,
                         showSpinner: false
-                    }
+                    },
+                    readme: {
+                        name: 'Read me',
+                        id: 'readme',
+                        template: `<div style="padding: 40px">README !</div>`,
+                        scroll: true,
+                        showSpinner: false
+                    },
+                    properties: {
+                        name: 'Properties',
+                        id: 'properties',
+                        template: `<div style="padding: 40px">PROPERTIES !</div>`,
+                        scroll: true,
+                        showSpinner: false
+                    },
+                    dependencies: {
+                        name: 'Dependencies',
+                        id: 'dependencies',
+                        template: `<div style="padding: 40px">DEPENDENCIES !</div>`,
+                        scroll: true,
+                        showSpinner: false
+                    },
+                    builds: {
+                        name: 'Builds',
+                        id: 'builds',
+                        template: `<div style="padding: 40px">BUILDS !</div>`,
+                        scroll: true,
+                        showSpinner: false
+                    },
                 },
                 transformers: {
                     filters: (data, packageType) => {
@@ -357,25 +387,8 @@ export default class NativeUIDescriptor {
                             rows: [
                                 {
                                     size: '100%',
-//                                    cells: ['50% @dockerLayers', '50% #rightSide']
                                     cells: ['100% @dockerLayers']
                                 }
-                            ]
-                        },
-                        rightSide: {
-                            rows: [
-                                {
-                                    size: '33%',
-                                    cells: ['100% @dockerLayers']
-                                },
-                                {
-                                    size: '33%',
-                                    cells: ['100% @dockerLayers']
-                                },
-                                {
-                                    size: '33%',
-                                    cells: ['100% @dockerLayers']
-                                },
                             ]
                         }
                     }
@@ -410,7 +423,7 @@ export default class NativeUIDescriptor {
                             return result;
                         },
                         version: data => {
-                            console.log(data, '!!!!!')
+                            data.downloadsCount = data.numOfDownloads;
                             return data;
                         }
                     },
@@ -441,10 +454,10 @@ export default class NativeUIDescriptor {
                     ],
                     versionsTableColumns: [
                         'name',
-                        'repo',
-                        'packageId',
+                        'repositories',
                         'lastModified',
-                        'downloadsCount'
+                        'downloadsCount',
+                        'keywords'
                     ],
                     packageSummaryColumns: [
                         'packageIcon',
@@ -455,6 +468,32 @@ export default class NativeUIDescriptor {
                         'lastModified',
                         'installCommand'
                     ],
+                    widgetsLayout: {
+                        main: {
+                            rows: [
+                                {
+                                    size: '100%',
+                                    cells: ['50% @readme', '50% #rightSide'],
+                                }
+                            ]
+                        },
+                        rightSide: {
+                            rows: [
+                                {
+                                    size: '33%',
+                                    cells: ['100% @properties']
+                                },
+                                {
+                                    size: '33%',
+                                    cells: ['100% @dependencies']
+                                },
+                                {
+                                    size: '33%',
+                                    cells: ['100% @builds']
+                                },
+                            ]
+                        }
+                    }
 
 
                 }
