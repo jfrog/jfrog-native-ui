@@ -1,16 +1,16 @@
 export default class VersionController {
 
-	constructor(JFrogSubRouter, $scope, JFrogUIUtils, ModelFactory, NativeUIDescriptor) {
+	constructor(JFrogSubRouter, $scope, JFrogUIUtils, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
-		this.ModelFactory = ModelFactory;
 		this.jFrogUIUtils = JFrogUIUtils;
         this.descriptor = NativeUIDescriptor.getDescriptor();
 
         this.widgetsOptions = {
             outerPadding: 0,
 	        padding: 15,
+            expandablePanes: true,
 	        sharedModel: {
             	versionCtrl: this
 	        }
@@ -51,7 +51,7 @@ export default class VersionController {
 
 	getVersionData(daoParams) {
 		return this.getVersion({daoParams: daoParams}).then((version) => {
-			this.version = this.ModelFactory.getVersionModel(daoParams.packageType, version);
+			this.version = this.descriptor.typeSpecific[daoParams.packageType].transformers.version(version);
 		}).catch(() => {
 			delete this.version;
 		})

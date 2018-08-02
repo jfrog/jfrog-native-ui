@@ -1,12 +1,11 @@
 export default class PackageController {
 
-	constructor(JFrogSubRouter, ModelFactory, $scope, JFrogTableViewOptions,
+	constructor(JFrogSubRouter, $scope, JFrogTableViewOptions,
 	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor, JfFullTextService) {
         this.fullTextService = JfFullTextService;
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
-		this.ModelFactory = ModelFactory;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.jFrogUIUtils = JFrogUIUtils;
 		this.$rootScope = $rootScope;
@@ -49,7 +48,6 @@ export default class PackageController {
 
 	getSummaryData() {
         this.getPackageSummary({daoParams: this.$stateParams}).then(summaryData => {
-            console.log(summaryData);
             this.summaryData = summaryData
         }).catch(() => {
             this.summaryData = {}
@@ -86,7 +84,7 @@ export default class PackageController {
 
 		return this.getPackage({daoParams}).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
-			this.package = this.ModelFactory.getPackageModel(this.$stateParams.packageType, pkg);
+			this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
 		});
 	}
 

@@ -1,11 +1,10 @@
 export default class PackagesController {
 
-	constructor(JFrogSubRouter, ModelFactory, $q, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, NativeUIDescriptor) {
+	constructor(JFrogSubRouter, $q, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
 		this.$q = $q;
-		this.ModelFactory = ModelFactory;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.fullTextService = JfFullTextService;
 		this.jFrogUIUtils = JFrogUIUtils;
@@ -50,8 +49,8 @@ export default class PackagesController {
 
 		this.$pendingData = true;
 		return this.getPackages({daoParams: searchParams}).then((packages) => {
-			this.packages.list = this.ModelFactory.getPackageListModel(daoParams.packageType, packages);
-			this.$pendingData = false;
+            this.packages.list = this.descriptor.typeSpecific[daoParams.packageType].transformers.packages(packages);
+            this.$pendingData = false;
 		});
 	}
 
@@ -87,13 +86,13 @@ export default class PackagesController {
 
 	refreshFilters(daoParams) {
 		return this.getFilters({daoParams: daoParams}).then((filters) => {
-			this.filters = this.ModelFactory.getFiltersModel(daoParams.packageType, filters);
+			this.filters = this.descriptor.common.transformers.filters(filters, daoParams.packageType);
         });
 	}
 
 	initEmptyPackagesPage(daoParams) {
 		let defferd = this.$q.defer();
-		this.packages.list = this.ModelFactory.getPackageListModel(daoParams.packageType, []);
+        this.packages.list = this.descriptor.typeSpecific[daoParams.packageType].transformers.packages([]);
 		defferd.resolve(this.packages.list);
 		return defferd.promise;
 	}

@@ -248,10 +248,65 @@ export default class NativeUIDescriptor {
                         scroll: true,
                         showSpinner: false
                     }
+                },
+                transformers: {
+                    filters: (data, packageType) => {
+                        let result = {};
+                        result.repos = data.results;
+                        result.reposCount = data.resultsCount;
+                        result.extraFilters = this.getDescriptor().typeSpecific[packageType].filters;
+                        return result;
+                    }
                 }
             },
             typeSpecific: {
                 docker: {
+                    transformers: {
+                        packages: data => {
+                            let result = {};
+                            if (data.results && data.results.length) {
+                                result.data = data.results.map((image) => {
+                                    return this.getDescriptor().typeSpecific.docker.transformers.package(image);
+                                });
+                            }
+                            result.itemsCount = data.resultsCount;
+                            return result;
+                        },
+                        package: data => {
+                            let result = {};
+                            result.name = data.name || data.packageName;
+                            result.repositories = data.repositories;
+                            result.numOfRepos = data.numOfRepos;
+                            result.downloadsCount = data.totalDownloads;
+                            result.versionsCount = data.totalVersions;
+                            result.lastModified = data.lastModified;
+                            if (data.versions) {
+                                result.versions = data.versions.map((version) => {
+                                    return this.getDescriptor().typeSpecific.docker.transformers.version(version);
+                                });
+                            }
+                            return result;
+                        },
+                        version: data => {
+                            let result = {};
+                            result.name = data.name;
+                            result.packageName = data.packageName;
+                            result.packageId = data.packageId;
+                            result.lastModified = data.lastModified;
+                            result.size = data.size;
+                            result.xray = data.xray;
+
+                            result.security = data.security;
+                            result.labels = data.labels;
+                            result.repo = data.repoKey;
+                            result.downloadsCount = data.totalDownloads;
+
+                            result.layers = data.blobsInfo;
+
+                            return result;
+                        }
+                    },
+
                     aliases: {
                         package: 'image',
                         version: 'tag'
@@ -307,7 +362,6 @@ export default class NativeUIDescriptor {
                                 }
                             ]
                         },
-/*
                         rightSide: {
                             rows: [
                                 {
@@ -324,10 +378,42 @@ export default class NativeUIDescriptor {
                                 },
                             ]
                         }
-*/
                     }
                 },
                 npm: {
+                    transformers: {
+                        packages: data => {
+                            let result = {}
+                            if (data.results && data.results.length) {
+                                result.data = data.results.map((image) => {
+                                    return this.getDescriptor().typeSpecific.npm.transformers.package(image);
+                                });
+                            }
+                            result.itemsCount = data.resultsCount;
+                            return result;
+                        },
+                        package: data => {
+                            let result = {};
+                            result.name = data.name || data.packageName;
+                            result.repositories = data.repositories;
+                            result.numOfRepos = data.numOfRepos;
+                            result.downloadsCount = data.totalDownloads;
+                            result.versionsCount = data.numOfVersions;
+                            result.lastModified = data.lastModified;
+                            result.keywords = data.keywords;
+                            if (data.results) {
+                                result.versions = data.results.map((version) => {
+                                    return this.getDescriptor().typeSpecific.npm.transformers.version(version);
+                                });
+                            }
+
+                            return result;
+                        },
+                        version: data => {
+                            console.log(data, '!!!!!')
+                            return data;
+                        }
+                    },
                     aliases: {
                         package: 'package',
                         version: 'version'
@@ -353,6 +439,13 @@ export default class NativeUIDescriptor {
                         'lastModified',
                         'keywords'
                     ],
+                    versionsTableColumns: [
+                        'name',
+                        'repo',
+                        'packageId',
+                        'lastModified',
+                        'downloadsCount'
+                    ],
                     packageSummaryColumns: [
                         'packageIcon',
                         'packageName',
@@ -361,7 +454,8 @@ export default class NativeUIDescriptor {
                         'numberOfDownloads',
                         'lastModified',
                         'installCommand'
-                    ]
+                    ],
+
 
                 }
             }
