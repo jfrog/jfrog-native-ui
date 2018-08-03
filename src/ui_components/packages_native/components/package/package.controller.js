@@ -1,11 +1,12 @@
 export default class PackageController {
 
-	constructor(JFrogSubRouter, $scope, JFrogTableViewOptions,
+	constructor(JFrogSubRouter, $scope, $q, JFrogTableViewOptions,
 	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor, JfFullTextService) {
         this.fullTextService = JfFullTextService;
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
+		this.$q = $q;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
 		this.jFrogUIUtils = JFrogUIUtils;
 		this.$rootScope = $rootScope;
@@ -29,16 +30,17 @@ export default class PackageController {
             }
 
             this.subRouter.listenForChanges(['package', 'repos'], 'package', () => {
+                this.getSummaryData();
                 this.getPackageData().then(() => {
                     this.tableViewOptions.setData(this.package.versions);
                 })
             }, this.$scope);
 
             this.summaryColumns = this.getSummaryColumns();
-            this.getSummaryData();
 
         }
-		this.getPackageData().then(() => {
+        this.getSummaryData();
+        this.getPackageData().then(() => {
 			init();
 		}).catch(() => {
             this.package = {};
@@ -47,7 +49,7 @@ export default class PackageController {
 	}
 
 	getSummaryData() {
-        this.getPackageSummary({daoParams: this.$stateParams}).then(summaryData => {
+        return this.getPackageSummary({daoParams: this.$stateParams}).then(summaryData => {
             this.summaryData = summaryData
         }).catch(() => {
             this.summaryData = {}
@@ -183,7 +185,6 @@ export default class PackageController {
 	}
 
 	goToVersion(versionName, repo) {
-        console.log(versionName, repo);
         this.subRouter.goto('version', {
 			packageType: this.$stateParams.packageType,
 			package: this.$stateParams.package,

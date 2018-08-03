@@ -15,6 +15,7 @@ export default class PackagesNativeComponent {
 	        getPackageExtraInfo: '&?',
 	        getPackageDownloadsCount: '&?',
             getVersion: '&?',
+            getVersionSummary: '&?',
 	        getVersionDownloadsCount: '&?',
             getManifest: '&?',
 	        isWithXray: '&?',
