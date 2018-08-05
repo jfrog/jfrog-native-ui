@@ -422,6 +422,7 @@ export default class NativeUIDescriptor {
                             result.downloadsCount = data.totalDownloads;
                             result.versionsCount = data.numOfVersions;
                             result.lastModified = data.lastModified;
+                            result.latestPath = data.latestPath;
                             result.keywords = data.keywords;
                             if (data.results) {
                                 result.versions = data.results.map((version) => {

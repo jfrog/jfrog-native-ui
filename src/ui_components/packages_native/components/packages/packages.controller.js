@@ -318,8 +318,8 @@ export default class PackagesController {
 			else {
 				row.manualOnDemendDownloadsCount = true;
 			}
-			row.lastModified = response.lastModified;
-			row.versionsCount = response.totalVersions;
+			if (response.lastModified) row.lastModified = response.lastModified;
+			if (response.totalVersions) row.versionsCount = response.totalVersions;
 			row.calculated = true;
 			row.calculationPending = false;
 		}).catch(() => {

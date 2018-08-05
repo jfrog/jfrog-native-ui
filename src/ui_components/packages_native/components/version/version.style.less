@@ -10,10 +10,15 @@ version-component {
         background-color: transparent;
         box-shadow: none;
         .jf-main-content-pane {
-          .docker-layers {
-            width: 50%;
-            padding: 20px;
+          overflow: visible;
+          .jf-widgets-layout-container {
+            overflow: visible !important;
+            .docker-layers {
+              width: 50%;
+              padding: 20px;
+            }
           }
+
         }
       }
     }
@@ -44,5 +49,6 @@ version-component {
         }
       }
     }
+
   }
 }

@@ -151,16 +151,22 @@ export default class PackageController {
 			tooltip: 'Show In Tree',
 			visibleWhen: () => this.showInTree && typeof this.showInTree === 'function',
 			callback: (row) => {
-				let pathParams = {
-					repo: row.repo,
-					package: this.package.name,
-					version: row.name
-				};
-				this.showInTree({pathParams: pathParams});
+			    if (row.latestPath) {
+                    this.showInTree({pathParams: {fullpath: row.latestPath}});
+                }
+                else {
+                    let pathParams = {
+                        repo: row.repo,
+                        package: this.package.name,
+                        version: row.name
+                    };
+                    this.showInTree({pathParams: pathParams});
+                }
 			}
 		}, {
 			icon: 'icon icon-report',
 			tooltip: 'View manifest',
+            visibleWhen: () => this.$stateParams.packageType === 'docker',
 			callback: (row) => {
 				this.showManifest(row.name, row.repo);
 			}

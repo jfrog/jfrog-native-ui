@@ -28,17 +28,6 @@
     <div class="jf-page-content">
         <div class="jf-content-section">
             <div class="jf-main-content-pane">
-<!--
-                <div class="docker-layers">
-                    <h4>Layers</h4>
-                    <jf-docker-v2-layers
-                            controller="$ctrl"
-                            data="$ctrl.version.layers"
-                            current-path="a/latest">
-                    </jf-docker-v2-layers>
-                </div>
--->
-
 	            <jf-widgets-layout widgets="$ctrl.descriptor.common.widgets"
 	                               layout="$ctrl.descriptor.typeSpecific[$ctrl.$stateParams.packageType].widgetsLayout"
 	                               options="$ctrl.widgetsOptions"></jf-widgets-layout>
