@@ -21,7 +21,7 @@ export default class PackagesController {
 		this.subRouter.listenForChanges(['packageType', 'query'], 'packages',
 			(oldP, newP) => {
 				this.initPackagesViewData(this.$stateParams);
-				if (!!oldP.packageQuery && !newP.packageQuery || !!oldP.versionQuery && !newP.versionQuery) {
+				if (!!oldP.query && !newP.query) {
 					this.initFilters();
 					this.getSelectedRepos();
 					this.getFilteredData();
@@ -49,7 +49,7 @@ export default class PackagesController {
 
 		this.$pendingData = true;
 		return this.getPackages({daoParams: searchParams}).then((packages) => {
-            this.packages.list = this.descriptor.typeSpecific[daoParams.packageType].transformers.packages(packages);
+            this.packages.list = this.typeSpecific.transformers.packages(packages);
             this.$pendingData = false;
 		});
 	}
@@ -67,20 +67,8 @@ export default class PackagesController {
 	}
 
 	refreshPackageTypes(daoParams) {
-		return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
-            packageTypes = _.map(packageTypes, pt => {
-                if (!this.descriptor.typeSpecific[pt.value] || this.descriptor.typeSpecific[pt.value].disabled) {
-                    pt.disabled = true;
-                }
-                return pt;
-            })
-
-            this.packageTypes = _.sortBy(packageTypes, pt => !!pt.disabled)
-
-            if (!_.find(this.packageTypes, {value: this.subRouter.params.packageType})) {
-                this.subRouter.params.packageType = _.find(this.packageTypes, pt => !pt.disabled).value;
-			}
-
+        return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
+            this.packageTypes = packageTypes;
 		});
 	}
 
@@ -92,7 +80,7 @@ export default class PackagesController {
 
 	initEmptyPackagesPage(daoParams) {
 		let defferd = this.$q.defer();
-        this.packages.list = this.descriptor.typeSpecific[daoParams.packageType].transformers.packages([]);
+        this.packages.list = this.typeSpecific.transformers.packages([]);
 		defferd.resolve(this.packages.list);
 		return defferd.promise;
 	}
@@ -103,19 +91,24 @@ export default class PackagesController {
 		this.initTable();
 	}
 
+	get typeSpecific() {
+	    return this.selectedPackageType ? this.descriptor.typeSpecific[this.selectedPackageType.value] : {};
+    }
+
 	initConstants() {
-		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.descriptor.typeSpecific[this.selectedPackageType.value].aliases.package);
-		this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(
-			this.descriptor.typeSpecific[this.selectedPackageType.value].aliases.version);
-		this.packageTypeIcon = this.descriptor.typeSpecific[this.selectedPackageType.value].icons.package;
-		this.versionIcon = this.descriptor.typeSpecific[this.selectedPackageType.value].icons.version;
+	    if (this.typeSpecific && this.typeSpecific.aliases && this.typeSpecific.icons) {
+            this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(this.typeSpecific.aliases.package);
+            this.versionAlias = this.jFrogUIUtils.capitalizeFirstLetter(this.typeSpecific.aliases.version);
+            this.packageTypeIcon = this.typeSpecific.icons.package;
+            this.versionIcon = this.typeSpecific.icons.version;
+        }
 	}
 
 	initSelectedPackageType() {
-		this.selectedPackageType = _.find(this.packageTypes, (packageType) => {
+        let selected = _.find(this.packageTypes, (packageType) => {
 			return packageType.value === this.$stateParams.packageType;
 		});
+        if (selected) this.selectedPackageType = selected;
     }
 
 	initFilters() {
@@ -126,7 +119,7 @@ export default class PackagesController {
 			};
 		});
 
-		this.moreFiltersList = _.map(Object.keys(this.filters.extraFilters), (value) => {
+		this.moreFiltersList = _.map(Object.keys(this.filters.extraFilters || {}), (value) => {
 		    let id = this.filters.extraFilters[value];
 			return {
 				text: value,
@@ -136,7 +129,7 @@ export default class PackagesController {
 			};
 		});
 
-		this.initialDropDownPlaceholder = this.moreFiltersList[0].text;
+		this.initialDropDownPlaceholder = this.moreFiltersList[0] ? this.moreFiltersList[0].text : '';
 
 		if (!_.isEmpty(this.$stateParams.query)) {
 			this.getSelectedRepos();
@@ -183,7 +176,7 @@ export default class PackagesController {
 	}
 
 	getColumns() {
-        return _.map(this.descriptor.typeSpecific[this.selectedPackageType.value].packagesTableColumns, column => {
+        return _.map(this.typeSpecific.packagesTableColumns, column => {
             let columnObj;
             if (_.isString(column)) {
                 columnObj = _.cloneDeep(this.descriptor.common.packagesTableColumns[column]);
@@ -222,7 +215,7 @@ export default class PackagesController {
 			return filter.inputTextValue;
 		}).map((filter) => {
 			return {
-				id: this.descriptor.typeSpecific[this.selectedPackageType.value].filters[filter.text],
+				id: this.typeSpecific.filters[filter.text],
 				comparator: this.descriptor.defaultComparator,
 				values: [filter.inputTextValue || '']
 			};
@@ -265,6 +258,7 @@ export default class PackagesController {
 	onPackageTypeChange() {
 		// Fire a refresh callback for getting packages and filters
 		this.$stateParams.packageType = this.selectedPackageType.value;
+        localStorage.lastNativeUIPackageType = this.$stateParams.packageType;
         this.$stateParams.query = {};
         delete this.hasSelectedFilters;
         this.initPackagesViewData(this.$stateParams);

@@ -44,7 +44,7 @@ export default class VersionController {
 				this.summaryColumns = this.getSummaryColumns();
 			}
 
-			this.subRouter.listenForChanges(['package', 'version'], 'version', () => {
+			this.subRouter.listenForChanges(['packageType', 'package', 'version'], 'version', () => {
                 this.getSummaryData();
 				this.getVersionData(this.$stateParams);
 			}, this.$scope);
@@ -55,8 +55,8 @@ export default class VersionController {
 	getVersionData(daoParams) {
 		return this.getVersion({daoParams: daoParams}).then((version) => {
 			this.version = this.descriptor.typeSpecific[daoParams.packageType].transformers.version(version);
-		}).catch(() => {
-			delete this.version;
+		}).catch((data) => {
+            delete this.version;
 		})
 	}
 

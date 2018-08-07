@@ -1,7 +1,7 @@
 
 <packages-component
-        ng-if="$ctrl.subRouter.state === 'packages'"
-        get-package-types="$ctrl.getPackageTypes({daoParams})"
+        ng-if="$ctrl.ready && $ctrl.subRouter.state === 'packages'"
+        get-package-types="$ctrl.getAvailablePackageTypes({daoParams})"
         get-filters="$ctrl.getFilters({daoParams})"
         get-packages="$ctrl.getPackages({daoParams})"
         get-package-extra-info="$ctrl.getPackageExtraInfo({daoParams})"
@@ -9,7 +9,7 @@
 </packages-component>
 
 <package-component
-        ng-if="$ctrl.subRouter.state === 'package'"
+        ng-if="$ctrl.ready && $ctrl.subRouter.state === 'package'"
         get-package="$ctrl.getPackage({daoParams})"
         get-package-summary="$ctrl.getPackageSummary({daoParams})"
         get-manifest="$ctrl.getManifest({daoParams})"
@@ -19,7 +19,7 @@
 </package-component>
 
 <version-component
-        ng-if="$ctrl.subRouter.state === 'version'"
+        ng-if="$ctrl.ready && $ctrl.subRouter.state === 'version'"
         get-version="$ctrl.getVersion({daoParams})"
         get-version-summary="$ctrl.getVersionSummary({daoParams})"
         is-with-xray="$ctrl.isWithXray()">

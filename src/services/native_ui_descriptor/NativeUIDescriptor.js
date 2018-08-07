@@ -294,7 +294,9 @@ export default class NativeUIDescriptor {
                         let result = {};
                         result.repos = data.results;
                         result.reposCount = data.resultsCount;
-                        result.extraFilters = this.descriptor.typeSpecific[packageType].filters;
+                        if (this.descriptor.typeSpecific[packageType]) {
+                            result.extraFilters = this.descriptor.typeSpecific[packageType].filters;
+                        }
                         return result;
                     }
                 }

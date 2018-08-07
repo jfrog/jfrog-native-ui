@@ -29,7 +29,7 @@ export default class PackageController {
                 this.initTable();
             }
 
-            this.subRouter.listenForChanges(['package', 'repos'], 'package', () => {
+            this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
                 this.getPackageData().then(() => {
                     this.tableViewOptions.setData(this.package.versions);
