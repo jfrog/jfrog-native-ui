@@ -5,10 +5,7 @@ export default class VersionComponent {
         this.template = require('./version.view.html');
         this.controller = VersionController;
         this.bindings = {
-            packageType: '<',
-	        getVersion: '&?',
-	        getVersionSummary: '&?',
-	        isWithXray: '&?'
+            nativeParent: '='
         };
     }
 }

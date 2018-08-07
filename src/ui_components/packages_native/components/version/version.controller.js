@@ -35,14 +35,10 @@ export default class VersionController {
         this.getSummaryData();
 		this.getVersionData(this.$stateParams).then(() => {
 			this.initConstants();
-			if (this.isWithXray && typeof this.isWithXray === 'function') {
-				this.isWithXray().then((response) => {
-					this.withXray = response;
-					this.summaryColumns = this.getSummaryColumns();
-				});
-			} else {
-				this.summaryColumns = this.getSummaryColumns();
-			}
+            this.nativeParent.hostData.isXrayEnabled().then((response) => {
+                this.withXray = response;
+            });
+            this.summaryColumns = this.getSummaryColumns();
 
 			this.subRouter.listenForChanges(['packageType', 'package', 'version'], 'version', () => {
                 this.getSummaryData();
@@ -53,7 +49,7 @@ export default class VersionController {
 	}
 
 	getVersionData(daoParams) {
-		return this.getVersion({daoParams: daoParams}).then((version) => {
+		return this.nativeParent.hostData.getVersion(daoParams).then((version) => {
 			this.version = this.descriptor.typeSpecific[daoParams.packageType].transformers.version(version);
 		}).catch((data) => {
             delete this.version;
@@ -61,7 +57,7 @@ export default class VersionController {
 	}
 
     getSummaryData() {
-        this.getVersionSummary({daoParams: this.$stateParams}).then(summaryData => {
+        this.nativeParent.hostData.getVersionSummary(this.$stateParams).then(summaryData => {
             this.summaryData = summaryData;
         }).catch(() => {
             this.summaryData = {}

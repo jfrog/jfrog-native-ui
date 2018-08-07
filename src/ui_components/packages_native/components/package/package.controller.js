@@ -17,17 +17,9 @@ export default class PackageController {
 	}
 
 	$onInit() {
-
-		let init = () => {
+        let init = () => {
             this.initConstants();
-            if (this.isWithXray && typeof this.isWithXray === 'function') {
-                this.isWithXray().then((response) => {
-                    this.withXray = response;
-                    this.initTable();
-                });
-            } else {
-                this.initTable();
-            }
+            this.initTable();
 
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
@@ -49,7 +41,7 @@ export default class PackageController {
 	}
 
 	getSummaryData() {
-        return this.getPackageSummary({daoParams: this.$stateParams}).then(summaryData => {
+        return this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
             this.summaryData = summaryData
         }).catch(() => {
             this.summaryData = {}
@@ -59,8 +51,7 @@ export default class PackageController {
     }
 
 	getPackageData(additionalDaoParams) {
-
-		additionalDaoParams = additionalDaoParams || {};
+        additionalDaoParams = additionalDaoParams || {};
 		additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
 		additionalDaoParams.order = additionalDaoParams.order || 'desc';
 
@@ -84,7 +75,7 @@ export default class PackageController {
 
 		this.calcPackageDownloads();
 
-		return this.getPackage({daoParams}).then((pkg) => {
+		return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
 			this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
 		});
@@ -95,7 +86,7 @@ export default class PackageController {
 			package: this.$stateParams.package,
 			packageType: this.$stateParams.packageType
 		};
-		this.getPackageDownloadsCount({daoParams}).then((response) => {
+		this.nativeParent.hostData.getPackageDownloadsCount(daoParams).then((response) => {
 			if (this.package) this.package.totalDownloads = response.totalDownloads;
 			this.totalDownloadsForPackage = response.totalDownloads;
 		});
@@ -149,10 +140,9 @@ export default class PackageController {
 		return [{
 			icon: 'icon icon-show-in-tree',
 			tooltip: 'Show In Tree',
-			visibleWhen: () => this.showInTree && typeof this.showInTree === 'function',
 			callback: (row) => {
 			    if (row.latestPath) {
-                    this.showInTree({pathParams: {fullpath: row.latestPath}});
+                    this.nativeParent.hostData.showInTree({fullpath: row.latestPath});
                 }
                 else {
                     let pathParams = {
@@ -160,7 +150,7 @@ export default class PackageController {
                         package: this.package.name,
                         version: row.name
                     };
-                    this.showInTree({pathParams: pathParams});
+                    this.nativeParent.hostData.showInTree(pathParams);
                 }
 			}
 		}, {
@@ -204,31 +194,29 @@ export default class PackageController {
 	}
 
 	showManifest(versionName, repo) {
-		if (this.getManifest && typeof this.getManifest === 'function') {
-			let daoParams = {
-				packageType: this.$stateParams.packageType,
-				package: this.package.name,
-				version: versionName,
-				repo: repo,
-				manifest: true
+		let daoParams = {
+			packageType: this.$stateParams.packageType,
+			package: this.package.name,
+			version: versionName,
+			repo: repo,
+			manifest: true
+		};
+
+		this.nativeParent.hostData.getManifest(daoParams).then((response) => {
+			this.modalScope = this.$rootScope.$new();
+			this.modalScope.modalTitle = 'Manifest.json';
+
+			this.modalScope.closeModal = () => {
+				return this.modalInstance.close();
 			};
-
-			this.getManifest({daoParams: daoParams}).then((response) => {
-				this.modalScope = this.$rootScope.$new();
-				this.modalScope.modalTitle = 'Manifest.json';
-
-				this.modalScope.closeModal = () => {
-					return this.modalInstance.close();
-				};
-				this.modalScope.downloadManifest = () => {
-					this.jFrogUIUtils.saveTextAsFile(this.modalScope.manifest,
-						`manifest_${this.package.name}_${versionName}.txt`);
-					this.modalScope.closeModal();
-				};
-				this.modalScope.manifest = JSON.stringify(angular.fromJson(response.fileContent), null, '\t');
-				this.modalInstance = this.modal.launchModal('manifest.modal', this.modalScope, 'lg');
-			});
-		}
+			this.modalScope.downloadManifest = () => {
+				this.jFrogUIUtils.saveTextAsFile(this.modalScope.manifest,
+					`manifest_${this.package.name}_${versionName}.txt`);
+				this.modalScope.closeModal();
+			};
+			this.modalScope.manifest = JSON.stringify(angular.fromJson(response.fileContent), null, '\t');
+			this.modalInstance = this.modal.launchModal('manifest.modal', this.modalScope, 'lg');
+		});
 	}
 
 	getSummaryColumns() {
@@ -250,10 +238,6 @@ export default class PackageController {
 
 	calcVersionDownloads(row, e) {
 		if (e) e.stopPropagation();
-		if (!this.getVersionDownloadsCount || !typeof this.getVersionDownloadsCount === 'function') {
-			return;
-		}
-
 		let daoParams = {
 			repo: row.repo,
 			package: this.package.name,
@@ -261,7 +245,7 @@ export default class PackageController {
 			version: row.name,
 		};
 		row.pendingCalculation = true;
-		this.getVersionDownloadsCount({daoParams: daoParams}).then((response) => {
+		this.nativeParent.hostData.getVersionDownloadsCount(daoParams).then((response) => {
 			row.downloadsCount = response.totalDownloads;
 			row.calculated = true;
 			row.pendingCalculation = false;

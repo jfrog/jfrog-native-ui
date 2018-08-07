@@ -48,7 +48,7 @@ export default class PackagesController {
 		}
 
 		this.$pendingData = true;
-		return this.getPackages({daoParams: searchParams}).then((packages) => {
+		return this.nativeParent.hostData.getPackages(searchParams).then((packages) => {
             this.packages.list = this.typeSpecific.transformers.packages(packages);
             this.$pendingData = false;
 		});
@@ -67,13 +67,13 @@ export default class PackagesController {
 	}
 
 	refreshPackageTypes(daoParams) {
-        return this.getPackageTypes({daoParams: daoParams}).then((packageTypes) => {
+        return this.nativeParent.getAvailablePackageTypes(daoParams).then((packageTypes) => {
             this.packageTypes = packageTypes;
 		});
 	}
 
 	refreshFilters(daoParams) {
-		return this.getFilters({daoParams: daoParams}).then((filters) => {
+		return this.nativeParent.hostData.getFilters(daoParams).then((filters) => {
 			this.filters = this.descriptor.common.transformers.filters(filters, daoParams.packageType);
         });
 	}
@@ -295,17 +295,13 @@ export default class PackagesController {
 	calcPackageExtraData(row) {
 		if (row.calculated || row.calculationPending) return;
 
-		if (!this.getPackageExtraInfo || !(typeof this.getPackageExtraInfo === 'function')) {
-			return;
-		}
-
 		let pkgName = row.name;
 		let daoParams = {
 			package: pkgName,
 			packageType: this.selectedPackageType.value
 		};
 		row.calculationPending = true;
-		this.getPackageExtraInfo({daoParams: daoParams}).then((response) => {
+		this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
 			if (response.totalDownloads !== undefined) {
 				row.downloadsCount = response.totalDownloads;
 			}
@@ -324,16 +320,12 @@ export default class PackagesController {
 
 	calcPackageDownloads(e, row) {
 		e.stopPropagation();
-		if (!this.getPackageDownloadsCount || !(typeof this.getPackageDownloadsCount === 'function')) {
-			return;
-		}
-
 		let pkgName = row.name;
 		let daoParams = {
 			package: pkgName,
 			packageType: this.selectedPackageType.value
 		};
-		this.getPackageDownloadsCount({daoParams: daoParams}).then((response) => {
+		this.nativeParent.hostData.getPackageDownloadsCount(daoParams).then((response) => {
 			row.downloadsCount = response.totalDownloads;
 			delete row.manualOnDemendDownloadsCount;
 		});

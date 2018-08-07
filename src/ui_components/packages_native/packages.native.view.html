@@ -1,26 +1,14 @@
-
 <packages-component
         ng-if="$ctrl.ready && $ctrl.subRouter.state === 'packages'"
-        get-package-types="$ctrl.getAvailablePackageTypes({daoParams})"
-        get-filters="$ctrl.getFilters({daoParams})"
-        get-packages="$ctrl.getPackages({daoParams})"
-        get-package-extra-info="$ctrl.getPackageExtraInfo({daoParams})"
-		get-package-downloads-count="$ctrl.getPackageDownloadsCount({daoParams})">
+        native-parent="$ctrl">
 </packages-component>
 
 <package-component
         ng-if="$ctrl.ready && $ctrl.subRouter.state === 'package'"
-        get-package="$ctrl.getPackage({daoParams})"
-        get-package-summary="$ctrl.getPackageSummary({daoParams})"
-        get-manifest="$ctrl.getManifest({daoParams})"
-		show-in-tree="$ctrl.showInTree({pathParams})"
-        get-package-downloads-count="$ctrl.getPackageDownloadsCount({daoParams})"
-        get-version-downloads-count="$ctrl.getVersionDownloadsCount({daoParams})">
+        native-parent="$ctrl">
 </package-component>
 
 <version-component
         ng-if="$ctrl.ready && $ctrl.subRouter.state === 'version'"
-        get-version="$ctrl.getVersion({daoParams})"
-        get-version-summary="$ctrl.getVersionSummary({daoParams})"
-        is-with-xray="$ctrl.isWithXray()">
+        native-parent="$ctrl">
 </version-component>

@@ -6,20 +6,9 @@ export default class PackagesNativeComponent {
         this.template = require('./packages.native.view.html');
         this.controller = PackagesNativeController;
         this.bindings = {
+            hostData: '=',
+
             packageType: '<',
-            getPackageTypes: '&?',
-            getFilters: '&?',
-            getPackages: '&?',
-            getPackage: '&?',
-            getPackageSummary: '&?',
-	        getPackageExtraInfo: '&?',
-	        getPackageDownloadsCount: '&?',
-            getVersion: '&?',
-            getVersionSummary: '&?',
-	        getVersionDownloadsCount: '&?',
-            getManifest: '&?',
-	        isWithXray: '&?',
-	        showInTree: '&?',
         };
     }
 }
