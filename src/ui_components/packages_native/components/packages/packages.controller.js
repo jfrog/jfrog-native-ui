@@ -200,7 +200,7 @@ export default class PackagesController {
 		if (selected.length) {
 			this.selectedRepos = [{
 				id: 'repo',
-				comparator: this.descriptor.defaultComparator,
+				comparator: this.descriptor.common.defaultComparator,
 				values: selected.map((selectedRepo) => {
 					return selectedRepo.text;
 				})
@@ -216,7 +216,7 @@ export default class PackagesController {
 		}).map((filter) => {
 			return {
 				id: this.typeSpecific.filters[filter.text],
-				comparator: this.descriptor.defaultComparator,
+				comparator: this.descriptor.common.defaultComparator,
 				values: [filter.inputTextValue || '']
 			};
 		});

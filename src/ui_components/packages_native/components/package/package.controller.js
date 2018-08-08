@@ -61,14 +61,14 @@ export default class PackageController {
 		if (this.$stateParams.query.repos) {
 			daoParams.repoFilter.push({
 				id: 'repo',
-				comparator: this.descriptor.defaultComparator,
+				comparator: this.descriptor.common.defaultComparator,
 				values: this.$stateParams.query.repos.split(',')
 			});
 		}
 		if (this.$stateParams.query.version) {
 			daoParams.repoFilter.push({
 				id: 'version',
-				comparator: this.descriptor.defaultComparator,
+				comparator: this.descriptor.common.defaultComparator,
 				values: [this.$stateParams.query.version]
 			});
 		}
