@@ -7,7 +7,6 @@ export default class PackagesNativeComponent {
         this.controller = PackagesNativeController;
         this.bindings = {
             hostData: '=',
-
             packageType: '<',
         };
     }

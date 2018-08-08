@@ -252,7 +252,7 @@ export default class PackageController {
 		});
 	}
     filterByKeyword(keyword) {
-        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters['Keywords'];
+        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters.keywords;
         if (keywordsId) {
             this.$stateParams.package = null;
             this.$stateParams.query = {[keywordsId]: keyword};

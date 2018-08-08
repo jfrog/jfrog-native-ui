@@ -1,12 +1,14 @@
 export default class PackagesNativeController {
-	constructor(JFrogSubRouter, $scope, $timeout, NativeUIDescriptor) {
+	constructor(JFrogSubRouter, $scope, $timeout, NativeUIDescriptor, HostDaoParamFormatter) {
 		this.$scope = $scope;
 		this.$timeout = $timeout;
 		this.JFrogSubRouter = JFrogSubRouter;
         this.descriptor = NativeUIDescriptor.getDescriptor();
+        this.formatter = HostDaoParamFormatter;
     }
 
 	$onInit() {
+	    this.wrapHostDataCalls();
 		this.defaultPackageType = localStorage.lastNativeUIPackageType || 'docker';
 		this.initSubRouter();
 	}
@@ -103,6 +105,11 @@ export default class PackagesNativeController {
             return packageTypes;
 
         });
+    }
+
+
+    wrapHostDataCalls() {
+	    this.formatter.wrapHostDataCalls(this.hostData);
     }
 
 }

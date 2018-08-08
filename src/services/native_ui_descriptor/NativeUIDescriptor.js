@@ -1,4 +1,3 @@
-import cellTemplates from '../../constants/cell.templates.constants';
 import BaseDescriptor from './BaseDescriptor';
 
 export default class NativeUIDescriptor extends BaseDescriptor{

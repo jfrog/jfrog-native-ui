@@ -64,9 +64,14 @@ export default class DockerDescriptor extends BaseDescriptor{
                 version: 'icon-docker-tags'
             },
             filters: {
-                'Image Name': 'pkg',
-                'Tag': 'version',
-                'Checksum': 'checksum',
+                package: 'pkg',
+                version: 'version',
+                checksum: 'checksum',
+            },
+            filtersLabels: {
+                pkg: 'Image Name',
+                version: 'Tag',
+                checksum: 'Checksum',
             },
             installPrefix: 'docker pull',
             packagesTableColumns: [

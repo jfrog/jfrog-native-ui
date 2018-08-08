@@ -52,11 +52,18 @@ export default class NpmDescriptor extends BaseDescriptor{
                 version: 'icon-docker-tags'
             },
             filters: {
-                'Package Name': 'npmName',
-                'Version': 'npmVersion',
-                'Keywords': 'npmKeywords',
-                'Scope': 'npmScope',
-                'Checksum': 'npmChecksum',
+                package: 'npmName',
+                version: 'npmVersion',
+                keywords: 'npmKeywords',
+                scope: 'npmScope',
+                checksum: 'npmChecksum',
+            },
+            filtersLabels: {
+                'npmName': 'Package Name',
+                'npmVersion': 'Version',
+                'npmKeywords': 'Keywords',
+                'npmScope': 'Scope',
+                'npmChecksum': 'Checksum',
             },
             installPrefix: 'npm i',
             packagesTableColumns: [

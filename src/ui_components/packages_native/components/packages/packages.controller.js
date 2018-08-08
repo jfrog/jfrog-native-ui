@@ -36,16 +36,10 @@ export default class PackagesController {
 		}
 
 		let searchParams = {
-			packageType: daoParams.packageType,
 			filters: daoParams.filters || [],
 			sortBy: daoParams.sortBy || 'name',
 			order: daoParams.order || 'asc'
 		};
-
-		let pkgFilter = _.find(searchParams.filters, {id: 'pkg'});
-		if (pkgFilter && pkgFilter.values[0] && !pkgFilter.values[0].endsWith('*')) {
-			pkgFilter.values[0] = pkgFilter.values[0] + '*'
-		}
 
 		this.$pendingData = true;
 		return this.nativeParent.hostData.getPackages(searchParams).then((packages) => {
@@ -55,6 +49,7 @@ export default class PackagesController {
 	}
 
 	initPackagesViewData(daoParams) {
+	    this.resetReposList();
         this.refreshPackageTypes(daoParams).then(() => {
 			this.$q.all([
 				this.refreshFilters(daoParams),
@@ -73,8 +68,8 @@ export default class PackagesController {
 	}
 
 	refreshFilters(daoParams) {
-		return this.nativeParent.hostData.getFilters(daoParams).then((filters) => {
-			this.filters = this.descriptor.common.transformers.filters(filters, daoParams.packageType);
+        return this.nativeParent.hostData.getRepos(daoParams).then((filters) => {
+            this.filters = this.descriptor.common.transformers.filters(filters, daoParams.packageType);
         });
 	}
 
@@ -118,11 +113,10 @@ export default class PackagesController {
 				isSelected: !this.$stateParams.query.repos ? false : _.includes(this.$stateParams.query.repos.split(','), value)
 			};
 		});
-
-		this.moreFiltersList = _.map(Object.keys(this.filters.extraFilters || {}), (value) => {
+        this.moreFiltersList = _.map(Object.keys(this.filters.extraFilters || {}), (value) => {
 		    let id = this.filters.extraFilters[value];
 			return {
-				text: value,
+				text: this.descriptor.typeSpecific[this.$stateParams.packageType].filtersLabels[id],
                 id: id,
 				isSelected: !!this.$stateParams.query[id],
 				inputTextValue: this.$stateParams.query[id] || ''
@@ -193,6 +187,13 @@ export default class PackagesController {
         });
 	}
 
+	resetReposList() {
+	    if (this.reposList && this.reposList.length) {
+	        this.reposList.forEach(repo => repo.isSelected = false);
+        }
+        this.selectedRepos = null;
+    }
+
 	getSelectedRepos() {
 		let selected = _.filter(this.reposList, (repo) => {
 			return repo.isSelected;
@@ -215,7 +216,7 @@ export default class PackagesController {
 			return filter.inputTextValue;
 		}).map((filter) => {
 			return {
-				id: this.typeSpecific.filters[filter.text],
+				id: filter.id,
 				comparator: this.descriptor.common.defaultComparator,
 				values: [filter.inputTextValue || '']
 			};
@@ -227,7 +228,6 @@ export default class PackagesController {
 		this.getSelectedFilters();
 		let daoParams = {
 			filters: this.concatAllActiveFilters(),
-			packageType: this.selectedPackageType.value,
 			sortBy: this.sorting.sortBy,
 			order: this.sorting.order
 		};
@@ -335,7 +335,7 @@ export default class PackagesController {
 
     filterByKeyword(keyword) {
         console.log(this.moreFiltersList);
-        let keywordsId = this.filters.extraFilters['Keywords'];
+        let keywordsId = this.filters.extraFilters.keywords;
         if (keywordsId) {
             this.$stateParams.query = {[keywordsId]: keyword};
         }

@@ -95,7 +95,7 @@ export default class VersionController {
 
     //This is currently duplicated from package level, should be moved to common place, if unchanged, to keep d.r.y
     filterByKeyword(keyword) {
-        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters['Keywords'];
+        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters.keywords;
         if (keywordsId) {
             this.$stateParams.package = null;
             this.$stateParams.version = null;
