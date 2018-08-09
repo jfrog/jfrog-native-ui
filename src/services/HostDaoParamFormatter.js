@@ -72,6 +72,8 @@ export default class HostDaoParamFormatter {
         set('version', 'versionName');
         set('packageType', 'packageType');
         set('repo', 'repo');
+        set('path', 'path');
+        set('dataType', 'dataType');
         set('manifest', 'manifest');
         set('order', 'order');
         set('sortBy', 'sortBy');

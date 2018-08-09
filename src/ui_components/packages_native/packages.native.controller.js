@@ -16,17 +16,17 @@ export default class PackagesNativeController {
 	initSubRouter() {
 		this.subRouter = this.JFrogSubRouter.createLocalRouter({
 			parentScope: this.$scope,
-			urlStructure: '/:packageType/:package/:version/?:repo&:query',
+			urlStructure: '/:packageType/:package/:version/?:repo&:versionPath&:query',
 			hotSyncUrl: true,
 			encodeSearchParamsAsBase64: 'state',
 			states: [
 				{
 					name: 'packages',
-					params: {mandatory: ['packageType'], nullify: ['package', 'version', 'repo']}
+					params: {mandatory: ['packageType'], nullify: ['package', 'version', 'repo', 'versionPath']}
 				},
 				{
 					name: 'package',
-					params: {mandatory: ['packageType', 'package'], nullify: ['version', 'repo']}
+					params: {mandatory: ['packageType', 'package'], nullify: ['version', 'repo', 'versionPath']}
 				},
 				{
 					name: 'version',

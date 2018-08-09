@@ -77,7 +77,6 @@ export default class PackageController {
 
 		return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
-			pkg.results.forEach(version => delete version.numOfDownloads);
 			this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
 		});
 	}
@@ -139,7 +138,7 @@ export default class PackageController {
 
 	onRowClick(row) {
 		if (row && row.entity && row.entity.name && !$(row.event.target).is('.copy-to-clip')) {
-			this.goToVersion(row.entity.name, row.entity.repo || row.entity.repositories[0]);
+			this.goToVersion(row.entity.name, row.entity.repo || row.entity.repositories[0], row.entity.latestPath);
 		}
 	}
 
@@ -188,11 +187,12 @@ export default class PackageController {
         });
 	}
 
-	goToVersion(versionName, repo) {
+	goToVersion(versionName, repo, path) {
         this.subRouter.goto('version', {
 			packageType: this.$stateParams.packageType,
 			package: this.$stateParams.package,
 			repo: repo,
+	        versionPath: path,
 			version: versionName
 		})
 	}

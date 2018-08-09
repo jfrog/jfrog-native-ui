@@ -248,44 +248,37 @@ export default class CommonDescriptor extends BaseDescriptor{
                 dockerLayers: {
                     name: 'Docker Layers',
                     id: 'docker-layers',
-                    template: `
-                                <div class="docker-layers">
-                                   <h4>Layers</h4>
-                                   <jf-docker-v2-layers
-                                           controller="ctrl.$scope.versionCtrl"
-                                           data="ctrl.$scope.versionCtrl.version.layers"
-                                           current-path="a/latest">
-                                   </jf-docker-v2-layers>
-                                </div>
-`,
+                    template: require('../../version_data_widgets/docker_layers/docker_layers_widget.html'),
                     scroll: true,
                     showSpinner: false
                 },
                 readme: {
                     name: 'Read me',
                     id: 'readme',
-                    template: `<div style="padding: 40px">README !</div>`,
+                    template: require('../../version_data_widgets/readme/readme_widget.html'),
                     scroll: true,
                     showSpinner: false
                 },
                 properties: {
                     name: 'Properties',
                     id: 'properties',
-                    template: `<div style="padding: 40px">PROPERTIES !</div>`,
+                    template: require('../../version_data_widgets/properties/properties_widget.html'),
+                    controller: require('../../version_data_widgets/properties/properties_widget.controller'),
                     scroll: true,
                     showSpinner: false
                 },
                 dependencies: {
                     name: 'Dependencies',
                     id: 'dependencies',
-                    template: `<div style="padding: 40px">DEPENDENCIES !</div>`,
+                    template: require('../../version_data_widgets/dependencies/dependencies_widget.html'),
                     scroll: true,
                     showSpinner: false
                 },
                 builds: {
                     name: 'Builds',
                     id: 'builds',
-                    template: `<div style="padding: 40px">BUILDS !</div>`,
+                    template: require('../../version_data_widgets/builds/builds_widget.html'),
+                    controller: require('../../version_data_widgets/builds/builds_widget.controller'),
                     scroll: true,
                     showSpinner: false
                 },

@@ -31,6 +31,7 @@ export default class NpmDescriptor extends BaseDescriptor{
                     result.keywords = data.keywords;
                     if (data.results) {
                         result.versions = data.results.map((version) => {
+                            delete version.numOfDownloads;
                             return this.descriptor.transformers.version(version);
                         });
                     }
