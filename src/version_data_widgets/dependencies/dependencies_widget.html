@@ -1,1 +1,11 @@
-<div class="version-widget-container">DEPENDENCIES !</div>
+<div class="version-widget-container">
+	<div ng-if="ctrl.data.dependencies.length">
+		<div class="widget-title">Dependencies</div>
+		<div class="dependencies-list">{{ctrl.data.dependencies.join(', ')}}</div>
+		<hr/>
+	</div>
+	<div ng-if="ctrl.data.devDependencies.length">
+		<div class="widget-title">Dev Dependencies</div>
+		<div class="dependencies-list">{{ctrl.data.devDependencies.join(', ')}}</div>
+	</div>
+</div>

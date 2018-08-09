@@ -20,23 +20,20 @@ export default class PropertiesWidgetController {
         return [
             {
                 header: 'Key name',
-                field: 'propKey'
+                field: 'key'
             },
             {
-                header: 'Value',
-                field: 'propVal'
+                header: 'Values',
+                field: 'values',
+                cellTemplate:`<div>{{row.entity.values.join (',')}}</div>`
             },
         ]
 
     }
 
     getProperties() {
-        this.hostData.getVersionData({dataType: 'props', path: this.subRouter.params.versionPath}).then(properties => {
-            properties = _.map(Object.keys(properties.props), prop => {
-                let value = properties.props[prop];
-                return {propKey: prop, propVal: value};
-            });
-            this.tableViewOptions.setData(properties);
+        this.hostData.getVersionData({dataType: 'props', path: this.subRouter.params.versionPath}).then(response => {
+            this.tableViewOptions.setData(response.properties);
         })
     }
 }

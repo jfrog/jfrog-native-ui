@@ -48,8 +48,8 @@ export default class BuildsWidgetController {
     }
 
     getBuilds() {
-        this.hostData.getVersionData({dataType: 'builds', path: this.subRouter.params.versionPath}).then(builds => {
-            this.tableViewOptions.setData(builds.results);
+        this.hostData.getVersionData({dataType: 'builds', path: this.subRouter.params.versionPath}).then(response => {
+            this.tableViewOptions.setData(response.results);
         })
     }
 }

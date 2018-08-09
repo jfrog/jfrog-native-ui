@@ -256,6 +256,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     name: 'Read me',
                     id: 'readme',
                     template: require('../../version_data_widgets/readme/readme_widget.html'),
+                    controller: require('../../version_data_widgets/readme/readme_widget.controller'),
                     scroll: true,
                     showSpinner: false
                 },
@@ -271,6 +272,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     name: 'Dependencies',
                     id: 'dependencies',
                     template: require('../../version_data_widgets/dependencies/dependencies_widget.html'),
+                    controller: require('../../version_data_widgets/dependencies/dependencies.controller'),
                     scroll: true,
                     showSpinner: false
                 },
