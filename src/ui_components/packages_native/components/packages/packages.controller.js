@@ -49,6 +49,7 @@ export default class PackagesController {
 	}
 
 	initPackagesViewData(daoParams) {
+        delete this.hasSelectedFilters;
 	    this.resetReposList();
         this.refreshPackageTypes(daoParams).then(() => {
 			this.$q.all([
