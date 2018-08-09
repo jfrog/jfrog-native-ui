@@ -4,13 +4,13 @@
 	<span class="show-download-count no-cm-action"
 	      jf-tooltip="Click to calculate"
 	      ng-click="appScope.$ctrl.calcVersionDownloads(row.entity, $event)"
-	      ng-if="row.entity.downloadsCount === undefined && !row.entity.calculated && !row.entity.pendingCalculation">
+	      ng-if="row.entity.downloadsCount === undefined && row.entity.manualOnDemendDownloadsCount">
         Show downloads count
     </span>
-	<span ng-if="(row.entity.calculated || row.entity.downloadsCount !== undefined) && !row.entity.pendingCalculation">
+	<span ng-if="row.entity.downloadsCount !== undefined && !row.entity.pendingCalculation">
         {{ row.entity.downloadsCount || 0 }} Download{{row.entity.downloadsCount === 1 ? '' : 's' }}
     </span>
-	<spab ng-if="row.entity.pendingCalculation">
+	<span ng-if="row.entity.pendingCalculation">
 		--
-	</spab>
+	</span>
 </div>

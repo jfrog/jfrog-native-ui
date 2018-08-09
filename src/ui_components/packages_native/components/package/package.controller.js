@@ -77,6 +77,7 @@ export default class PackageController {
 
 		return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
+			pkg.results.forEach(version => delete version.numOfDownloads);
 			this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
 		});
 	}
@@ -116,7 +117,14 @@ export default class PackageController {
 		this.tableViewOptions.on('row.clicked', this.onRowClick.bind(this));
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
 
-	}
+        this.tableViewOptions.on('row.in.view', row => {
+            if (row.downloadsCount === undefined) {
+            	if (this.$stateParams.packageType === 'docker') this.calcVersionDownloads(row);
+            	else this.calcPackageExtraData(row);
+            }
+        });
+
+    }
 
 	onSortChange(field, dir) {
 		if (field === 'repo') field = 'repoKey';
@@ -251,6 +259,28 @@ export default class PackageController {
 			row.pendingCalculation = false;
 		});
 	}
+
+    calcPackageExtraData(row) {
+        if (row.calculated || row.calculationPending) return;
+
+        let versionName = row.name;
+        let daoParams = {
+            version: versionName
+        };
+        row.calculationPending = true;
+        this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
+            if (response.totalDownloads !== undefined) {
+                row.downloadsCount = response.totalDownloads;
+            }
+            else {
+                row.manualOnDemendDownloadsCount = true;
+            }
+            row.calculated = true;
+            row.calculationPending = false;
+        })
+    }
+
+
     filterByKeyword(keyword) {
         let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters.keywords;
         if (keywordsId) {
