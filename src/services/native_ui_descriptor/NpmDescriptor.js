@@ -85,7 +85,7 @@ export default class NpmDescriptor extends BaseDescriptor{
                 'packageIcon',
                 'packageName',
                 'description',
-                'keywords',
+                'license',
                 'numberOfDownloads',
                 'lastModified',
                 'installCommand'
