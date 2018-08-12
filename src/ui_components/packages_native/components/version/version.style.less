@@ -73,5 +73,28 @@ version-component {
         padding: 0;
       }
     }
+
+    .jf-table-view {
+      .jf-table-top {
+        height: 35px;
+        margin-bottom: 0;
+        .counter-and-filter-wrapper {
+          .table-counter {
+            display: inline-block;
+          }
+          .jf-table-filter {
+            display: inline-block;
+            input {
+              border: none;
+              border-bottom: solid black 1px;
+              height: 20px;
+              &[disabled] {
+                background: inherit;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

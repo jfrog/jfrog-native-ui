@@ -15,6 +15,7 @@ export default class BuildsWidgetController {
         this.tableViewOptions = new this.JFrogTableViewOptions(this.$scope);
         this.tableViewOptions.setColumns(this.getColumns())
             .setActions(this.getActions())
+            .showPagination(false)
             .setObjectName('build')
     }
 

@@ -13,6 +13,7 @@ export default class PropertiesWidgetController {
     createTable() {
         this.tableViewOptions = new this.JFrogTableViewOptions(this.$scope);
         this.tableViewOptions.setColumns(this.getColumns())
+            .showPagination(false)
             .setObjectName('property/properties')
     }
 
