@@ -1,8 +1,9 @@
 export default class PackagesNativeController {
-	constructor(JFrogSubRouter, $scope, $timeout, NativeUIDescriptor, HostDaoParamFormatter) {
+	constructor(JFrogSubRouter, JfFullTextService, $scope, $timeout, NativeUIDescriptor, HostDaoParamFormatter) {
 		this.$scope = $scope;
 		this.$timeout = $timeout;
 		this.JFrogSubRouter = JFrogSubRouter;
+        this.fullTextService = JfFullTextService;
         this.descriptor = NativeUIDescriptor.getDescriptor();
         this.formatter = HostDaoParamFormatter;
     }
@@ -107,6 +108,10 @@ export default class PackagesNativeController {
         });
     }
 
+    showAll(e, text, title, asList = false, itemClickCB = null, windowClass = '') {
+        e.stopPropagation();
+        this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB, windowClass);
+    }
 
     wrapHostDataCalls() {
 	    this.formatter.wrapHostDataCalls(this.hostData);

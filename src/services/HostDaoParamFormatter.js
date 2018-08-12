@@ -27,7 +27,7 @@ export default class HostDaoParamFormatter {
 
         if (stateParams.query) {
             Object.keys(stateParams.query).forEach(queryParam => {
-                addFilter(queryParam, (stateParams.query[queryParam] || '').split(','))
+                addFilter(queryParam === 'repos' ? 'repo' : queryParam, (stateParams.query[queryParam] || '').split(','))
             })
         }
 

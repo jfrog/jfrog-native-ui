@@ -1,8 +1,7 @@
 export default class PackageController {
 
 	constructor(JFrogSubRouter, $scope, $q, JFrogTableViewOptions,
-	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor, JfFullTextService) {
-        this.fullTextService = JfFullTextService;
+	            JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
@@ -291,11 +290,6 @@ export default class PackageController {
             this.$stateParams.package = null;
             this.$stateParams.query = {[keywordsId]: keyword};
         }
-    }
-
-    showAll(e, text, title, asList = false, itemClickCB = null) {
-        e.stopPropagation();
-        this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB);
     }
 
 }

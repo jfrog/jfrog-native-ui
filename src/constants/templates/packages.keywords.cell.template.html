@@ -2,6 +2,7 @@
 	<div class="keyword"
 	     ng-repeat="keyword in row.entity.keywords.slice(0,3)"
 	     ng-click="appScope.$ctrl.filterByKeyword(keyword); $event.stopPropagation()"
+	     ng-style="{'max-width': row.entity.keywords.length > 3 ? '25%' : row.entity.keywords.length > 0 ? (100/row.entity.keywords.length) + '%' : 0}"
 	     jf-tooltip-on-overflow>
         {{keyword}}
 	</div>
@@ -9,7 +10,7 @@
 	<div class="keyword"
 	     ng-if="row.entity.keywords.length > 3"
 	     jf-tooltip="{{'Show All (' + row.entity.keywords.length + ')'}}"
-	     ng-click="appScope.$ctrl.showAll($event,row.entity.keywords, 'Keywords', true, appScope.$ctrl.filterByKeyword.bind(appScope.$ctrl))">
+	     ng-click="appScope.$ctrl.nativeParent.showAll($event,row.entity.keywords, 'Keywords', true, appScope.$ctrl.filterByKeyword.bind(appScope.$ctrl), 'keywords-modal')">
         ...
 	</div>
 </div>

@@ -1,7 +1,6 @@
 export default class VersionController {
 
-	constructor(JFrogSubRouter, $scope, $q, JFrogUIUtils, NativeUIDescriptor, JfFullTextService) {
-        this.fullTextService = JfFullTextService;
+	constructor(JFrogSubRouter, $scope, $q, JFrogUIUtils, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
@@ -108,12 +107,6 @@ export default class VersionController {
             this.$stateParams.repo = null;
             this.$stateParams.query = {[keywordsId]: keyword};
         }
-    }
-
-    //This is currently duplicated from package level, should be moved to common place, if unchanged, to keep d.r.y
-    showAll(e, text, title, asList = false, itemClickCB = null) {
-        e.stopPropagation();
-        this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB);
     }
 
 }

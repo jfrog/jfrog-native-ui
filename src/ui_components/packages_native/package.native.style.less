@@ -44,15 +44,22 @@ body.packagesNative {
   }
 }
 
+.full-text-modal.keywords-modal,
 .summary-row,
 .jf-table-cell-content {
+  .modal-body.text-to-list {
+    padding: 30px;
+  }
+  .text-to-list,
   .keywords-wrap {
     padding: 4px 0;
+    .full-text-item,
     .keyword {
-      border: 1px solid @blackBGMediumDark;
-      border-radius: 6px;
+//      border: 1px solid @blackBGMediumDark;
+      background-color: @grayBorderLighter;
+      border-radius: 12px;
       margin-right: 4px;
-      padding: 0 3px 2px 3px;
+      padding: 4px 3px 6px 3px;
       display: inline-block;
       max-width: 30%;
       overflow: hidden;
@@ -60,13 +67,17 @@ body.packagesNative {
       text-overflow: ellipsis;
       cursor: pointer;
     }
+    .full-text-item {
+      margin-bottom: 20px;
+      margin-right: 10px;
+    }
   }
 }
 .summary-row {
   .keywords-wrap {
     .keyword {
-      border: 1px solid @grayBGLight;
-      background-color: @grayBGLight;
+//      border: 1px solid @grayBGLight;
+      background-color: @grayBorderLighter;
       height: 25px;
       line-height: 20px;
       font-size: 80%;

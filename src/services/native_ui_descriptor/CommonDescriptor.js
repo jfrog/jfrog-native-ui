@@ -165,7 +165,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                                         <div class="keyword"
                                              ng-if="$ctrl.summaryData.keywords.length > 4"
                                              jf-tooltip="{{'Show All (' + $ctrl.summaryData.keywords.length + ')'}}"
-                                             ng-click="$ctrl.showAll($event,$ctrl.summaryData.keywords, 'Keywords', true, $ctrl.filterByKeyword.bind($ctrl))">
+                                             ng-click="$ctrl.nativeParent.showAll($event,$ctrl.summaryData.keywords, 'Keywords', true, $ctrl.filterByKeyword.bind($ctrl), 'keywords-modal')">
                                             ...
                                         </div>
                                     </div>    

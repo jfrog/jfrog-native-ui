@@ -1,12 +1,11 @@
 export default class PackagesController {
 
-	constructor(JFrogSubRouter, $q, $scope, JFrogTableViewOptions, JfFullTextService, JFrogUIUtils, NativeUIDescriptor) {
+	constructor(JFrogSubRouter, $q, $scope, JFrogTableViewOptions, JFrogUIUtils, NativeUIDescriptor) {
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
 		this.$q = $q;
 		this.JFrogTableViewOptions = JFrogTableViewOptions;
-		this.fullTextService = JfFullTextService;
 		this.jFrogUIUtils = JFrogUIUtils;
         this.descriptor = NativeUIDescriptor.getDescriptor();
 		this.sorting = {sortBy: 'name', order: 'asc'};
@@ -163,11 +162,6 @@ export default class PackagesController {
 		if (row && row.entity && row.entity.name && row.entity.name !== 'Name') {
 			this.goToPackage(row.entity.name);
 		}
-	}
-
-	showAll(e, text, title, asList = false, itemClickCB = null) {
-		e.stopPropagation();
-		this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB);
 	}
 
 	getColumns() {
