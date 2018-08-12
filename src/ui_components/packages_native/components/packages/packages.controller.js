@@ -13,6 +13,7 @@ export default class PackagesController {
 	}
 
 	$onInit() {
+	    this.nativeParent.stateController = this;
 		this.packages = {};
 
 		this.initPackagesViewData(this.$stateParams);
@@ -327,14 +328,5 @@ export default class PackagesController {
 
 
 	}
-
-    filterByKeyword(keyword) {
-        console.log(this.moreFiltersList);
-        let keywordsId = this.filters.extraFilters.keywords;
-        if (keywordsId) {
-            this.$stateParams.query = {[keywordsId]: keyword};
-        }
-        this.initPackagesViewData(this.$stateParams);
-    }
 
 }

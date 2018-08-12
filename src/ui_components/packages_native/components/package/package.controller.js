@@ -16,6 +16,8 @@ export default class PackageController {
 	}
 
 	$onInit() {
+        this.nativeParent.stateController = this;
+
         let init = () => {
             this.initConstants();
             this.initTable();
@@ -281,15 +283,6 @@ export default class PackageController {
             row.calculated = true;
             row.calculationPending = false;
         })
-    }
-
-
-    filterByKeyword(keyword) {
-        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters.keywords;
-        if (keywordsId) {
-            this.$stateParams.package = null;
-            this.$stateParams.query = {[keywordsId]: keyword};
-        }
     }
 
 }

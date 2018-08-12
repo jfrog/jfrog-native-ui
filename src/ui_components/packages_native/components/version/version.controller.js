@@ -19,8 +19,27 @@ export default class VersionController {
 
     }
 
+    $onInit() {
+        this.nativeParent.stateController = this;
 
-	initConstants() {
+        this.getSummaryData();
+        this.getVersionData(this.$stateParams).then(() => {
+            this.initConstants();
+            this.nativeParent.hostData.isXrayEnabled().then((response) => {
+                this.withXray = response;
+            });
+            this.summaryColumns = this.getSummaryColumns();
+
+            this.subRouter.listenForChanges(['packageType', 'package', 'version'], 'version', () => {
+                this.getSummaryData();
+                this.getVersionData(this.$stateParams);
+            }, this.$scope);
+
+        })
+    }
+
+
+    initConstants() {
 		this.packageAlias = this.jFrogUIUtils.capitalizeFirstLetter(
 			this.descriptor.typeSpecific[this.$stateParams.packageType].aliases.package
 		);
@@ -29,23 +48,6 @@ export default class VersionController {
 		);
 		this.packageTypeIcon = this.descriptor.typeSpecific[this.$stateParams.packageType].icons.package;
 		this.versionIcon = this.descriptor.typeSpecific[this.$stateParams.packageType].icons.version;
-	}
-
-	$onInit() {
-        this.getSummaryData();
-		this.getVersionData(this.$stateParams).then(() => {
-			this.initConstants();
-            this.nativeParent.hostData.isXrayEnabled().then((response) => {
-                this.withXray = response;
-            });
-            this.summaryColumns = this.getSummaryColumns();
-
-			this.subRouter.listenForChanges(['packageType', 'package', 'version'], 'version', () => {
-                this.getSummaryData();
-				this.getVersionData(this.$stateParams);
-			}, this.$scope);
-
-		})
 	}
 
 	getVersionData(daoParams) {
@@ -97,16 +99,4 @@ export default class VersionController {
 
         });
     }
-
-    //This is currently duplicated from package level, should be moved to common place, if unchanged, to keep d.r.y
-    filterByKeyword(keyword) {
-        let keywordsId = this.descriptor.typeSpecific[this.$stateParams.packageType].filters.keywords;
-        if (keywordsId) {
-            this.$stateParams.package = null;
-            this.$stateParams.version = null;
-            this.$stateParams.repo = null;
-            this.$stateParams.query = {[keywordsId]: keyword};
-        }
-    }
-
 }

@@ -157,7 +157,8 @@ export default class CommonDescriptor extends BaseDescriptor{
                                     <div class="keywords-wrap">
                                         <div class="keyword"
                                              ng-repeat="keyword in $ctrl.summaryData.keywords.slice(0,4)"
-                                             ng-click="$ctrl.filterByKeyword(keyword)"
+                                             ng-click="$ctrl.nativeParent.filterByKeyword(keyword)"
+                                             ng-style="{'max-width': $ctrl.summaryData.keywords.length > 4 ? '20%' : $ctrl.summaryData.keywords.length > 0 ? (100/$ctrl.summaryData.keywords.length) + '%' : 0}"
                                              jf-tooltip-on-overflow>
                                             {{keyword}}
                                         </div>
@@ -165,7 +166,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                                         <div class="keyword"
                                              ng-if="$ctrl.summaryData.keywords.length > 4"
                                              jf-tooltip="{{'Show All (' + $ctrl.summaryData.keywords.length + ')'}}"
-                                             ng-click="$ctrl.nativeParent.showAll($event,$ctrl.summaryData.keywords, 'Keywords', true, $ctrl.filterByKeyword.bind($ctrl), 'keywords-modal')">
+                                             ng-click="$ctrl.nativeParent.showAll($event,$ctrl.summaryData.keywords, 'Keywords', true, $ctrl.nativeParent.filterByKeyword.bind($ctrl.nativeParent), 'keywords-modal')">
                                             ...
                                         </div>
                                     </div>    

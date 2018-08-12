@@ -6,6 +6,7 @@ export default class PackagesNativeController {
         this.fullTextService = JfFullTextService;
         this.descriptor = NativeUIDescriptor.getDescriptor();
         this.formatter = HostDaoParamFormatter;
+        this.stateController = null;
     }
 
 	$onInit() {
@@ -111,6 +112,21 @@ export default class PackagesNativeController {
     showAll(e, text, title, asList = false, itemClickCB = null, windowClass = '') {
         e.stopPropagation();
         this.fullTextService.showFullTextModal(text, title, 590, asList, itemClickCB, windowClass);
+    }
+
+    filterByKeyword(keyword) {
+	    let origState = this.subRouter.state;
+        let keywordsId = this.descriptor.typeSpecific[this.subRouter.params.packageType].filters.keywords;
+        if (keywordsId) {
+            this.subRouter.params.package = null;
+            this.subRouter.params.version = null;
+            this.subRouter.params.repo = null;
+            this.subRouter.params.versionPath = null;
+            this.subRouter.params.query = {[keywordsId]: keyword};
+        }
+        if (origState === 'packages' && this.stateController) {
+            this.stateController.initPackagesViewData(this.subRouter.params);
+        }
     }
 
     wrapHostDataCalls() {
