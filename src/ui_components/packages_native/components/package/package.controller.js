@@ -41,13 +41,17 @@ export default class PackageController {
 	}
 
 	getSummaryData() {
-        return this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
-            this.summaryData = summaryData
-        }).catch(() => {
+		if (this.$stateParams.packageType !== 'docker') {
+            return this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
+                this.summaryData = summaryData
+                this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
+            })
+		}
+		else {
             this.summaryData = {}
-        }).finally(() => {
             this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
-        })
+            return this.$q.when();
+		}
     }
 
 	getPackageData(additionalDaoParams) {
@@ -73,7 +77,7 @@ export default class PackageController {
 			});
 		}
 
-		this.calcPackageDownloads();
+		if (this.$stateParams.packageType === 'docker') this.calcPackageDownloads();
 
 		return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;

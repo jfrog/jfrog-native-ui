@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "angular": "1.6.10",
-    "jfrog-ui-essentials": "2.1.2"
+    "jfrog-ui-essentials": "2.1.5"
   },
   "resolutions": {
     "angular": "1.7.2",

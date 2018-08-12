@@ -1,10 +1,11 @@
 export default class VersionController {
 
-	constructor(JFrogSubRouter, $scope, JFrogUIUtils, NativeUIDescriptor, JfFullTextService) {
+	constructor(JFrogSubRouter, $scope, $q, JFrogUIUtils, NativeUIDescriptor, JfFullTextService) {
         this.fullTextService = JfFullTextService;
 		this.subRouter = JFrogSubRouter.getActiveRouter();
 		this.$stateParams = this.subRouter.params;
 		this.$scope = $scope;
+		this.$q = $q;
 		this.jFrogUIUtils = JFrogUIUtils;
         this.descriptor = NativeUIDescriptor.getDescriptor();
 
@@ -49,19 +50,24 @@ export default class VersionController {
 	}
 
 	getVersionData(daoParams) {
-		return this.nativeParent.hostData.getVersion(daoParams).then((version) => {
-			this.version = this.descriptor.typeSpecific[daoParams.packageType].transformers.version(version);
-		}).catch((data) => {
-            delete this.version;
-		})
+        if (this.$stateParams.packageType === 'docker') {
+            return this.nativeParent.hostData.getVersion(daoParams).then((version) => {
+                this.version = this.descriptor.typeSpecific[daoParams.packageType].transformers.version(version);
+            })
+        }
+        else return this.$q.when();
 	}
 
     getSummaryData() {
-        this.nativeParent.hostData.getVersionSummary(this.$stateParams).then(summaryData => {
-            this.summaryData = summaryData;
-        }).catch(() => {
+	    if (this.$stateParams.packageType !== 'docker') {
+            this.nativeParent.hostData.getVersionSummary(this.$stateParams).then(summaryData => {
+                this.summaryData = summaryData;
+            })
+        }
+        else {
             this.summaryData = {}
-        })
+            return this.$q.when();
+        }
     }
 
 
