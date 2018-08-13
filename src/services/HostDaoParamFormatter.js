@@ -23,7 +23,9 @@ export default class HostDaoParamFormatter {
     getFiltersFromState(overrides) {
         let stateParams = this.getSubRouter().params;
         let filters = [];
-        let addFilter = (id,values) => filters.push({id, comparator: this.descriptor.common.defaultComparator, values});
+        let addFilter = (id,values,comparator = this.descriptor.common.defaultComparator) => {
+            return filters.push({id, comparator, values});
+        }
 
         if (stateParams.query) {
             Object.keys(stateParams.query).forEach(queryParam => {
@@ -41,12 +43,18 @@ export default class HostDaoParamFormatter {
         }
 
         if (stateParams.package || overrides.package) {
-            if (pkgFilter) pkgFilter.values = [stateParams.package || overrides.package];
-            else addFilter(typeDescriptor.filters.package, [stateParams.package || overrides.package]);
+            if (pkgFilter) {
+                pkgFilter.values = [stateParams.package || overrides.package];
+                pkgFilter.comparator = 'equals';
+            }
+            else addFilter(typeDescriptor.filters.package, [stateParams.package || overrides.package], 'equals');
         }
         if (stateParams.version || overrides.version) {
-            if (versionFilter) versionFilter.values = [stateParams.version || overrides.version];
-            else addFilter(typeDescriptor.filters.version, [stateParams.version || overrides.version])
+            if (versionFilter) {
+                versionFilter.values = [stateParams.version || overrides.version];
+                versionFilter.comparator = 'equals';
+            }
+            else addFilter(typeDescriptor.filters.version, [stateParams.version || overrides.version], 'equals');
         }
 
         return filters;
