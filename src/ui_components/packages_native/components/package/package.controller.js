@@ -43,10 +43,16 @@ export default class PackageController {
 
 	getSummaryData() {
 		if (this.$stateParams.packageType !== 'docker') {
-            return this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
+		    let defer = this.$q.defer();
+            this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
                 this.summaryData = summaryData
                 this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
-            })
+                this.nativeParent.hostData.getPackageSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
+                    _.extend(this.summaryData, summaryExtraData)
+                    defer.resolve();
+                })
+            }).catch(console.error)
+            return defer.promise;
 		}
 		else {
             this.summaryData = {}

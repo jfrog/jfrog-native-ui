@@ -129,7 +129,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                 numberOfDownloads: {
                     label: 'Number Of Downloads',
                     class: 'package-downloads-count',
-                    template: `{{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.package.downloadsCount}}`,
+                    template: `{{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : ($ctrl.totalDownloadsForPackage !== undefined ? $ctrl.totalDownloadsForPackage : '-')}}`,
                     isActive: true
                 },
                 lastModified: {
@@ -186,7 +186,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     label: 'License',
                     class: 'summary-license',
                     template: `<span jf-tooltip-on-overflow>
-                                    {{$ctrl.summaryData.license || '?'}}
+                                    {{$ctrl.summaryData.license || '-'}}
                                </span>`,
                     noWrap: true,
                     isActive: true

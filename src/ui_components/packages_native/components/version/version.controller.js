@@ -63,6 +63,9 @@ export default class VersionController {
 	    if (this.$stateParams.packageType !== 'docker') {
             this.nativeParent.hostData.getVersionSummary(this.$stateParams).then(summaryData => {
                 this.summaryData = summaryData;
+                this.nativeParent.hostData.getVersionSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
+                    _.extend(this.summaryData, summaryExtraData);
+                })
             })
         }
         else {
