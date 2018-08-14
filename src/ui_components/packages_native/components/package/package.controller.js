@@ -240,9 +240,11 @@ export default class PackageController {
             }
             else columnObj = column;
 
-            if (columnObj.label && columnObj.label.indexOf('@{PACKAGE_ALIAS}') !== -1) {
-                columnObj.label = columnObj.label.replace('@{PACKAGE_ALIAS}', this.packageAlias);
-            }
+            ['label', 'template'].forEach(objField => {
+                if (columnObj[objField] && columnObj[objField].indexOf('@{PACKAGE_ALIAS}') !== -1) {
+                    columnObj[objField] = columnObj[objField].replace('@{PACKAGE_ALIAS}', this.packageAlias);
+                }
+            })
 
             return columnObj;
 

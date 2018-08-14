@@ -177,10 +177,9 @@ export default class CommonDescriptor extends BaseDescriptor{
                 description: {
                     label: 'Description',
                     class: 'summary-description',
-                    template: `<span class="description-text"jf-tooltip-on-overflow>
-                                    {{$ctrl.summaryData.description}}
-                               </span>`,
-                    noWrap: false,
+                    template: `<div class="description-wrap"><jf-text-box text="$ctrl.summaryData.description" modal-title="@{PACKAGE_ALIAS} Description"></jf-text-box></div>`,
+                    noWrap: true,
+                    width: '20%',
                     isActive: true
                 },
                 license: {

@@ -85,10 +85,13 @@ body.packagesNative {
     }
   }
   .summary-description {
-    .description-text {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      font-size: 80% !important;
+    position: relative;
+    .description-wrap {
+      position: absolute;
+      top: 30px; bottom: 16px; left: 20px; right: 20px;
+      font-weight: 700;
+      color: @blackBGLight;
+      line-height: 15px;
     }
   }
 }
