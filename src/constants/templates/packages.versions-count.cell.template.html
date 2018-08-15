@@ -1,4 +1,13 @@
-<div class="versions-count">
+<div class="versions-count" disable-tooltip-on-overflow>
+    <jf-pending-data wait-for="row.entity.versionsCount">
+        <div class="icon-wrapper">
+            <i class="icon"
+               ng-class="appScope.$ctrl.versionIcon">
+            </i>
+        </div>
+        {{row.entity.versionsCount || 0 }} {{appScope.$ctrl.versionAlias}}{{row.entity.versionsCount === 1 ? '' : 's'}}
+    </jf-pending-data>
+<!--
     <div ng-if="row.entity.versionsCount !== undefined">
         <div class="icon-wrapper">
             <i class="icon"
@@ -8,6 +17,7 @@
         {{row.entity.versionsCount || 0 }} {{appScope.$ctrl.versionAlias}}{{row.entity.versionsCount === 1 ? '' : 's'}}
     </div>
     <div ng-if="row.entity.versionsCount === undefined">
-        --
+        &#45;&#45;
     </div>
+-->
 </div>

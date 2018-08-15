@@ -1,5 +1,9 @@
 <div class="downloads-count no-cm-action"
      disable-tooltip-on-overflow>
+	<jf-pending-data wait-for="row.entity.downloadsCount">
+		{{ row.entity.downloadsCount}} Download{{row.entity.downloadsCount === 1 ? '' : 's' }}
+	</jf-pending-data>
+<!--
 	<div ng-if="row.entity.downloadsCount !== undefined">
 		<i class="icon icon-download"></i>
 		<span>
@@ -15,6 +19,7 @@
     </span>
 	</div>
 	<div ng-if="row.entity.downloadsCount === undefined && !row.entity.manualOnDemendDownloadsCount">
-        --
+        &#45;&#45;
 	</div>
+-->
 </div>

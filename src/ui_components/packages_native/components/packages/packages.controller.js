@@ -10,6 +10,8 @@ export default class PackagesController {
         this.descriptor = NativeUIDescriptor.getDescriptor();
 		this.sorting = {sortBy: 'name', order: 'asc'};
 		this.ready = false;
+
+		this.extraInfoRequestsToCancel = []
 	}
 
 	$onInit() {
@@ -238,6 +240,7 @@ export default class PackagesController {
             }
         })
 
+        this.cancelPackageExtraInfo();
 		this.getPackagesData(daoParams).then(() => {
 			this.tableViewOptions.setData(this.packages.list.data);
 			this.hasSelectedFilters = daoParams.filters.length > 0;
@@ -257,6 +260,7 @@ export default class PackagesController {
         localStorage.lastNativeUIPackageType = this.$stateParams.packageType;
         this.$stateParams.query = {};
         delete this.hasSelectedFilters;
+        this.cancelPackageExtraInfo();
         this.initPackagesViewData(this.$stateParams);
 		this.refreshAll();
 		//TODO: when more package types would become available - figure out how to change the view
@@ -285,6 +289,7 @@ export default class PackagesController {
 	}
 
 	goToPackage(packageName) {
+	    this.cancelPackageExtraInfo();
 		this.subRouter.goto('package', {packageType: this.selectedPackageType.value, package: packageName})
 	}
 
@@ -313,6 +318,10 @@ export default class PackagesController {
             row.calculationPending = false;
         })
 	}
+
+    cancelPackageExtraInfo() {
+        this.nativeParent.hostData.cancelPackageExtraInfo();
+    }
 
 	calcPackageDownloads(e, row) {
 		e.stopPropagation();

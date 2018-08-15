@@ -55,8 +55,8 @@ export default class CommonDescriptor extends BaseDescriptor{
                     sortable: false,
                     //                        headerCellTemplate: '<div style="padding-right:0"></div>',
                     cellTemplate: `<span jf-tooltip-on-overflow>
-                                {{row.entity.lastModified ? (row.entity.lastModified | date : 'medium') : '--'}}
-                           </span>`,
+                                        <jf-pending-data wait-for="row.entity.lastModified">{{row.entity.lastModified}}</jf-pending-data>
+                                   </span>`,
                     width: '15%'
                 },
                 keywords: {
@@ -129,7 +129,9 @@ export default class CommonDescriptor extends BaseDescriptor{
                 numberOfDownloads: {
                     label: 'Number Of Downloads',
                     class: 'package-downloads-count',
-                    template: `{{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : ($ctrl.totalDownloadsForPackage !== undefined ? $ctrl.totalDownloadsForPackage : '-')}}`,
+                    template: `<jf-pending-data wait-for="$ctrl.summaryData.numOfDownloads || $ctrl.totalDownloadsForPackage">
+                                   {{$ctrl.summaryData.numOfDownloads || $ctrl.totalDownloadsForPackage}}
+                               </jf-pending-data>`,
                     isActive: true
                 },
                 lastModified: {
@@ -186,7 +188,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     label: 'License',
                     class: 'summary-license',
                     template: `<span jf-tooltip-on-overflow>
-                                    {{$ctrl.summaryData.license || '-'}}
+                                    <jf-pending-data wait-for="$ctrl.summaryData.license">{{$ctrl.summaryData.license}}</jf-pending-data>
                                </span>`,
                     noWrap: true,
                     isActive: true

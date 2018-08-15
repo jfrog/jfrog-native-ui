@@ -7,6 +7,8 @@ export default class PackagesNativeController {
         this.descriptor = NativeUIDescriptor.getDescriptor();
         this.formatter = HostDaoParamFormatter;
         this.stateController = null;
+
+
     }
 
 	$onInit() {

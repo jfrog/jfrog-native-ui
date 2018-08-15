@@ -13,6 +13,7 @@ export default class DockerDescriptor extends BaseDescriptor{
                     let result = {};
                     if (data.results && data.results.length) {
                         result.data = data.results.map((image) => {
+                            if (image.lastModified === 0) delete image.lastModified;
                             return this.descriptor.transformers.package(image);
                         });
                     }
