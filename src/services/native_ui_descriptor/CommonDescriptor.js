@@ -55,7 +55,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     sortable: false,
                     //                        headerCellTemplate: '<div style="padding-right:0"></div>',
                     cellTemplate: `<span jf-tooltip-on-overflow>
-                                        <jf-pending-data wait-for="row.entity.lastModified">{{row.entity.lastModified}}</jf-pending-data>
+                                        <jf-pending-data wait-for="row.entity.lastModified">{{row.entity.lastModified | date: 'medium'}}</jf-pending-data>
                                    </span>`,
                     width: '15%'
                 },
@@ -129,8 +129,8 @@ export default class CommonDescriptor extends BaseDescriptor{
                 numberOfDownloads: {
                     label: 'Number Of Downloads',
                     class: 'package-downloads-count',
-                    template: `<jf-pending-data wait-for="$ctrl.summaryData.numOfDownloads || $ctrl.totalDownloadsForPackage">
-                                   {{$ctrl.summaryData.numOfDownloads || $ctrl.totalDownloadsForPackage}}
+                    template: `<jf-pending-data wait-for="$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.totalDownloadsForPackage">
+                                   {{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.totalDownloadsForPackage}}
                                </jf-pending-data>`,
                     isActive: true
                 },
