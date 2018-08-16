@@ -47,10 +47,13 @@ export default class PackageController {
             this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
                 this.summaryData = summaryData
                 this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
-                this.nativeParent.hostData.getPackageSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
-                    _.extend(this.summaryData, summaryExtraData)
-                    defer.resolve();
-                })
+                if (summaryData.latestPath) {
+                    this.nativeParent.hostData.getPackageSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
+                        _.extend(this.summaryData, summaryExtraData)
+                        defer.resolve();
+                    })
+                }
+                else defer.resolve()
             }).catch(console.error)
             return defer.promise;
 		}

@@ -63,9 +63,11 @@ export default class VersionController {
 	    if (this.$stateParams.packageType !== 'docker') {
             this.nativeParent.hostData.getVersionSummary(this.$stateParams).then(summaryData => {
                 this.summaryData = summaryData;
-                this.nativeParent.hostData.getVersionSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
-                    _.extend(this.summaryData, summaryExtraData);
-                })
+                if (summaryData.latestPath) {
+                    this.nativeParent.hostData.getVersionSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
+                        _.extend(this.summaryData, summaryExtraData);
+                    })
+                }
             })
         }
         else {
@@ -91,12 +93,14 @@ export default class VersionController {
             }
             else columnObj = column;
 
-            if (columnObj.label && columnObj.label.indexOf('@{PACKAGE_ALIAS}') !== -1) {
-                columnObj.label = columnObj.label.replace('@{PACKAGE_ALIAS}', this.packageAlias);
-            }
-            if (columnObj.label && columnObj.label.indexOf('@{VERSION_ALIAS}') !== -1) {
-                columnObj.label = columnObj.label.replace('@{VERSION_ALIAS}', this.versionAlias);
-            }
+            ['label','template'].forEach(key => {
+                if (columnObj[key] && columnObj[key].indexOf('@{PACKAGE_ALIAS}') !== -1) {
+                    columnObj[key] = columnObj[key].replace('@{PACKAGE_ALIAS}', this.packageAlias);
+                }
+                if (columnObj[key] && columnObj[key].indexOf('@{VERSION_ALIAS}') !== -1) {
+                    columnObj[key] = columnObj[key].replace('@{VERSION_ALIAS}', this.versionAlias);
+                }
+            })
 
             return columnObj;
 
