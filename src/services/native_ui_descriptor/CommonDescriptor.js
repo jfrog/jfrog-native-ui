@@ -9,8 +9,10 @@ export default class CommonDescriptor extends BaseDescriptor{
     }
 
     init() {
+
         this.descriptor = {
             defaultComparator: 'matches',
+            readMoreTemplate: `<div class="show-more-ellipsis">...</div> <div class="show-more-text">Read more...</div>`,
             packagesTableColumns: {
                 name: {
                     header: '@{PACKAGE_ALIAS} Name',
@@ -179,7 +181,13 @@ export default class CommonDescriptor extends BaseDescriptor{
                 description: {
                     label: 'Description',
                     class: 'summary-description',
-                    template: `<div class="description-wrap"><jf-text-box text="$ctrl.summaryData.description" modal-title="@{PACKAGE_ALIAS} Description"></jf-text-box></div>`,
+                    template: `<ead class="description-wrap">
+                                    <jf-text-box text="$ctrl.summaryData.description" 
+                                                 max-lines="2"
+                                                 see-all-text="{{$ctrl.descriptor.common.readMoreTemplate}}" 
+                                                 modal-title="@{PACKAGE_ALIAS} Description">
+                                    </jf-text-box>
+                               </div>`,
                     noWrap: true,
                     width: '20%',
                     isActive: true
