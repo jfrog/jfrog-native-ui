@@ -303,20 +303,20 @@ export default class PackagesController {
 		};
 		row.calculationPending = true;
 		this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
+		    _.merge(row, this.typeSpecific.transformers.package(response));
+/*
 			if (response.totalDownloads !== undefined) {
-				row.downloadsCount = response.totalDownloads;
+				row.downloadsCount  = response.totalDownloads;
 			}
 			else {
 				row.manualOnDemendDownloadsCount = true;
 			}
 			if (response.lastModified) row.lastModified = response.lastModified;
 			if (response.totalVersions) row.versionsCount = response.totalVersions;
+*/
 			row.calculated = true;
 			row.calculationPending = false;
-		}).catch(() => {
-            row.calculated = true;
-            row.calculationPending = false;
-        })
+		})
 	}
 
     cancelPackageExtraInfo() {
