@@ -81,7 +81,8 @@ export default class PackagesNativeController {
     }
 
     ensurePackageTypeValidity() {
-        if (!_.find(this.packageTypes, {value: this.subRouter.params.packageType})) {
+	    let foundByParam = _.find(this.packageTypes, {value: this.subRouter.params.packageType})
+        if (!foundByParam || foundByParam.disabled) {
             let lastPackageType = localStorage.lastNativeUIPackageType;
             let found = _.find(this.packageTypes, {value: lastPackageType});
             let validPackageType;
