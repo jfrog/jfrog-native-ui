@@ -4,7 +4,7 @@
             <h1>Package Viewer
                 <span>
                     <i class="icon" ng-class="$ctrl.packageTypeIcon"></i>
-                    {{$ctrl.jFrogUIUtils.capitalizeFirstLetter($ctrl.$stateParams.packageType)}}
+                    {{$ctrl.nativeParent.getDisplayNameForPackageType($ctrl.$stateParams.packageType)}}
                 </span>
             </h1>
 

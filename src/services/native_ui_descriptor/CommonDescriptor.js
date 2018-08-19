@@ -259,6 +259,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     name: 'Docker Layers',
                     id: 'docker-layers',
                     template: require('../../version_data_widgets/docker_layers/docker_layers_widget.html'),
+                    controller: require('../../version_data_widgets/docker_layers/docker_layers_widget.controller'),
                     scroll: true,
                     showSpinner: false
                 },

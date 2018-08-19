@@ -1,7 +1,8 @@
 export default class PackagesNativeController {
-	constructor(JFrogSubRouter, JfFullTextService, $scope, $timeout, NativeUIDescriptor, HostDaoParamFormatter) {
+	constructor(JFrogSubRouter, JfFullTextService, $scope, $q, $timeout, NativeUIDescriptor, HostDaoParamFormatter) {
 		this.$scope = $scope;
 		this.$timeout = $timeout;
+		this.$q = $q;
 		this.JFrogSubRouter = JFrogSubRouter;
         this.fullTextService = JfFullTextService;
         this.descriptor = NativeUIDescriptor.getDescriptor();
@@ -96,19 +97,22 @@ export default class PackagesNativeController {
     }
 
     getAvailablePackageTypes() {
-        return this.hostData.getPackageTypes().then((packageTypes) => {
-            packageTypes = _.map(packageTypes, pt => {
-                if (!this.descriptor.typeSpecific[pt.value] || this.descriptor.typeSpecific[pt.value].disabled) {
-                    pt.disabled = true;
-                }
-                return pt;
-            })
+	    if (this.packageTypes) return this.$q.when(this.packageTypes);
+	    else {
+            return this.hostData.getPackageTypes().then((packageTypes) => {
+                packageTypes = _.map(packageTypes, pt => {
+                    if (!this.descriptor.typeSpecific[pt.value] || this.descriptor.typeSpecific[pt.value].disabled) {
+                        pt.disabled = true;
+                    }
+                    return pt;
+                })
 
-            packageTypes = _.sortBy(packageTypes, pt => !!pt.disabled)
+                this.packageTypes = _.sortBy(packageTypes, pt => !!pt.disabled)
 
-            return packageTypes;
+                return this.packageTypes;
 
-        });
+            });
+        }
     }
 
     showAll(e, text, title, asList = false, itemClickCB = null, windowClass = '') {
@@ -133,6 +137,15 @@ export default class PackagesNativeController {
 
     wrapHostDataCalls() {
 	    this.formatter.wrapHostDataCalls(this.hostData);
+    }
+
+    getDisplayNameForPackageType(packageType) {
+	    if (this.packageTypes) {
+	        let found = _.find(this.packageTypes, {value: packageType});
+	        if (found) {
+	            return found.displayText;
+            }
+        }
     }
 
 }
