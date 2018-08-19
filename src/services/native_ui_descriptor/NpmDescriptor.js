@@ -95,10 +95,19 @@ export default class NpmDescriptor extends BaseDescriptor{
                 'versionIcon',
                 'versionName',
                 'description',
+                'license',
+                'numberOfDownloads',
+                'lastModified',
+                'installCommand'
+/*
+                'versionIcon',
+                'versionName',
+                'description',
                 'keywords',
                 'license',
                 'numberOfDownloads',
                 'lastModified'
+*/
             ],
             widgetsLayout: {
                 main: {
