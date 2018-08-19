@@ -67,12 +67,16 @@ export default class DockerDescriptor extends BaseDescriptor{
             filters: {
                 package: 'pkg',
                 version: 'version',
+/*
                 checksum: 'checksum',
+*/
             },
             filtersLabels: {
                 pkg: 'Image Name',
                 version: 'Tag',
+/*
                 checksum: 'Checksum',
+*/
             },
             installPrefix: 'docker pull',
             packagesTableColumns: [
@@ -94,7 +98,9 @@ export default class DockerDescriptor extends BaseDescriptor{
                 'packageName',
                 'numberOfDownloads',
                 'lastModified',
+/*
                 'installCommand'
+*/
             ],
             versionSummaryColumns: [
                 'versionIcon',

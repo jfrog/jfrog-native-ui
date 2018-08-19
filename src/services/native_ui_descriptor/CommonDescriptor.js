@@ -126,7 +126,6 @@ export default class CommonDescriptor extends BaseDescriptor{
                     noWrap: true,
                     template: `<span jf-tooltip-on-overflow>{{$ctrl.summaryData.name || $ctrl.package.name || 'No package'}}</span>`,
                     isActive: true,
-                    width: '180px'
                 },
                 numberOfDownloads: {
                     label: 'Number Of Downloads',
