@@ -143,3 +143,26 @@ jf-text-box {
     color: blue;
   }
 }
+
+.package-install-command {
+  .install-command {
+    border: 1px solid @blackBGMediumDark;
+    border-left: 5px solid @blackBGMediumDark;
+    padding: 0 5px;
+    line-height: 1em;
+    span {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 80%;
+      margin-right: 10px;
+      text-overflow: ellipsis;
+      line-height: 1.8em;
+    }
+
+    jf-clip-copy span {
+      line-height: 20px;
+    }
+
+  }
+}
