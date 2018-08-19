@@ -44,9 +44,16 @@ package-component {
   .install-command {
     border: 1px solid @blackBGMediumDark;
     border-left: 5px solid @blackBGMediumDark;
-    width: 100%;
-    overflow: hidden;
-    display: inline;
-    padding: 0 4px 1px 6px;
+    padding: 0 5px;
+    line-height: 1em;
+    span {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      text-overflow: ellipsis;
+      line-height: 1.8em;
+    }
+
   }
 }

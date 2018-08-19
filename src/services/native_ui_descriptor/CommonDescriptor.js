@@ -9,7 +9,6 @@ export default class CommonDescriptor extends BaseDescriptor{
     }
 
     init() {
-
         this.descriptor = {
             defaultComparator: 'matches',
             readMoreTemplate: `<div class="show-more-ellipsis">...</div> <div class="show-more-text">Read more...</div>`,
@@ -39,7 +38,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     width: '15%'
                 },
                 downloadsCount: {
-                    header: 'Download Count',
+                    header: 'Downloads',
                     sortable: false,
                     //                        headerCellTemplate: '<div style="padding-right:0"></div>',
                     cellTemplate: cellTemplates.packages.downloadsCount,
@@ -112,13 +111,13 @@ export default class CommonDescriptor extends BaseDescriptor{
             },
             packageSummaryColumns: {
                 packageIcon: {
-                    class: 'package-icon',
-                    template: `<div class="summary-icon-column">
+                    class: 'package-icon text-center',
+                    template: `<div class="summary-icon-column" id="summary-icon">
                                     <i class="icon" ng-class="$ctrl.packagesIcon"></i>
                                 </div>`,
                     isActive: true,
                     noWrap: true,
-                    width: '120px'
+                    width: 'auto'
                 },
                 packageName: {
                     label: `@{PACKAGE_ALIAS} Name`,
@@ -126,10 +125,13 @@ export default class CommonDescriptor extends BaseDescriptor{
                     noWrap: true,
                     template: `<span jf-tooltip-on-overflow>{{$ctrl.summaryData.name || $ctrl.package.name || 'No package'}}</span>`,
                     isActive: true,
+                    width: 'auto'
                 },
                 numberOfDownloads: {
-                    label: 'Number Of Downloads',
+                    label: 'Downloads',
                     class: 'package-downloads-count',
+                    template: `{{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : ($ctrl.totalDownloadsForPackage !== undefined ? $ctrl.totalDownloadsForPackage : '-')}}`,
+	                width: 'minmax(200px,.6fr)',
                     template: `<jf-pending-data wait-for="$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.totalDownloadsForPackage">
                                    {{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.totalDownloadsForPackage}}
                                </jf-pending-data>`,
@@ -142,14 +144,13 @@ export default class CommonDescriptor extends BaseDescriptor{
                         {{($ctrl.summaryData.lastModified || $ctrl.package.lastModified) ? (($ctrl.summaryData.lastModified || $ctrl.package.lastModified) | date : 'medium') : '--'}}
                        </span>`,
                     noWrap: true,
-                    isActive: true
+                    isActive: true,
+                    width: 'auto'
                 },
                 installCommand: {
                     label: 'Installation command',
                     class: 'package-install-command',
-                    template: `<span jf-tooltip-on-overflow>
-                                <div class="install-command">{{$ctrl.summaryData.installCommand}}</div>
-                               </span>`,
+                    template: `<div class="install-command"><span jf-tooltip-on-overflow>{{$ctrl.summaryData.installCommand}}</span></div>`,
                     noWrap: true,
                     isActive: true
                 },
@@ -175,7 +176,8 @@ export default class CommonDescriptor extends BaseDescriptor{
                                     </div>    
                                </span>`,
                     noWrap: true,
-                    isActive: true
+                    isActive: true,
+	                width: 'minmax(350px,2fr)'
                 },
                 description: {
                     label: 'Description',
@@ -189,7 +191,8 @@ export default class CommonDescriptor extends BaseDescriptor{
                                </div>`,
                     noWrap: true,
                     width: '20%',
-                    isActive: true
+                    isActive: true,
+	                width: 'minmax(350px,2fr)'
                 },
                 license: {
                     label: 'License',
@@ -198,24 +201,26 @@ export default class CommonDescriptor extends BaseDescriptor{
                                     <jf-pending-data wait-for="$ctrl.summaryData.license">{{$ctrl.summaryData.license}}</jf-pending-data>
                                </span>`,
                     noWrap: true,
-                    isActive: true
+                    isActive: true,
+                    width: 'minmax(120px,.5fr)'
                 }
             },
             versionSummaryColumns: {
                 versionIcon: {
                     noWrap: true,
-                    template: `<div class="summary-icon-column">
+                    template: `<div class="summary-icon-column" id="summary-icon">
                         <i class="icon" ng-class="$ctrl.versionIcon"></i>
                     </div>`,
                     isActive: true,
-                    width: '120px'
+                    width: 'auto'
                 },
                 versionName: {
                     label: `@{VERSION_ALIAS} Name`,
                     class: 'version-name',
                     noWrap: true,
                     template: `<span jf-tooltip-on-overflow>{{$ctrl.summaryData.name || $ctrl.version.name || 'No version'}}</span>`,
-                    isActive: true
+                    isActive: true,
+	                width: 'auto'
                 },
                 size: {
                     label: 'Size',
