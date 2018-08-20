@@ -93,7 +93,8 @@ export default class PackageController {
 
 		if (this.$stateParams.packageType === 'docker') this.calcPackageDownloads();
 
-		return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
+        this.cancelPackageExtraInfo();
+        return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
 			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
 			this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
 		});
@@ -206,6 +207,7 @@ export default class PackageController {
 	}
 
 	goToVersion(versionName, repo, path) {
+        this.cancelPackageExtraInfo();
         this.subRouter.goto('version', {
 			packageType: this.$stateParams.packageType,
 			package: this.$stateParams.package,
@@ -281,6 +283,33 @@ export default class PackageController {
 	}
 
     calcPackageExtraData(row) {
+        if (!this.extraDataQueue) this.extraDataQueue = [];
+        this.extraDataQueue.push(row);
+
+        if (!this.extraDataQueueRunning) {
+            this.extraDataQueueRunning = true;
+            let fetch = () => {
+                if (this.extraDataQueue.length) {
+                    let next = this.extraDataQueue[0];
+                    this.extraDataQueue.splice(0,1);
+                    this._calcPackageExtraData(next).then(() => {
+                        fetch();
+                    })
+                }
+                else this.extraDataQueueRunning = false;
+            }
+            fetch();
+        }
+
+    }
+
+    cancelPackageExtraInfo() {
+        this.nativeParent.hostData.cancelPackageExtraInfo();
+        this.extraDataQueueRunning = false;
+        this.extraDataQueue = [];
+    }
+
+    _calcPackageExtraData(row) {
         if (row.calculated || row.calculationPending) return;
 
         let versionName = row.name;
@@ -288,7 +317,7 @@ export default class PackageController {
             version: versionName
         };
         row.calculationPending = true;
-        this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
+        return this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
             _.merge(row, this.typeSpecific.transformers.version(response));
 /*
             if (response.totalDownloads !== undefined) {
@@ -300,7 +329,7 @@ export default class PackageController {
 */
             row.calculated = true;
             row.calculationPending = false;
-        }).catch(console.error)
+        })
     }
 
 }

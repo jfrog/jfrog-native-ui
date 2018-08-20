@@ -303,7 +303,28 @@ export default class PackagesController {
 		this.subRouter.goto('package', {packageType: this.selectedPackageType.value, package: packageName})
 	}
 
-	calcPackageExtraData(row) {
+    calcPackageExtraData(row) {
+        if (!this.extraDataQueue) this.extraDataQueue = [];
+        this.extraDataQueue.push(row);
+
+        if (!this.extraDataQueueRunning) {
+            this.extraDataQueueRunning = true;
+        	let fetch = () => {
+        		if (this.extraDataQueue.length) {
+                    let next = this.extraDataQueue[0];
+                    this.extraDataQueue.splice(0,1);
+                    this._calcPackageExtraData(next).then(() => {
+                        fetch();
+                    })
+		        }
+                else this.extraDataQueueRunning = false;
+	        }
+	        fetch();
+        }
+
+    }
+
+	_calcPackageExtraData(row) {
 		if (row.calculated || row.calculationPending) return;
 
 		let pkgName = row.name;
@@ -312,7 +333,7 @@ export default class PackagesController {
 			packageType: this.selectedPackageType.value
 		};
 		row.calculationPending = true;
-		this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
+		return this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
 		    _.merge(row, this.typeSpecific.transformers.package(response));
 /*
 			if (response.totalDownloads !== undefined) {
@@ -331,6 +352,8 @@ export default class PackagesController {
 
     cancelPackageExtraInfo() {
         this.nativeParent.hostData.cancelPackageExtraInfo();
+        this.extraDataQueueRunning = false;
+        this.extraDataQueue = [];
     }
 
 	calcPackageDownloads(e, row) {
