@@ -198,11 +198,11 @@ export default class CommonDescriptor extends BaseDescriptor{
                     label: 'License',
                     class: 'summary-license',
                     template: `<span jf-tooltip-on-overflow>
-                                    <jf-pending-data wait-for="$ctrl.summaryData.license">{{$ctrl.summaryData.license}}</jf-pending-data>
+                                    <jf-pending-data wait-for="$ctrl.summaryData.license">{{$ctrl.summaryData.license || 'No License'}}</jf-pending-data>
                                </span>`,
                     noWrap: true,
                     isActive: true,
-                    width: 'minmax(120px,.5fr)'
+                    width: 'minmax(150px,.5fr)'
                 }
             },
             versionSummaryColumns: {
