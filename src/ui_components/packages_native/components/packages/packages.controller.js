@@ -43,8 +43,6 @@ export default class PackagesController {
 			order: daoParams.order || 'asc'
 		};
 
-		this.$pendingData = true;
-
 /*
         if (this.$stateParams.packageType !== 'docker') {
             this.nativeParent.hostData.getPackagesCount(searchParams).then((result) => {
@@ -53,11 +51,23 @@ export default class PackagesController {
         }
         else delete this.totalCount;
 */
+        let cached = this.nativeParent.cache('packages.list');
+        if (cached && _.isEqual(cached.searchParams, searchParams)) {
+            this.packages.list = cached.list;
+            return this.$q.when();
+        }
+        else {
+            this.$pendingData = true;
+            return this.nativeParent.hostData.getPackages(searchParams).then((packages) => {
+                this.packages.list = this.typeSpecific.transformers.packages(packages);
+                this.nativeParent.cache('packages.list', {
+                    list: this.packages.list,
+                    searchParams
+                })
+                this.$pendingData = false;
+            });
+        }
 
-		return this.nativeParent.hostData.getPackages(searchParams).then((packages) => {
-            this.packages.list = this.typeSpecific.transformers.packages(packages);
-            this.$pendingData = false;
-		});
 	}
 
 	initPackagesViewData(daoParams) {
@@ -311,28 +321,7 @@ export default class PackagesController {
 		this.subRouter.goto('package', {packageType: this.selectedPackageType.value, package: packageName})
 	}
 
-    calcPackageExtraData(row) {
-        if (!this.extraDataQueue) this.extraDataQueue = [];
-        this.extraDataQueue.push(row);
-
-        if (!this.extraDataQueueRunning) {
-            this.extraDataQueueRunning = true;
-        	let fetch = () => {
-        		if (this.extraDataQueue.length) {
-                    let next = this.extraDataQueue[0];
-                    this.extraDataQueue.splice(0,1);
-                    this._calcPackageExtraData(next).then(() => {
-                        fetch();
-                    })
-		        }
-                else this.extraDataQueueRunning = false;
-	        }
-	        fetch();
-        }
-
-    }
-
-	_calcPackageExtraData(row) {
+	calcPackageExtraData(row) {
 		if (row.calculated || row.calculationPending) return;
 
 		let pkgName = row.name;
@@ -360,8 +349,6 @@ export default class PackagesController {
 
     cancelPackageExtraInfo() {
         this.nativeParent.hostData.cancelPackageExtraInfo();
-        this.extraDataQueueRunning = false;
-        this.extraDataQueue = [];
     }
 
 	calcPackageDownloads(e, row) {

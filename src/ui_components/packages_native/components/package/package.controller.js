@@ -289,34 +289,11 @@ export default class PackageController {
 		});
 	}
 
-    calcPackageExtraData(row) {
-        if (!this.extraDataQueue) this.extraDataQueue = [];
-        this.extraDataQueue.push(row);
-
-        if (!this.extraDataQueueRunning) {
-            this.extraDataQueueRunning = true;
-            let fetch = () => {
-                if (this.extraDataQueue.length) {
-                    let next = this.extraDataQueue[0];
-                    this.extraDataQueue.splice(0,1);
-                    this._calcPackageExtraData(next).then(() => {
-                        fetch();
-                    })
-                }
-                else this.extraDataQueueRunning = false;
-            }
-            fetch();
-        }
-
-    }
-
     cancelPackageExtraInfo() {
         this.nativeParent.hostData.cancelPackageExtraInfo();
-        this.extraDataQueueRunning = false;
-        this.extraDataQueue = [];
     }
 
-    _calcPackageExtraData(row) {
+    calcPackageExtraData(row) {
         if (row.calculated || row.calculationPending) return;
 
         let versionName = row.name;
