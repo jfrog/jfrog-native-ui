@@ -84,7 +84,7 @@ export default class HostDaoParamFormatter {
         set('dataType', 'dataType');
         set('manifest', 'manifest');
         set('order', 'order');
-        set('sortBy', 'sortBy');
+        set('sortBy', 'sort_by');
         set('$no_spinner', '$no_spinner');
 
         return pathAndQueryParams;
