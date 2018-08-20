@@ -106,11 +106,12 @@ export default class PackageController {
 
 		if (this.$stateParams.packageType === 'docker') this.calcPackageDownloads();
 
-        this.cancelPackageExtraInfo();
+        this.cancelVersionExtraInfo();
 
 
         let cached = this.nativeParent.cache('package');
         if (cached && _.isEqual(cached.state, daoParams)) {
+            if (cached.package.versions) cached.package.versions.forEach(row => delete row.calculationPending);
             this.package = cached.package;
             return this.$q.when();
         }
@@ -242,7 +243,7 @@ export default class PackageController {
 	}
 
 	goToVersion(versionName, repo, path) {
-        this.cancelPackageExtraInfo();
+        this.cancelVersionExtraInfo();
         this.subRouter.goto('version', {
 			packageType: this.$stateParams.packageType,
 			package: this.$stateParams.package,
@@ -317,8 +318,8 @@ export default class PackageController {
 		});
 	}
 
-    cancelPackageExtraInfo() {
-        this.nativeParent.hostData.cancelPackageExtraInfo();
+    cancelVersionExtraInfo() {
+        this.nativeParent.hostData.cancelVersionExtraInfo();
     }
 
     calcPackageExtraData(row) {

@@ -53,6 +53,7 @@ export default class PackagesController {
 */
         let cached = this.nativeParent.cache('packages.list');
         if (cached && _.isEqual(cached.searchParams, searchParams)) {
+            if (cached.list && cached.list.data) cached.list.data.forEach(row => delete row.calculationPending);
             this.packages.list = cached.list;
             return this.$q.when();
         }

@@ -9,7 +9,7 @@ export default class HostDaoParamFormatter {
     }
 
     wrapHostDataCalls(hostDataCalls) {
-        let excludedMethods = ['getPackageTypes','isXrayEnabled','showInTree', 'cancelPackageExtraInfo', 'getDbType'];
+        let excludedMethods = ['getPackageTypes','isXrayEnabled','showInTree', 'cancelPackageExtraInfo', 'cancelVersionExtraInfo', 'getDbType'];
         Object.keys(hostDataCalls).forEach(method => {
             if (!_.includes(excludedMethods, method)) {
                 let origMethod = hostDataCalls[method];
