@@ -39,7 +39,7 @@ export default class NpmDescriptor extends BaseDescriptor{
                     return result;
                 },
                 version: data => {
-                    data.downloadsCount = data.numOfDownloads;
+                    data.downloadsCount = data.numOfDownloads || data.totalDownloads;
                     return data;
                 }
             },

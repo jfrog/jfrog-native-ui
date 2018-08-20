@@ -41,6 +41,10 @@ export default class PackageController {
 		})
 	}
 
+    get typeSpecific() {
+        return this.descriptor.typeSpecific[this.$stateParams.packageType];
+    }
+
 	getSummaryData() {
 		if (this.$stateParams.packageType !== 'docker') {
 		    let defer = this.$q.defer();
@@ -285,15 +289,18 @@ export default class PackageController {
         };
         row.calculationPending = true;
         this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
+            _.merge(row, this.typeSpecific.transformers.version(response));
+/*
             if (response.totalDownloads !== undefined) {
                 row.downloadsCount = response.totalDownloads;
             }
             else {
                 row.manualOnDemendDownloadsCount = true;
             }
+*/
             row.calculated = true;
             row.calculationPending = false;
-        })
+        }).catch(console.error)
     }
 
 }
