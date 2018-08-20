@@ -46,19 +46,32 @@ export default class PackageController {
     }
 
 	getSummaryData() {
+
 		if (this.$stateParams.packageType !== 'docker') {
 		    let defer = this.$q.defer();
-            this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
-                this.summaryData = summaryData
-                this.summaryData.installCommand = this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
-                if (summaryData.latestPath) {
-                    this.nativeParent.hostData.getPackageSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
-                        _.extend(this.summaryData, summaryExtraData)
-                        defer.resolve();
+
+            let cached = this.nativeParent.cache('package.summary');
+            if (cached && _.isEqual(cached.state, this.$stateParams)) {
+                this.summaryData = cached.data;
+                defer.resolve();
+            }
+            else {
+                this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
+                    this.summaryData = summaryData;
+                    this.nativeParent.cache('package.summary', {
+                        data: this.summaryData,
+                        state: _.cloneDeep(this.$stateParams)
                     })
-                }
-                else defer.resolve()
-            }).catch(console.error)
+                    this.summaryData.installCommand = this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
+                    if (summaryData.latestPath) {
+                        this.nativeParent.hostData.getPackageSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
+                            _.extend(this.summaryData, summaryExtraData);
+                            defer.resolve();
+                        })
+                    }
+                    else defer.resolve()
+                }).catch(console.error)
+            }
             return defer.promise;
 		}
 		else {
@@ -94,10 +107,25 @@ export default class PackageController {
 		if (this.$stateParams.packageType === 'docker') this.calcPackageDownloads();
 
         this.cancelPackageExtraInfo();
-        return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
-			pkg.totalDownloads = this.totalDownloadsForPackage || 0;
-			this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
-		});
+
+
+        let cached = this.nativeParent.cache('package');
+        if (cached && _.isEqual(cached.state, daoParams)) {
+            this.package = cached.package;
+            return this.$q.when();
+        }
+        else {
+
+            return this.nativeParent.hostData.getPackage(daoParams).then((pkg) => {
+                pkg.totalDownloads = this.totalDownloadsForPackage || 0;
+                this.package = this.descriptor.typeSpecific[this.$stateParams.packageType].transformers.package(pkg);
+                this.nativeParent.cache('package', {
+                    package: this.package,
+                    state: _.cloneDeep(daoParams)
+                })
+
+            });
+        }
 	}
 
 	calcPackageDownloads() {

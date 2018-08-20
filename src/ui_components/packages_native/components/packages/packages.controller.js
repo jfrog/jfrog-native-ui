@@ -62,7 +62,7 @@ export default class PackagesController {
                 this.packages.list = this.typeSpecific.transformers.packages(packages);
                 this.nativeParent.cache('packages.list', {
                     list: this.packages.list,
-                    searchParams
+                    searchParams: _.cloneDeep(searchParams)
                 })
                 this.$pendingData = false;
             });

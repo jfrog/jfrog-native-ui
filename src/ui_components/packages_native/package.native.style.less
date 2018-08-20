@@ -123,6 +123,11 @@ packages-native-component {
   }
 
   .summary-row {
+    .summary-item-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .summary-description .description-wrap {
       font-size: 14px;
       line-height: 1.5em;
@@ -145,7 +150,9 @@ jf-text-box {
 }
 
 .package-install-command {
+  min-width: 200px;
   .install-command {
+    white-space: nowrap;
     border: 1px solid @blackBGMediumDark;
     border-left: 5px solid @blackBGMediumDark;
     padding: 0 5px;
