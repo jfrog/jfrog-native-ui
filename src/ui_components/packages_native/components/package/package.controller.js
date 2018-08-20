@@ -46,7 +46,7 @@ export default class PackageController {
 		    let defer = this.$q.defer();
             this.nativeParent.hostData.getPackageSummary(this.$stateParams).then(summaryData => {
                 this.summaryData = summaryData
-                this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
+                this.summaryData.installCommand = this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
                 if (summaryData.latestPath) {
                     this.nativeParent.hostData.getPackageSummaryExtraInfo(_.extend({},this.$stateParams,{path: summaryData.latestPath})).then(summaryExtraData => {
                         _.extend(this.summaryData, summaryExtraData)
@@ -59,7 +59,7 @@ export default class PackageController {
 		}
 		else {
             this.summaryData = {}
-            this.summaryData.installCommand = '> ' + this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
+            this.summaryData.installCommand = this.descriptor.typeSpecific[this.$stateParams.packageType].installPrefix + ' ' + this.$stateParams.package;
             return this.$q.when();
 		}
     }

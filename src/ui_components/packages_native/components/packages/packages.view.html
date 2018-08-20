@@ -3,8 +3,11 @@
 		<div class="jf-header-item">
 			<h1>
 				Package Viewer
-				<span class="package-count">
+				<span class="package-count" ng-if="$ctrl.packages.list.itemsCount && $ctrl.totalCount === undefined">
                     {{$ctrl.packages.list.itemsCount ? '('+$ctrl.packages.list.itemsCount+')' : ''}}
+                </span>
+				<span class="package-count" ng-if="$ctrl.packages.list.itemsCount && $ctrl.totalCount !== undefined">
+                    {{$ctrl.packages.list.itemsCount ? '('+$ctrl.packages.list.itemsCount : ''}} {{$ctrl.totalCount !== undefined ? 'out of ' + $ctrl.totalCount + ')': ''}}
                 </span>
 			</h1>
 			<span class="filter repo-type">

@@ -44,6 +44,16 @@ export default class PackagesController {
 		};
 
 		this.$pendingData = true;
+
+/*
+        if (this.$stateParams.packageType !== 'docker') {
+            this.nativeParent.hostData.getPackagesCount(searchParams).then((result) => {
+                this.totalCount = result.numOfPackages;
+            });
+        }
+        else delete this.totalCount;
+*/
+
 		return this.nativeParent.hostData.getPackages(searchParams).then((packages) => {
             this.packages.list = this.typeSpecific.transformers.packages(packages);
             this.$pendingData = false;

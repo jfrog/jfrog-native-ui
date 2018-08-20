@@ -150,7 +150,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                 installCommand: {
                     label: 'Installation command',
                     class: 'package-install-command',
-                    template: `<div class="install-command"><span jf-tooltip-on-overflow>{{$ctrl.summaryData.installCommand}}</span><jf-clip-copy text-to-copy="$ctrl.summaryData.installCommand" object-name="Command"></jf-clip-copy></div>`,
+                    template: `<div class="install-command"><span jf-tooltip-on-overflow>> {{$ctrl.summaryData.installCommand}}</span><jf-clip-copy text-to-copy="$ctrl.summaryData.installCommand" object-name="Command"></jf-clip-copy></div>`,
                     noWrap: true,
                     isActive: true
                 },
