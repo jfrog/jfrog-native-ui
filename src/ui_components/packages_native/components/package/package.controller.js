@@ -329,7 +329,7 @@ export default class PackageController {
             version: versionName
         };
         row.calculationPending = true;
-        return this.nativeParent.hostData.getPackageExtraInfo(daoParams).then((response) => {
+        return this.nativeParent.hostData.getVersionExtraInfo(daoParams).then((response) => {
             _.merge(row, this.typeSpecific.transformers.version(response));
 /*
             if (response.totalDownloads !== undefined) {
