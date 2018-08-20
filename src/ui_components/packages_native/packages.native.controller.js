@@ -44,8 +44,11 @@ export default class PackagesNativeController {
                 this.getAvailablePackageTypes().then(packageTypes => {
                 	this.packageTypes = packageTypes;
                 	this.ensurePackageTypeValidity();
-                	this.ready = true;
-                });
+                	this.hostData.getDbType().then(response => {
+                	    this.dbType = response.dbType;
+                        this.ready = true;
+                    })
+                }).catch(console.error);
 				if (!this.subRouter.params.packageType) {
                     this.subRouter.goto('packages', {packageType: this.defaultPackageType});
 				}

@@ -138,7 +138,7 @@ export default class PackageController {
         this.tableViewOptions.on('row.in.view', row => {
             if (row.downloadsCount === undefined) {
             	if (this.$stateParams.packageType === 'docker') this.calcVersionDownloads(row);
-            	else this.calcPackageExtraData(row);
+            	else if (this.nativeParent.dbType !== 'derby') this.calcPackageExtraData(row);
             }
         });
 
@@ -190,7 +190,14 @@ export default class PackageController {
 	}
 
 	getTableColumns() {
-        return _.map(this.descriptor.typeSpecific[this.$stateParams.packageType].versionsTableColumns, column => {
+        if (this.nativeParent.dbType === 'derby') {
+            this.typeSpecific.versionsTableColumns = _.filter(this.typeSpecific.versionsTableColumns, col => {
+                let hiddenColumns = this.typeSpecific.columnsRemovedForDerby;
+                return !_.includes(hiddenColumns, _.isString(col) ? col : col.field)
+            })
+        }
+
+        return _.map(this.typeSpecific.versionsTableColumns, column => {
             let columnObj;
         	if (_.isString(column)) {
                 columnObj = _.cloneDeep(this.descriptor.common.versionsTableColumns[column]);

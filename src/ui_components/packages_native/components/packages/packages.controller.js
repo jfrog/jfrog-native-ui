@@ -161,7 +161,7 @@ export default class PackagesController {
 		this.tableViewOptions.useExternalSortCallback(this.onSortChange.bind(this));
 
 		this.tableViewOptions.on('row.in.view', row => {
-			if (row.downloadsCount === undefined) this.calcPackageExtraData(row);
+			if (this.$stateParams.packageType === 'docker' || this.nativeParent.dbType !== 'derby') this.calcPackageExtraData(row);
 		});
 	}
 
@@ -178,6 +178,14 @@ export default class PackagesController {
 	}
 
 	getColumns() {
+
+	    if (this.nativeParent.dbType === 'derby') {
+            this.typeSpecific.packagesTableColumns = _.filter(this.typeSpecific.packagesTableColumns, col => {
+                let hiddenColumns = this.typeSpecific.columnsRemovedForDerby;
+                return !_.includes(hiddenColumns, _.isString(col) ? col : col.field)
+            })
+        }
+
         return _.map(this.typeSpecific.packagesTableColumns, column => {
             let columnObj;
             if (_.isString(column)) {
