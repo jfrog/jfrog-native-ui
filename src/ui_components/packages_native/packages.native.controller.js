@@ -105,7 +105,7 @@ export default class PackagesNativeController {
 	    else {
             return this.hostData.getPackageTypes().then((packageTypes) => {
                 packageTypes = _.map(packageTypes, pt => {
-                    if (!this.descriptor.typeSpecific[pt.value] || this.descriptor.typeSpecific[pt.value].disabled) {
+                    if (!this.descriptor.typeSpecific[pt.value] || this.descriptor.typeSpecific[pt.value].disabled || _.includes(this.disabledPackageTypes, pt.value)) {
                         pt.disabled = true;
                     }
                     return pt;
