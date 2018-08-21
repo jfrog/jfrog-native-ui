@@ -14,7 +14,7 @@ export default class NativeUIDescriptor extends BaseDescriptor{
             common: this.CommonDescriptor.getDescriptor(),
             typeSpecific: {
                 docker: this.DockerDescriptor.getDescriptor(),
-                npm: this.NpmDescriptor.getDescriptor(),
+                npm: localStorage._disableNativeNpm ? undefined : this.NpmDescriptor.getDescriptor(),
             }
         }
     }
