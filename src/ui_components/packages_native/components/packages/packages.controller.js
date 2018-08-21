@@ -289,6 +289,7 @@ export default class PackagesController {
 		// Fire a refresh callback for getting packages and filters
 		this.$stateParams.packageType = this.selectedPackageType.value;
         localStorage.lastNativeUIPackageType = this.$stateParams.packageType;
+        this.packages = {};
         this.$stateParams.query = {};
         delete this.hasSelectedFilters;
         this.cancelPackageExtraInfo();
