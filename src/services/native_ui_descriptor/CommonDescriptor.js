@@ -182,7 +182,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                 description: {
                     label: 'Description',
                     class: 'summary-description',
-                    template: `<ead class="description-wrap">
+                    template: `<div class="description-wrap" ng-if="$ctrl.summaryData.description">
                                     <jf-text-box text="$ctrl.summaryData.description" 
                                                  max-lines="2"
                                                  see-all-text="{{$ctrl.descriptor.common.readMoreTemplate}}" 
