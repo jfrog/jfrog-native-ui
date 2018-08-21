@@ -19,7 +19,6 @@ export default class PackageController {
         this.nativeParent.stateController = this;
 
         let init = () => {
-            this.initConstants();
             this.initTable();
 
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
@@ -32,6 +31,7 @@ export default class PackageController {
             this.summaryColumns = this.getSummaryColumns();
 
         }
+        this.initConstants();
         this.getSummaryData();
         this.getPackageData().then(() => {
 			init();

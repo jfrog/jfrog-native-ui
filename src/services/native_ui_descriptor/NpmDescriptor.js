@@ -49,7 +49,7 @@ export default class NpmDescriptor extends BaseDescriptor{
             },
             icons: {
                 packages: 'icon-navigation-products',
-                package: 'icon-npm',
+                package: 'repotype iconrepo iconrepo-npm',
                 version: 'icon-docker-tags'
             },
             filters: {

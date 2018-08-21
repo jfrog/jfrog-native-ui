@@ -61,7 +61,7 @@ export default class DockerDescriptor extends BaseDescriptor{
             },
             icons: {
                 packages: 'icon-navigation-products',
-                package: 'icon-docker',
+                package: 'repotype iconrepo iconrepo-docker',
                 version: 'icon-docker-tags'
             },
             filters: {
