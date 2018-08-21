@@ -147,7 +147,7 @@ export default class PackagesController {
 			};
 		});
 
-		this.initialDropDownPlaceholder = this.moreFiltersList[0] ? this.moreFiltersList[0].text : '';
+		this.initialDropDownPlaceholder = this.moreFiltersList[0] ? (this.moreFiltersList[0].text + ' (You can use * or ? as wildcards)') : '';
 
 		if (!_.isEmpty(this.$stateParams.query)) {
 			this.getSelectedRepos();
