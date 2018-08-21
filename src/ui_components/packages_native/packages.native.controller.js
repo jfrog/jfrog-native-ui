@@ -155,7 +155,8 @@ export default class PackagesNativeController {
     cache(key, value) {
 	    if (!this.$cache) this.$cache = {};
 	    if (key !== undefined && value !== undefined) {
-	        this.$cache[key] = value;
+	        if (value === null) delete this.$cache[key];
+	        else this.$cache[key] = value;
         }
         else if (key !== undefined && this.$cache[key]) {
 	        return this.$cache[key]

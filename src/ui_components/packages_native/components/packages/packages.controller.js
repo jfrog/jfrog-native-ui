@@ -251,7 +251,9 @@ export default class PackagesController {
 		this.selectedFilters = selected.length ? selected : null;
 	}
 
-	getFilteredData() {
+	getFilteredData(noCache = false) {
+		if (noCache) this.nativeParent.cache('packages.list', null);
+
 		this.getSelectedFilters();
 		let daoParams = {
 			filters: this.concatAllActiveFilters(),
