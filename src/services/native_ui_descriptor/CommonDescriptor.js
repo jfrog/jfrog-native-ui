@@ -117,7 +117,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                                 </div>`,
                     isActive: true,
                     noWrap: true,
-                    width: 'auto'
+                    width: '120px'
                 },
                 packageName: {
                     label: `@{PACKAGE_ALIAS} Name`,
