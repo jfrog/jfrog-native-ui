@@ -189,7 +189,6 @@ export default class CommonDescriptor extends BaseDescriptor{
                                     </jf-text-box>
                                </div>`,
                     noWrap: true,
-                    width: '20%',
                     isActive: true,
 	                width: 'minmax(350px,2fr)'
                 },
