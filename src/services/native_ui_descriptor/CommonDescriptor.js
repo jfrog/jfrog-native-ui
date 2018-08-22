@@ -130,7 +130,6 @@ export default class CommonDescriptor extends BaseDescriptor{
                 numberOfDownloads: {
                     label: 'Downloads',
                     class: 'package-downloads-count',
-                    template: `{{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : ($ctrl.totalDownloadsForPackage !== undefined ? $ctrl.totalDownloadsForPackage : '-')}}`,
 	                width: 'minmax(200px,.6fr)',
                     template: `<jf-pending-data wait-for="$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.totalDownloadsForPackage">
                                    {{$ctrl.summaryData.numOfDownloads !== undefined ? $ctrl.summaryData.numOfDownloads : $ctrl.totalDownloadsForPackage}}
