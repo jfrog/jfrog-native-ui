@@ -44,8 +44,8 @@ export default class PackagesNativeController {
                 this.getAvailablePackageTypes().then(packageTypes => {
                 	this.packageTypes = packageTypes;
                 	this.ensurePackageTypeValidity();
-                	this.hostData.getDbType().then(response => {
-                	    this.dbType = response.dbType;
+                	this.hostData.showExtraInfo().then(response => {
+                	    this.showExtraInfo = response.showExtraInfo;
                         this.ready = true;
                     })
                 }).catch(console.error);
