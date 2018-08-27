@@ -13,7 +13,7 @@
     "!LICENSE"
   ],
   "dependencies": {
-    "angular": "1.6.10",
+    "angular": "1.7.2",
     "jfrog-ui-essentials": "2.2.0"
   },
   "resolutions": {
