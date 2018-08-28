@@ -2,6 +2,97 @@ package-component {
   .jf-page-wrapper {
     .jf-page-content {
       .jf-content-section {
+
+        .graph-wrapper{
+          margin-top: 50px;
+.graph-filters{
+  jf-checkbox{
+
+    input[type=checkbox]{
+
+      &.downloads{
+        &:checked+span{
+
+          background-color: #fff;
+        }
+      }
+
+      &.security{
+        &:checked+span{
+
+          background-color: #fff;
+        }
+      }
+
+      &.license{
+        &:checked+span{
+
+          background-color: #fff;
+        }
+      }
+
+    }
+  }
+}
+          span.legend-item span {
+            width: 10px;
+            height: 10px;
+            display: inline-block;
+            margin-left: 10px;
+            border-radius: 50%;
+          }
+          .bb-legend-item {
+            margin: 0 10px;
+          }
+          div#bb-legend {
+            display: inline-block;
+            border: 1px solid;
+            padding: 10px;
+            border-color: #dadada;
+            float:right;
+          }
+          .bb-line-downloads {
+            stroke-width: 3px;
+          }
+          line.bb-ygrid {
+            stroke-dasharray: 0;
+            stroke: #dadada;
+          }
+          .bb line, .bb path {
+            fill: none;
+            stroke: #dadada;
+          }
+          g.tick line {
+            display: none;
+          }
+
+          .bb-tooltip-container {
+            z-index: 10;
+            position: fixed;
+            background: white;
+            font-size: 12px;
+            opacity: 10 !important;
+            padding: 15px;
+            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+          }
+          .bb-tooltip.data-point-tooltip {
+            box-shadow: none;
+          }
+          span.tooltip-value.bold {
+            font-weight: bold;
+            color: #000;
+          }
+          span.tooltip-label {
+            color: #989898;
+            font-size: 14px;
+            margin-right: 7px;
+          }
+
+        }
+        jf-switch-toggler{
+          float: right;
+        }
         .jf-table-view {
           .jf-table-view-container {
             .jf-table-row {
