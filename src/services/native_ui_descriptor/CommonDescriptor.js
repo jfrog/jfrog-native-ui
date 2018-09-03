@@ -64,7 +64,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     header: 'Keywords',
                     sortable: false,
                     cellTemplate: cellTemplates.packages.keywords,
-                    width: '15%'
+                    width: '18%'
                 }
             },
             versionsTableColumns: {
@@ -106,7 +106,7 @@ export default class CommonDescriptor extends BaseDescriptor{
                     header: 'Keywords',
                     sortable: false,
                     cellTemplate: cellTemplates.packages.keywords,
-                    width: '15%'
+                    width: '18%'
                 }
             },
             packageSummaryColumns: {

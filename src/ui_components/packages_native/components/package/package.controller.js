@@ -391,8 +391,8 @@ export default class PackageController {
 
         this.tableViewOptions.on('row.in.view', row => {
             if (row.downloadsCount === undefined) {
-                if (this.$stateParams.packageType === 'docker') this.calcVersionDownloads(row);
-                else if (this.nativeParent.dbType !== 'derby') this.calcPackageExtraData(row);
+            	if (this.$stateParams.packageType === 'docker') this.calcVersionDownloads(row);
+            	else if (this.nativeParent.showExtraInfo) this.calcPackageExtraData(row);
             }
         });
 
@@ -443,10 +443,10 @@ export default class PackageController {
         }];
     }
 
-    getTableColumns() {
-        if (this.nativeParent.dbType === 'derby') {
+	getTableColumns() {
+        if (!this.nativeParent.showExtraInfo) {
+            let hiddenColumns = this.typeSpecific.columnsRemovedForDerby;
             this.typeSpecific.versionsTableColumns = _.filter(this.typeSpecific.versionsTableColumns, col => {
-                let hiddenColumns = this.typeSpecific.columnsRemovedForDerby;
                 return !_.includes(hiddenColumns, _.isString(col) ? col : col.field)
             })
         }
