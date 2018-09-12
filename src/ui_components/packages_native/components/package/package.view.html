@@ -37,8 +37,8 @@
 <span> <label>Time Range</label>
             <jf-ui-select
                     jf-select-placeholder="Time Range"
-                    jf-select-model="$ctrl.limitVal"
-                    jf-select-change="$ctrl.setLimitVal()"
+                    jf-select-model="$ctrl.selectedTimeSpan"
+                    jf-select-change="$ctrl.getXrayData()"
                     jf-select-display-attr="displayName"
                     jf-select-options="$ctrl.dateSpanOptions">
             </jf-ui-select></span>
@@ -46,8 +46,8 @@
                 <label>Limit</label>
             <jf-ui-select
                     jf-select-placeholder="Limit"
-                    jf-select-model="$ctrl.selectedPackageType"
-                    jf-select-change="$ctrl.onPackageTypeChange()"
+                    jf-select-model="$ctrl.limitVal"
+                    jf-select-change="$ctrl.getXrayData()"
                     jf-select-options="$ctrl.limitOptions">
             </jf-ui-select>
 </span>

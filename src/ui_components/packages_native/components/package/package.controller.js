@@ -244,7 +244,8 @@ export default class PackageController {
 
         let init = () => {
             this.initTable();
-            this.limitOptions=['10', '15', '30'];
+            this.limitOptions=['5', '10', '15'];
+            this.limitVal = '10';
             this.dateSpanOptions=[{displayName:"Last 24 Hours",value:"LAST_24H"}, {displayName:"Last 7 Days",value:"LAST_7D"}, {displayName:"Last 14 Days",value:"LAST_14D"}];
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
@@ -361,6 +362,10 @@ export default class PackageController {
         additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
         additionalDaoParams.order = additionalDaoParams.order || 'desc';
         additionalDaoParams.with_xray = true;
+        additionalDaoParams.limit = this.limitVal;
+        if(this.selectedTimeSpan){
+            additionalDaoParams.from = this.selectedTimeSpan.value
+        }
         additionalDaoParams.$no_spinner = true;
 
 
