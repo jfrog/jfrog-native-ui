@@ -86,6 +86,8 @@ export default class HostDaoParamFormatter {
         set('order', 'order');
         set('sortBy', 'sort_by');
         set('$no_spinner', '$no_spinner');
+        set('limit', 'limit');
+        set('with_xray', 'with_xray');
 
         return pathAndQueryParams;
     }

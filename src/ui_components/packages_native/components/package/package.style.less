@@ -5,33 +5,64 @@ package-component {
 
         .graph-wrapper{
           jf-billboard.bb {
-            height: 95%;
+            height: 90%;
           }
           margin-top: 50px;
-          height: 90%;
+          height: 85%;
 .graph-filters{
+  .dd-wrapper{
+    width:600px;
+    position: relative;
+    bottom: 40px;
+    left: 0;
+    > span {
+      width: 280px;
+      display: inline-block;
+      &:last-child{
+        margin-left:40px;
+      }
+    }
+
+  }
+  .jf-checkbox {
+    input[type=checkbox]:checked+span {
+      background-image: none;
+      &:after{
+        content: "\e97f";
+        color: #fff;
+        text-align: center;
+        width: 100%;
+        display: inline-block;
+        position: relative;
+        font-family: artifactory!important;
+        bottom: 1px;
+      }
+    }
+  }
+
+
+
   jf-checkbox{
 
     input[type=checkbox]{
 
       &.downloads{
-        &:checked+span{
+        &+span{
 
-          background-color: #fff;
+          background-color: #753C8C !important;
         }
       }
 
       &.security{
-        &:checked+span{
+        +span{
 
-          background-color: #fff;
+          background-color: #E5B32D !important;
         }
       }
 
       &.license{
-        &:checked+span{
-
-          background-color: #fff;
+        +span{
+          background-color:#4A7CB8 !important
         }
       }
 
@@ -47,13 +78,24 @@ package-component {
           }
           .bb-legend-item {
             margin: 0 10px;
+
+            &.bb-legend-item-downloads{
+              display: none;
+            }
           }
+
+
           div#bb-legend {
             display: inline-block;
             border: 1px solid;
-            padding: 10px;
+            padding-right: 10px;
+            padding-left: 10px;
             border-color: #dadada;
-            float:right;
+            h4 {
+              width: auto;
+              display: block;
+              font-size: 14px;
+            }
           }
           .bb-line-downloads {
             stroke-width: 3px;
@@ -121,6 +163,35 @@ package-component {
       }
     }
   }
+
+
+  .icon-severity.normal:before {
+    content: "\e97f";
+    color: #43a047;
+
+  }
+  .icon-severity.minor:before {
+    content: "\e97e";
+    color: #f3c43d;
+  }
+
+  .icon-severity.major:before {
+    content: "\e97c";
+    color: #e08a00;
+  }
+  .icon-severity.critical:before {
+    content: "\e97b";
+    color: darkred !important;
+  }
+  .icon-severity.unscanned:before {
+    content: "\e97d";
+    color: #707070;
+  }
+  .icon-severity.unknown:before {
+    content: "\e97d";
+    color: #707070;
+  }
+
 }
 
 .modal {

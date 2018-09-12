@@ -240,7 +240,7 @@ export default class PackageController {
 
     $onInit() {
         this.nativeParent.stateController = this;
-
+        this.limitOptions=['10', '15', '30'];
         let init = () => {
             this.initTable();
 
@@ -250,7 +250,7 @@ export default class PackageController {
                     this.tableViewOptions.setData(this.package.versions);
                 })
             }, this.$scope);
-
+            this.getXrayData();
             this.summaryColumns = this.getSummaryColumns();
 
         }
@@ -310,6 +310,8 @@ export default class PackageController {
         additionalDaoParams = additionalDaoParams || {};
         additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
         additionalDaoParams.order = additionalDaoParams.order || 'desc';
+        console.log("Getting package data!");
+
 
         let daoParams = _.extend({}, this.$stateParams, additionalDaoParams);
         delete daoParams.repos;
@@ -354,6 +356,20 @@ export default class PackageController {
         }
     }
 
+    getXrayData(additionalDaoParams) {
+        additionalDaoParams = additionalDaoParams || {};
+        additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
+        additionalDaoParams.order = additionalDaoParams.order || 'desc';
+        additionalDaoParams.with_xray = true;
+        additionalDaoParams.$no_spinner = true;
+
+        this.nativeParent.hostData.getPackage(additionalDaoParams).then((data) => {
+            console.log("Data Arrived", data);
+            this.graphData = data.results;
+            this.chartConfig = this.getGraphObj();
+        });
+    }
+
     calcPackageDownloads() {
         let daoParams = {
             package: this.$stateParams.package,
@@ -391,8 +407,8 @@ export default class PackageController {
 
         this.tableViewOptions.on('row.in.view', row => {
             if (row.downloadsCount === undefined) {
-            	if (this.$stateParams.packageType === 'docker') this.calcVersionDownloads(row);
-            	else if (this.nativeParent.showExtraInfo) this.calcPackageExtraData(row);
+                if (this.$stateParams.packageType === 'docker') this.calcVersionDownloads(row);
+                else if (this.nativeParent.showExtraInfo) this.calcPackageExtraData(row);
             }
         });
 
@@ -443,7 +459,7 @@ export default class PackageController {
         }];
     }
 
-	getTableColumns() {
+    getTableColumns() {
         if (!this.nativeParent.showExtraInfo) {
             let hiddenColumns = this.typeSpecific.columnsRemovedForDerby;
             this.typeSpecific.versionsTableColumns = _.filter(this.typeSpecific.versionsTableColumns, col => {
@@ -556,6 +572,7 @@ export default class PackageController {
         };
         row.calculationPending = true;
         return this.nativeParent.hostData.getVersionExtraInfo(daoParams).then((response) => {
+            console.log("Returned Row", response);
             _.merge(row, this.typeSpecific.transformers.version(response));
             /*
                         if (response.totalDownloads !== undefined) {
@@ -572,7 +589,7 @@ export default class PackageController {
 
     /* ======== Chart Config Mock Methods ========== */
 
-    getmockCharConf(type = "chart") {
+    getGraphObj(type = "chart") {
         let _this = this;
         return {
             id: "xray-data-chart",
@@ -681,7 +698,8 @@ ${_this.buildTooltip(d)}
             },
             bar: {
                 width: {
-                    ratio: 0.3
+                    ratio: 0.5,
+                    max: 31
                 },
                 padding: 5
             },
@@ -690,7 +708,8 @@ ${_this.buildTooltip(d)}
                     type: "category",
                     tick: {
                         multiline: false,
-                        tooltip: true
+                        tooltip: true,
+                        centered: false
                     },
                     height: 50
                 }
@@ -706,13 +725,31 @@ ${_this.buildTooltip(d)}
                         <span style="background-color: ${color}" ></span> ${this.removeChart(title)} </span>`
                     }
                 },
-                item:{
-                    onclick:()=>{return}
+                item: {
+                    onclick: () => {
+                        return
+                    }
+                }
+            },
+            oninit: () => {
+                this.legendRendered = false;
+            },
+            onrendered: () => {
+                console.log("Render DONE!");
+                if (!this.legendRendered) {
+                    this.groupLegends();
                 }
             }
         }
+    }
+
+    groupLegends() {
+        this.legendRendered = true;
+        $("span[class*='legend-item bb-legend-item bb-legend-item-security']").wrapAll("<h4>Security Issues</h4> <div class='security-wrapper' />")
+        $("span[class*='legend-item bb-legend-item bb-legend-item-license']").wrapAll("<h4>Licenses Issues</h4>  <div class='license-wrapper'/>")
 
     }
+
 
     removeChart(txt) {
         if (txt.indexOf('_') > -1) {
@@ -742,7 +779,7 @@ ${_this.buildTooltip(d)}
                 if (ObjArr.length - 1 == key) {
                     comma = "";
                 }
-                txt += this.removeChart(val.id) + "(" + val.value + ")" + comma + "  "
+                txt += this.removeChart(val.id) + " (" + val.value + ")" + comma + " "
 
             });
 
@@ -789,16 +826,15 @@ ${_this.buildTooltip(d)}
     getFormattedData() {
         let finalDataArr = [];
 
-
-        _.each(rawMockData, (val, index) => {
+        _.each(this.graphData, (val, index) => {
             let tmpObj = {};
-            _.map(val.violations.license, (v, k) => {
+            _.map(val.xrayViolations.violations.license, (v, k) => {
                 tmpObj['license_' + k] = v
             })
-            _.map(val.violations.security, (v, k) => {
+            _.map(val.xrayViolations.violations.security, (v, k) => {
                 tmpObj['security_' + k] = v
             })
-            tmpObj.x = val.version;
+            tmpObj.x = val.xrayViolations.version;
             if (val.downloads) {
                 tmpObj.downloads = val.downloads;
             }
@@ -806,6 +842,7 @@ ${_this.buildTooltip(d)}
         });
 
 
+        console.log("Final data is", finalDataArr);
         return finalDataArr;
     }
 
@@ -817,11 +854,11 @@ ${_this.buildTooltip(d)}
 
     toggleChart(type) {
         // toggle 'data1'
-        let toggleArr = _.map(_.filter(bb.instance[0].data(),(i)=>{
+        let toggleArr = _.map(_.filter(bb.instance[0].data(), (i) => {
             return i.id.indexOf(type) > -1
-        }),'id')
+        }), 'id')
         console.log(toggleArr);
-            bb.instance[0].toggle(toggleArr)
+        bb.instance[0].toggle(toggleArr)
     }
 
     securityViewState(state = 'hide') {

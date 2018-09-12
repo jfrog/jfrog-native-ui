@@ -60,6 +60,14 @@ export default class CommonDescriptor extends BaseDescriptor{
                                    </span>`,
                     width: '15%'
                 },
+                xrayStatus: {
+                    header: 'Xray Status',
+                    sortable: false,
+                    width: '15%',
+                    cellTemplate: `<div class="xray-status">
+                                <i  ng-class="[row.entity.xrayStatus.toLowerCase()]" class="icon-severity"></i>{{ row.entity.xrayStatus}}
+                            </div>`
+                },
                 keywords: {
                     header: 'Keywords',
                     sortable: false,
@@ -101,6 +109,14 @@ export default class CommonDescriptor extends BaseDescriptor{
                     sortable: false,
                     width: '15%',
                     cellTemplate: cellTemplates.versions.downloadsCount
+                },
+                xrayStatus: {
+                    header: 'Xray Status',
+                    sortable: false,
+                    width: '15%',
+                    cellTemplate: `<div class="xray-status">
+                                <i  ng-class="[row.entity.xrayStatus.toLowerCase()]" class="icon-severity"></i>{{ row.entity.xrayStatus}}
+                            </div>`
                 },
                 keywords: {
                     header: 'Keywords',

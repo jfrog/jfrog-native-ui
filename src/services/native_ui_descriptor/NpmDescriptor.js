@@ -29,6 +29,7 @@ export default class NpmDescriptor extends BaseDescriptor{
                     result.lastModified = data.lastModified;
                     result.latestPath = data.latestPath;
                     result.keywords = data.keywords;
+                    result.xrayStatus = data.xrayStatus;
                     if (data.results) {
                         result.versions = data.results.map((version) => {
                             delete version.numOfDownloads;
@@ -73,13 +74,15 @@ export default class NpmDescriptor extends BaseDescriptor{
                 'downloadsCount',
                 'versionsCount',
                 'lastModified',
-                'keywords'
+                'keywords',
+                'xrayStatus'
             ],
             versionsTableColumns: [
                 'name',
                 'repositories',
                 'lastModified',
                 'downloadsCount',
+                'xrayStatus',
                 'keywords'
             ],
             columnsRemovedForDerby: [
