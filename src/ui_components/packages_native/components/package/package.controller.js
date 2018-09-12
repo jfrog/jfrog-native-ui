@@ -721,6 +721,9 @@ ${_this.buildTooltip(d)}
                     label: {
                         text: "Downloads Count",
                         position: "outer-middle"
+                    },
+                    tick: {
+                        format: function(x) { return x % 1 === 0 ? x : ''; }
                     }
                 },
                 y: {
