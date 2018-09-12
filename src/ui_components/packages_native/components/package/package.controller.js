@@ -245,6 +245,7 @@ export default class PackageController {
         let init = () => {
             this.initTable();
             this.limitOptions=['10', '15', '30'];
+            this.dateSpanOptions=[{displayName:"Last 24 Hours",value:"LAST_24H"}, {displayName:"Last 7 Days",value:"LAST_7D"}, {displayName:"Last 14 Days",value:"LAST_14D"}];
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
                 this.getPackageData().then(() => {
@@ -714,7 +715,7 @@ ${_this.buildTooltip(d)}
                         tooltip: true,
                         centered: false
                     },
-                    height: 50
+                    height: 30
                 },
                 y2: {
                     show: true,
