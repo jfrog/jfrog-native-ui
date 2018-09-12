@@ -236,14 +236,15 @@ export default class PackageController {
         this.showSecurityViolations = true;
         this.showLicensesViolations = true;
         this.showDownloadsStats = true;
+
     }
 
     $onInit() {
         this.nativeParent.stateController = this;
-        this.limitOptions=['10', '15', '30'];
+
         let init = () => {
             this.initTable();
-
+            this.limitOptions=['10', '15', '30'];
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
                 this.getPackageData().then(() => {
@@ -262,8 +263,6 @@ export default class PackageController {
             this.package = {};
             init();
         })
-
-        this.chartConfig = this.getmockCharConf();
     }
 
     get typeSpecific() {
@@ -362,6 +361,7 @@ export default class PackageController {
         additionalDaoParams.order = additionalDaoParams.order || 'desc';
         additionalDaoParams.with_xray = true;
         additionalDaoParams.$no_spinner = true;
+
 
         this.nativeParent.hostData.getPackage(additionalDaoParams).then((data) => {
             console.log("Data Arrived", data);
@@ -835,8 +835,8 @@ ${_this.buildTooltip(d)}
                 tmpObj['security_' + k] = v
             })
             tmpObj.x = val.xrayViolations.version;
-            if (val.downloads) {
-                tmpObj.downloads = val.downloads;
+            if (val.xrayViolations.totalDownloads) {
+                tmpObj.downloads = val.xrayViolations.totalDownloads;
             }
             finalDataArr.push(tmpObj)
         });

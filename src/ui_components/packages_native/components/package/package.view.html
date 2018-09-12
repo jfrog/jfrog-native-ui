@@ -40,13 +40,14 @@
                     jf-select-model="$ctrl.limitVal"
                     jf-select-change="$ctrl.setLimitVal()"
                     jf-select-options="$ctrl.limitOptions">
-            </jf-ui-select></span><span> <label>Limit</label>
+            </jf-ui-select></span>
+            <span>
+                <label>Limit</label>
             <jf-ui-select
                     jf-select-placeholder="Limit"
-                    jf-select-display-func="$ctrl.getPackageTypeTemplate($item)"
                     jf-select-model="$ctrl.selectedPackageType"
                     jf-select-change="$ctrl.onPackageTypeChange()"
-                    jf-select-options="$ctrl.packageTypes">
+                    jf-select-options="$ctrl.limitOptions">
             </jf-ui-select>
 </span>
 
