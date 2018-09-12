@@ -721,7 +721,7 @@ ${_this.buildTooltip(d)}
                     show: true,
                     label: {
                         text: "Downloads Count",
-                        position: "outer-middle"
+                        position: "inner-middle"
                     },
                     tick: {
                         format: function(x) { return x % 1 === 0 ? x : ''; }
@@ -731,7 +731,7 @@ ${_this.buildTooltip(d)}
                     show: true,
                     label: {
                         text: "Violations Count",
-                        position: "outer-middle"
+                        position: "inner-middle"
                     },
                     tick: {
                         format: function(x) { return x % 1 === 0 ? x : ''; }
