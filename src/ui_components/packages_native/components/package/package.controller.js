@@ -728,7 +728,11 @@ ${_this.buildTooltip(d)}
                     label: {
                         text: "Violations Count",
                         position: "outer-middle"
+                    },
+                    tick: {
+                        format: function(x) { return x % 1 === 0 ? x : ''; }
                     }
+
                 }
             },
             subchart: {
