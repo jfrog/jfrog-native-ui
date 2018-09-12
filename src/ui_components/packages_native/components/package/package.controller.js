@@ -717,7 +717,18 @@ ${_this.buildTooltip(d)}
                     height: 50
                 },
                 y2: {
-                    show: true
+                    show: true,
+                    label: {
+                        text: "Downloads Count",
+                        position: "outer-middle"
+                    }
+                },
+                y: {
+                    show: true,
+                    label: {
+                        text: "Violations Count",
+                        position: "outer-middle"
+                    }
                 }
             },
             subchart: {
