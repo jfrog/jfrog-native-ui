@@ -636,6 +636,9 @@ export default class PackageController {
                         "license_unknown"
                     ]
                 ],
+                axes:{
+                    downloads:"y2"
+                },
                 onover: function (d) {
 
                 }
@@ -712,6 +715,9 @@ ${_this.buildTooltip(d)}
                         centered: false
                     },
                     height: 50
+                },
+                y2: {
+                    show: true
                 }
             },
             subchart: {
