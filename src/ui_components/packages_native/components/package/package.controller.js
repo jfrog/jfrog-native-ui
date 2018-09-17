@@ -223,10 +223,11 @@ const rawMockData = [
 export default class PackageController {
 
     constructor(JFrogSubRouter, $scope, $q, JFrogTableViewOptions,
-                JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor) {
+                JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor,$window) {
         this.subRouter = JFrogSubRouter.getActiveRouter();
         this.$stateParams = this.subRouter.params;
         this.$scope = $scope;
+        this.$window = $window;
         this.$q = $q;
         this.JFrogTableViewOptions = JFrogTableViewOptions;
         this.jFrogUIUtils = JFrogUIUtils;
@@ -244,9 +245,12 @@ export default class PackageController {
 
         let init = () => {
             this.initTable();
-            this.limitOptions=['5', '10', '15'];
+            this.limitOptions = ['5', '10', '15'];
             this.limitVal = '10';
-            this.dateSpanOptions=[{displayName:"Last 24 Hours",value:"LAST_24H"}, {displayName:"Last 7 Days",value:"LAST_7D"}, {displayName:"Last 14 Days",value:"LAST_14D"}];
+            this.dateSpanOptions = [{displayName: "Last 24 Hours", value: "LAST_24H"}, {
+                displayName: "Last 7 Days",
+                value: "LAST_7D"
+            }, {displayName: "Last 14 Days", value: "LAST_14D"}];
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
                 this.getPackageData().then(() => {
@@ -358,20 +362,23 @@ export default class PackageController {
     }
 
     getXrayData(additionalDaoParams) {
+
         additionalDaoParams = additionalDaoParams || {};
         additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
         additionalDaoParams.order = additionalDaoParams.order || 'desc';
         additionalDaoParams.with_xray = true;
         additionalDaoParams.limit = this.limitVal;
-        if(this.selectedTimeSpan){
+        if (this.selectedTimeSpan) {
             additionalDaoParams.from = this.selectedTimeSpan.value
         }
         additionalDaoParams.$no_spinner = true;
 
-
+        console.log('getting graph obj for package type:', this.$stateParams.packageType);
         this.nativeParent.hostData.getPackage(additionalDaoParams).then((data) => {
             console.log("Data Arrived", data);
             this.graphData = data.results;
+
+
             this.chartConfig = this.getGraphObj();
         });
     }
@@ -642,8 +649,8 @@ export default class PackageController {
                         "license_unknown"
                     ]
                 ],
-                axes:{
-                    downloads:"y2"
+                axes: {
+                    downloads: "y2"
                 },
                 onover: function (d) {
 
@@ -718,7 +725,11 @@ ${_this.buildTooltip(d)}
                     tick: {
                         multiline: false,
                         tooltip: true,
-                        centered: false
+                        centered: false,
+                        onclick: () => {
+                            console.log("CLICKED!!");
+                        }
+
                     },
                     height: 30
                 },
@@ -726,20 +737,24 @@ ${_this.buildTooltip(d)}
                     show: true,
                     label: {
                         text: "Downloads Count",
-                        position: "inner-middle"
+                        position: "outer-middle"
                     },
                     tick: {
-                        format: function(x) { return x % 1 === 0 ? x : ''; }
+                        format: function (x) {
+                            return x % 1 === 0 ? x : '';
+                        }
                     }
                 },
                 y: {
                     show: true,
                     label: {
                         text: "Violations Count",
-                        position: "inner-middle"
+                        position: "outer-middle"
                     },
                     tick: {
-                        format: function(x) { return x % 1 === 0 ? x : ''; }
+                        format: function (x) {
+                            return x % 1 === 0 ? x : '';
+                        }
                     }
 
                 }
@@ -768,9 +783,28 @@ ${_this.buildTooltip(d)}
                 console.log("Render DONE!");
                 if (!this.legendRendered) {
                     this.groupLegends();
+                    this.setLinkableLabels()
                 }
             }
         }
+    }
+
+    setLinkableLabels() {
+        let _this = this;
+        $('.bb-axis-x g text').each(function () {
+            let version = $(this).find('title').text();
+            let url = _.findWhere(_this.finalData, {x: version}).xrayUrl;
+            console.log("Need to move user into version ", version)
+            console.log(" ***  Need to move user into to url *** ", url)
+            if(url){
+                $(this).addClass('link-generated');
+                $(this).click(function () {
+                    _this.$window.open(url, "_blank");
+
+                    console.log('need to move user into the following address:', url)
+                });
+            }
+        });
     }
 
     groupLegends() {
@@ -792,6 +826,7 @@ ${_this.buildTooltip(d)}
     getTooltipText(type, data) {
 
         if (type == 'download') {
+            console.log("data for download tt is ", data);
             if (_.findWhere(data, {id: 'downloads'})) {
                 return _.findWhere(data, {id: 'downloads'}).value;
             }
@@ -864,15 +899,20 @@ ${_this.buildTooltip(d)}
             _.map(val.xrayViolations.violations.security, (v, k) => {
                 tmpObj['security_' + k] = v
             })
-            tmpObj.x = val.xrayViolations.version;
-            if (val.xrayViolations.totalDownloads) {
-                tmpObj.downloads = val.xrayViolations.totalDownloads;
+            let unScannedFlag = "";
+            if (val.xrayViolations.xrayStatus.toLowerCase() == 'unscanned') {
+                unScannedFlag = "(Unscanned)";
             }
+            tmpObj.x = val.xrayViolations.version + ' ' + unScannedFlag;
+            tmpObj.downloads = val.xrayViolations.totalDownloads;
+            tmpObj.xrayUrl = val.xrayViolations.detailsUrl
+
             finalDataArr.push(tmpObj)
         });
 
 
         console.log("Final data is", finalDataArr);
+        this.finalData = finalDataArr;
         return finalDataArr;
     }
 

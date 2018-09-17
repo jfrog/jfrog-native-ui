@@ -3,72 +3,79 @@ package-component {
     .jf-page-content {
       .jf-content-section {
 
-        .graph-wrapper{
+        .graph-wrapper {
+          text.link-generated {
+            fill: #006CAB;
+            cursor: pointer;
+          }
+          text.bb-axis-y2-label,
+          text.bb-axis-y-label {
+            font-size: 14px;
+            fill: #959595;
+          }
           jf-billboard.bb {
             height: 85%;
           }
           margin-top: 65px;
           height: 85%;
-.graph-filters{
-  .dd-wrapper{
-    width: 600px;
-    position: absolute;
-    top: 11px;
-    left: 29px;
-    > span {
-      width: 280px;
-      display: inline-block;
-      &:last-child{
-        margin-left:25px;
-      }
-    }
+          .graph-filters {
+            .dd-wrapper {
+              width: 600px;
+              position: absolute;
+              top: 11px;
+              left: 29px;
+              > span {
+                width: 280px;
+                display: inline-block;
+                &:last-child {
+                  margin-left: 25px;
+                }
+              }
 
-  }
-  .jf-checkbox {
-    input[type=checkbox]:checked+span {
-      background-image: none;
-      &:after{
-        content: "\e97f";
-        color: #fff;
-        text-align: center;
-        width: 100%;
-        display: inline-block;
-        position: relative;
-        font-family: artifactory!important;
-        bottom: 1px;
-      }
-    }
-  }
+            }
+            .jf-checkbox {
+              input[type=checkbox]:checked + span {
+                background-image: none;
+                &:after {
+                  content: "\e97f";
+                  color: #fff;
+                  text-align: center;
+                  width: 100%;
+                  display: inline-block;
+                  position: relative;
+                  font-family: artifactory !important;
+                  bottom: 1px;
+                }
+              }
+            }
 
+            jf-checkbox {
 
+              input[type=checkbox] {
 
-  jf-checkbox{
+                &.downloads {
+                  & + span {
 
-    input[type=checkbox]{
+                    background-color: #753C8C !important;
+                  }
+                }
 
-      &.downloads{
-        &+span{
+                &.security {
+                  + span {
 
-          background-color: #753C8C !important;
-        }
-      }
+                    background-color: #E5B32D !important;
+                  }
+                }
 
-      &.security{
-        +span{
+                &.license {
+                  + span {
+                    background-color: #4A7CB8 !important
+                  }
+                }
 
-          background-color: #E5B32D !important;
-        }
-      }
-
-      &.license{
-        +span{
-          background-color:#4A7CB8 !important
-        }
-      }
-
-    }
-  }
-}
+              }
+            }
+          }
           span.legend-item span {
             width: 10px;
             height: 10px;
@@ -79,11 +86,10 @@ package-component {
           .bb-legend-item {
             margin: 0 10px;
 
-            &.bb-legend-item-downloads{
+            &.bb-legend-item-downloads {
               display: none;
             }
           }
-
 
           div#bb-legend {
             display: inline-block;
@@ -136,7 +142,7 @@ package-component {
           }
 
         }
-        jf-switch-toggler{
+        jf-switch-toggler {
           float: right;
         }
         .jf-table-view {
@@ -163,7 +169,6 @@ package-component {
       }
     }
   }
-
 
   .icon-severity.normal:before {
     content: "\e97f";
