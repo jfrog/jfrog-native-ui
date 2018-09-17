@@ -74,8 +74,6 @@ export default class NpmDescriptor extends BaseDescriptor{
                 'downloadsCount',
                 'versionsCount',
                 'lastModified',
-                'keywords',
-                'xrayStatus'
             ],
             versionsTableColumns: [
                 'name',
