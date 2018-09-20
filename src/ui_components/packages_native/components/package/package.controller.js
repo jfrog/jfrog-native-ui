@@ -284,7 +284,6 @@ export default class PackageController {
 
         }
         this.nativeParent.hostData.isXrayEnabled().then((response) => {
-            console.log("Xray Available?", response);
             this.withXray = response;
             if (this.withXray) {
                 this.getXrayData();
@@ -402,7 +401,6 @@ export default class PackageController {
         }
         additionalDaoParams.$no_spinner = true;
 
-        console.log('getting graph obj for package type:', this.$stateParams.packageType);
         this.nativeParent.hostData.getPackage(additionalDaoParams).then((data) => {
             if (this.$stateParams.packageType == 'docker') {
                 this.graphData = data.versions;
@@ -635,7 +633,6 @@ export default class PackageController {
     /* ======== Chart Config Mock Methods ========== */
 
     getGraphObj(type = "chart") {
-        console.log("Setting GraphObj");
         let _this = this;
         return {
             id: "xray-data-chart",
@@ -916,7 +913,6 @@ ${_this.buildTooltip(d)}
         let finalDataArr = [];
         if (!this.withXray) {
             this.graphData = rawMockData;
-            console.log("Setting mock data!");
         }
         _.each(this.graphData, (val, index) => {
             let tmpObj = {};
