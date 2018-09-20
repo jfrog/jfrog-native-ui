@@ -64,9 +64,9 @@ export default class CommonDescriptor extends BaseDescriptor{
                     header: 'Xray Status',
                     sortable: false,
                     width: '15%',
-                    cellTemplate: `<div class="xray-status">
+                    cellTemplate: `<div  ng-if="row.entity.xrayStatus" class="xray-status">
                                 <i  ng-class="[row.entity.xrayStatus.toLowerCase()]" class="icon-severity"></i>{{ row.entity.xrayStatus}}
-                            </div>`
+                            </div><div  ng-if="!row.entity.xrayStatus" class="xray-status">N/A</div>`
                 },
                 keywords: {
                     header: 'Keywords',
@@ -114,9 +114,9 @@ export default class CommonDescriptor extends BaseDescriptor{
                     header: 'Xray Status',
                     sortable: false,
                     width: '15%',
-                    cellTemplate: `<div class="xray-status">
+                    cellTemplate: `<div  ng-if="row.entity.xrayStatus" class="xray-status">
                                 <i  ng-class="[row.entity.xrayStatus.toLowerCase()]" class="icon-severity"></i>{{ row.entity.xrayStatus}}
-                            </div>`
+                            </div><div  ng-if="!row.entity.xrayStatus" class="xray-status">N/A</div>`
                 },
                 keywords: {
                     header: 'Keywords',
