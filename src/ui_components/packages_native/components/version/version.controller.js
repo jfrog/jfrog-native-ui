@@ -26,6 +26,7 @@ export default class VersionController {
         this.getVersionData(this.$stateParams).then(() => {
             this.initConstants();
             this.nativeParent.hostData.isXrayEnabled().then((response) => {
+                console.log("Xray Available?",response);
                 this.withXray = response;
             });
             this.summaryColumns = this.getSummaryColumns();

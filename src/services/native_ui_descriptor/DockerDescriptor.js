@@ -42,15 +42,12 @@ export default class DockerDescriptor extends BaseDescriptor{
                     result.packageId = data.packageId;
                     result.lastModified = data.lastModified;
                     result.size = data.size;
-                    result.xray = data.xray;
-
                     result.security = data.security;
                     result.labels = data.labels;
                     result.repo = data.repoKey;
                     result.downloadsCount = data.totalDownloads;
-
+                    result.xrayStatus = data.xrayStatus;
                     result.layers = data.blobsInfo;
-
                     return result;
                 }
             },
@@ -91,7 +88,8 @@ export default class DockerDescriptor extends BaseDescriptor{
                 'repo',
                 'packageId',
                 'lastModified',
-                'downloadsCount'
+                'downloadsCount',
+                'xrayStatus'
             ],
             packageSummaryColumns: [
                 'packageIcon',

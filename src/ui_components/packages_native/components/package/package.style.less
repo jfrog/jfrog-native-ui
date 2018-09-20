@@ -2,8 +2,25 @@ package-component {
   .jf-page-wrapper {
     .jf-page-content {
       .jf-content-section {
-
+        .alert.alert-info {
+          font-weight: 700;
+          text-align: left;
+          top: 20px;
+          width: 733px;
+          margin: 0 auto;
+          z-index: 9999;
+          opacity: .8;
+          border: 1px solid;
+          strong{
+            font-size: 22px;
+          }
+        }
         .graph-wrapper {
+          margin-top: 65px;
+          height: 85%;
+          &.mock-mode {
+            margin-top: 0;
+          }
           text.link-generated {
             fill: #006CAB;
             cursor: pointer;
@@ -16,8 +33,6 @@ package-component {
           jf-billboard.bb {
             height: 85%;
           }
-          margin-top: 65px;
-          height: 85%;
           .graph-filters {
             .dd-wrapper {
               width: 600px;

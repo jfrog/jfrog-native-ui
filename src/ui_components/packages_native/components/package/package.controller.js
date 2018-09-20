@@ -3,18 +3,20 @@ const rawMockData = [
         "version": "1.02",
         "downloads": 120,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 22,
-                "minor": 42,
-                "major": 53,
-                "critical": 30
-            },
-            "security": {
-                "unknown": 22,
-                "minor": 422,
-                "major": 123,
-                "critical": 220
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 22,
+                    "minor": 42,
+                    "major": 53,
+                    "critical": 30
+                },
+                "security": {
+                    "unknown": 22,
+                    "minor": 422,
+                    "major": 123,
+                    "critical": 220
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -23,18 +25,20 @@ const rawMockData = [
         "version": "1.03",
         "downloads": 130,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 32,
-                "minor": 42,
-                "major": 53,
-                "critical": 320
-            },
-            "security": {
-                "unknown": 52,
-                "minor": 32,
-                "major": 23,
-                "critical": 72
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 32,
+                    "minor": 42,
+                    "major": 53,
+                    "critical": 320
+                },
+                "security": {
+                    "unknown": 52,
+                    "minor": 32,
+                    "major": 23,
+                    "critical": 72
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -43,18 +47,20 @@ const rawMockData = [
         "version": "1.1",
         "downloads": 640,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 22,
-                "minor": 52,
-                "major": 33,
-                "critical": 80
-            },
-            "security": {
-                "unknown": 0,
-                "minor": 9,
-                "major": 33,
-                "critical": 70
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 22,
+                    "minor": 52,
+                    "major": 33,
+                    "critical": 80
+                },
+                "security": {
+                    "unknown": 0,
+                    "minor": 9,
+                    "major": 33,
+                    "critical": 70
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -63,18 +69,20 @@ const rawMockData = [
         "version": "1.2",
         "downloads": 120,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 0,
-                "minor": 0,
-                "major": 0,
-                "critical": 14
-            },
-            "security": {
-                "unknown": 0,
-                "minor": 0,
-                "major": 3,
-                "critical": 54
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 0,
+                    "minor": 0,
+                    "major": 0,
+                    "critical": 14
+                },
+                "security": {
+                    "unknown": 0,
+                    "minor": 0,
+                    "major": 3,
+                    "critical": 54
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -83,18 +91,20 @@ const rawMockData = [
         "version": "1.3",
         "downloads": 100,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 11,
-                "minor": 2,
-                "major": 4,
-                "critical": 120
-            },
-            "security": {
-                "unknown": 12,
-                "minor": 52,
-                "major": 33,
-                "critical": 80
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 11,
+                    "minor": 2,
+                    "major": 4,
+                    "critical": 120
+                },
+                "security": {
+                    "unknown": 12,
+                    "minor": 52,
+                    "major": 33,
+                    "critical": 80
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -103,18 +113,20 @@ const rawMockData = [
         "version": "1.4",
         "downloads": 180,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 22,
-                "minor": 21,
-                "major": 32,
-                "critical": 60
-            },
-            "security": {
-                "unknown": 32,
-                "minor": 22,
-                "major": 23,
-                "critical": 20
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 22,
+                    "minor": 21,
+                    "major": 32,
+                    "critical": 60
+                },
+                "security": {
+                    "unknown": 32,
+                    "minor": 22,
+                    "major": 23,
+                    "critical": 20
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -123,38 +135,42 @@ const rawMockData = [
         "version": "1.5",
         "downloads": 500,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 2,
-                "minor": 2,
-                "major": 3,
-                "critical": 20
-            },
-            "security": {
-                "unknown": 2,
-                "minor": 2,
-                "major": 3,
-                "critical": 20
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 2,
+                    "minor": 2,
+                    "major": 3,
+                    "critical": 20
+                },
+                "security": {
+                    "unknown": 2,
+                    "minor": 2,
+                    "major": 3,
+                    "critical": 20
+                }
             }
         },
         "details_url": "http://xray/..."
     },
     {
         "version": "1.6",
-        "downloads": 200,
+        "downloads": 4332,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 0,
-                "minor": 0,
-                "major": 0,
-                "critical": 0
-            },
-            "security": {
-                "unknown": 0,
-                "minor": 0,
-                "major": 0,
-                "critical": 0
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 0,
+                    "minor": 0,
+                    "major": 0,
+                    "critical": 0
+                },
+                "security": {
+                    "unknown": 0,
+                    "minor": 0,
+                    "major": 0,
+                    "critical": 0
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -163,18 +179,20 @@ const rawMockData = [
         "version": "1.7",
         "downloads": 250,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 2,
-                "minor": 2,
-                "major": 3,
-                "critical": 20
-            },
-            "security": {
-                "unknown": 42,
-                "minor": 22,
-                "major": 23,
-                "critical": 20
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 2,
+                    "minor": 2,
+                    "major": 3,
+                    "critical": 20
+                },
+                "security": {
+                    "unknown": 42,
+                    "minor": 22,
+                    "major": 23,
+                    "critical": 20
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -183,18 +201,20 @@ const rawMockData = [
         "version": "1.8",
         "downloads": 32,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 22,
-                "minor": 22,
-                "major": 13,
-                "critical": 220
-            },
-            "security": {
-                "unknown": 92,
-                "minor": 42,
-                "major": 63,
-                "critical": 220
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 22,
+                    "minor": 22,
+                    "major": 13,
+                    "critical": 220
+                },
+                "security": {
+                    "unknown": 92,
+                    "minor": 42,
+                    "major": 63,
+                    "critical": 220
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -203,18 +223,20 @@ const rawMockData = [
         "version": "1.9",
         "downloads": 800,
         "status": "critical(15)",
-        "violations": {
-            "license": {
-                "unknown": 32,
-                "minor": 22,
-                "major": 13,
-                "critical": 420
-            },
-            "security": {
-                "unknown": 22,
-                "minor": 52,
-                "major": 53,
-                "critical": 320
+        "xrayViolations": {
+            violations: {
+                "license": {
+                    "unknown": 32,
+                    "minor": 22,
+                    "major": 13,
+                    "critical": 420
+                },
+                "security": {
+                    "unknown": 22,
+                    "minor": 52,
+                    "major": 53,
+                    "critical": 320
+                }
             }
         },
         "details_url": "http://xray/..."
@@ -223,7 +245,7 @@ const rawMockData = [
 export default class PackageController {
 
     constructor(JFrogSubRouter, $scope, $q, JFrogTableViewOptions,
-                JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor,$window) {
+                JFrogUIUtils, $rootScope, JFrogModal, NativeUIDescriptor, $window) {
         this.subRouter = JFrogSubRouter.getActiveRouter();
         this.$stateParams = this.subRouter.params;
         this.$scope = $scope;
@@ -257,10 +279,19 @@ export default class PackageController {
                     this.tableViewOptions.setData(this.package.versions);
                 })
             }, this.$scope);
-            this.getXrayData();
+
             this.summaryColumns = this.getSummaryColumns();
 
         }
+        this.nativeParent.hostData.isXrayEnabled().then((response) => {
+            console.log("Xray Available?", response);
+            this.withXray = response;
+            if (this.withXray) {
+                this.getXrayData();
+            } else {
+                this.chartConfig = this.getGraphObj();
+            }
+        });
         this.initConstants();
         this.getSummaryData();
         this.getPackageData().then(() => {
@@ -315,8 +346,6 @@ export default class PackageController {
         additionalDaoParams = additionalDaoParams || {};
         additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
         additionalDaoParams.order = additionalDaoParams.order || 'desc';
-        console.log("Getting package data!");
-
 
         let daoParams = _.extend({}, this.$stateParams, additionalDaoParams);
         delete daoParams.repos;
@@ -375,9 +404,11 @@ export default class PackageController {
 
         console.log('getting graph obj for package type:', this.$stateParams.packageType);
         this.nativeParent.hostData.getPackage(additionalDaoParams).then((data) => {
-            console.log("Data Arrived", data);
-            this.graphData = data.results;
-
+            if (this.$stateParams.packageType == 'docker') {
+                this.graphData = data.versions;
+            } else {
+                this.graphData = data.results;
+            }
 
             this.chartConfig = this.getGraphObj();
         });
@@ -391,6 +422,7 @@ export default class PackageController {
         this.nativeParent.hostData.getPackageDownloadsCount(daoParams).then((response) => {
             if (this.package) this.package.totalDownloads = response.totalDownloads;
             this.totalDownloadsForPackage = response.totalDownloads;
+
         });
     }
 
@@ -566,6 +598,7 @@ export default class PackageController {
         };
         row.pendingCalculation = true;
         this.nativeParent.hostData.getVersionDownloadsCount(daoParams).then((response) => {
+            row.xrayStatus = response.xrayStatus
             row.downloadsCount = response.totalDownloads;
             row.calculated = true;
             row.pendingCalculation = false;
@@ -585,7 +618,6 @@ export default class PackageController {
         };
         row.calculationPending = true;
         return this.nativeParent.hostData.getVersionExtraInfo(daoParams).then((response) => {
-            console.log("Returned Row", response);
             _.merge(row, this.typeSpecific.transformers.version(response));
             /*
                         if (response.totalDownloads !== undefined) {
@@ -603,6 +635,7 @@ export default class PackageController {
     /* ======== Chart Config Mock Methods ========== */
 
     getGraphObj(type = "chart") {
+        console.log("Setting GraphObj");
         let _this = this;
         return {
             id: "xray-data-chart",
@@ -725,10 +758,7 @@ ${_this.buildTooltip(d)}
                     tick: {
                         multiline: false,
                         tooltip: true,
-                        centered: false,
-                        onclick: () => {
-                            console.log("CLICKED!!");
-                        }
+                        centered: false
 
                     },
                     height: 30
@@ -780,7 +810,6 @@ ${_this.buildTooltip(d)}
                 this.legendRendered = false;
             },
             onrendered: () => {
-                console.log("Render DONE!");
                 if (!this.legendRendered) {
                     this.groupLegends();
                     this.setLinkableLabels()
@@ -794,14 +823,10 @@ ${_this.buildTooltip(d)}
         $('.bb-axis-x g text').each(function () {
             let version = $(this).find('title').text();
             let url = _.findWhere(_this.finalData, {x: version}).xrayUrl;
-            console.log("Need to move user into version ", version)
-            console.log(" ***  Need to move user into to url *** ", url)
-            if(url){
+            if (url) {
                 $(this).addClass('link-generated');
                 $(this).click(function () {
                     _this.$window.open(url, "_blank");
-
-                    console.log('need to move user into the following address:', url)
                 });
             }
         });
@@ -826,7 +851,6 @@ ${_this.buildTooltip(d)}
     getTooltipText(type, data) {
 
         if (type == 'download') {
-            console.log("data for download tt is ", data);
             if (_.findWhere(data, {id: 'downloads'})) {
                 return _.findWhere(data, {id: 'downloads'}).value;
             }
@@ -890,7 +914,10 @@ ${_this.buildTooltip(d)}
 
     getFormattedData() {
         let finalDataArr = [];
-
+        if (!this.withXray) {
+            this.graphData = rawMockData;
+            console.log("Setting mock data!");
+        }
         _.each(this.graphData, (val, index) => {
             let tmpObj = {};
             _.map(val.xrayViolations.violations.license, (v, k) => {
@@ -900,18 +927,23 @@ ${_this.buildTooltip(d)}
                 tmpObj['security_' + k] = v
             })
             let unScannedFlag = "";
-            if (val.xrayViolations.xrayStatus.toLowerCase() == 'unscanned') {
+            if (val.xrayViolations.xrayStatus && val.xrayViolations.xrayStatus.toLowerCase() == 'unscanned') {
                 unScannedFlag = "(Unscanned)";
             }
-            tmpObj.x = val.xrayViolations.version + ' ' + unScannedFlag;
-            tmpObj.downloads = val.xrayViolations.totalDownloads;
+            if(this.withXray){
+                tmpObj.x = val.xrayViolations.version + ' ' + unScannedFlag;
+                tmpObj.downloads = val.xrayViolations.totalDownloads;
+            }else{
+                tmpObj.x = val.version + ' ' + unScannedFlag;
+                tmpObj.downloads = val.downloads;
+            }
+
+
             tmpObj.xrayUrl = val.xrayViolations.detailsUrl
 
             finalDataArr.push(tmpObj)
         });
 
-
-        console.log("Final data is", finalDataArr);
         this.finalData = finalDataArr;
         return finalDataArr;
     }
@@ -927,7 +959,6 @@ ${_this.buildTooltip(d)}
         let toggleArr = _.map(_.filter(bb.instance[0].data(), (i) => {
             return i.id.indexOf(type) > -1
         }), 'id')
-        console.log(toggleArr);
         bb.instance[0].toggle(toggleArr)
     }
 
