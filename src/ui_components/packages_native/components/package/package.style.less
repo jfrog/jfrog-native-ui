@@ -2,6 +2,38 @@ package-component {
   .jf-page-wrapper {
     .jf-page-content {
       .jf-content-section {
+        .xray-toggler-wrapper {
+          z-index: 1000001;
+          position: relative;
+        }
+        .xray-graph-spinner {
+          position: absolute;
+          width: ~"calc(100% - 60px)";
+          height: ~"calc(100% - 60px)";
+          background-color: rgba(255, 255, 255, 0.5);
+          z-index: 1000000;
+
+          .spinner-msg {
+            position: absolute;
+            height: 70px;
+            width: 70px;
+
+            color: @grayFontGeneral;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+
+            margin-top: -35px;
+            margin-left: -35px;
+
+          }
+          .icon-hourglass {
+            background-size: 70px 70px;
+            width: 70px;
+            height: 70px;
+          }
+
+        }
         .alert.alert-info {
           font-weight: 700;
           text-align: left;
@@ -225,4 +257,6 @@ package-component {
     }
   }
 }
+
+
 

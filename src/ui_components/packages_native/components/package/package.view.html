@@ -26,69 +26,81 @@
     <div class="jf-page-content">
         <div class="jf-content-section">
             <div class="jf-main-content-pane">
-                <jf-switch-toggler on-toggle="$ctrl.legendRendered = false" model="$ctrl.toggleByStringModel" options="['Details','Xray']"></jf-switch-toggler>
+                <div class="xray-toggler-wrapper">
+                    <jf-switch-toggler on-toggle="$ctrl.legendRendered = false" model="$ctrl.toggleByStringModel" options="['Details','Xray']"></jf-switch-toggler>
+                </div>
                 <jf-table-view ng-show="$ctrl.toggleByStringModel == 'Details'"
-                        options="$ctrl.tableViewOptions"
-                        object-name="Package">
+                               options="$ctrl.tableViewOptions"
+                               object-name="Package">
                 </jf-table-view>
-<div ng-class="{'mock-mode':!$ctrl.withXray}" class="graph-wrapper" ng-if="$ctrl.toggleByStringModel == 'Xray'">
-    <div class="graph-filters">
-        <div ng-if="$ctrl.withXray" class="dd-wrapper">
-<span> <label>Time Range</label>
-            <jf-ui-select
-                    jf-select-placeholder="Time Range"
-                    jf-select-model="$ctrl.selectedTimeSpan"
-                    jf-select-change="$ctrl.getXrayData()"
-                    jf-select-display-attr="displayName"
-                    jf-select-options="$ctrl.dateSpanOptions">
-            </jf-ui-select></span>
-            <span>
-                <label>Limit</label>
-            <jf-ui-select
-                    jf-select-placeholder="Limit"
-                    jf-select-model="$ctrl.limitVal"
-                    jf-select-change="$ctrl.getXrayData()"
-                    jf-select-options="$ctrl.limitOptions">
-            </jf-ui-select>
-</span>
+
+                <div ng-if="$ctrl.toggleByStringModel == 'Xray' && ($ctrl.withXray && !$ctrl.graphData)"
+                     class="xray-graph-spinner">
+                    <div class="spinner-msg">
+                        <div class="icon-hourglass"></div>
+                    </div>
+                </div>
+
+                <div ng-class="{'mock-mode':!$ctrl.withXray}" class="graph-wrapper" ng-if="$ctrl.toggleByStringModel == 'Xray' && (!$ctrl.withXray || $ctrl.graphData)">
+                    <div class="graph-filters">
+                        <div ng-if="$ctrl.withXray" class="dd-wrapper">
+                            <span>
+                                <label>Time Range</label>
+                                <jf-ui-select
+                                        jf-select-placeholder="Time Range"
+                                        jf-select-model="$ctrl.selectedTimeSpan"
+                                        jf-select-change="$ctrl.getXrayData()"
+                                        jf-select-display-attr="displayName"
+                                        jf-select-options="$ctrl.dateSpanOptions">
+                                </jf-ui-select>
+                            </span>
+                            <span>
+                                <label>Limit</label>
+                                <jf-ui-select
+                                        jf-select-placeholder="Limit"
+                                        jf-select-model="$ctrl.limitVal"
+                                        jf-select-change="$ctrl.getXrayData()"
+                                        jf-select-options="$ctrl.limitOptions">
+                                </jf-ui-select>
+                            </span>
 
 
-        </div>
+                        </div>
 
-        <jf-checkbox text="Security Violations">
-            <input type="checkbox"
-                   id="enabled"
-                   class="security"
-                   ng-model="$ctrl.showSecurityViolations"
-                   ng-change="$ctrl.toggleChart('security')">
-        </jf-checkbox>
+                        <jf-checkbox text="Security Violations">
+                            <input type="checkbox"
+                                   id="enabled"
+                                   class="security"
+                                   ng-model="$ctrl.showSecurityViolations"
+                                   ng-change="$ctrl.toggleChart('security')">
+                        </jf-checkbox>
 
-        <jf-checkbox text="License Violations">
-            <input type="checkbox"
-                   id="enabled"
-                   class="license"
-                   ng-model="$ctrl.showLicensesViolations"
-                   ng-change="$ctrl.toggleChart('license')">
-        </jf-checkbox>
+                        <jf-checkbox text="License Violations">
+                            <input type="checkbox"
+                                   id="enabled"
+                                   class="license"
+                                   ng-model="$ctrl.showLicensesViolations"
+                                   ng-change="$ctrl.toggleChart('license')">
+                        </jf-checkbox>
 
-        <jf-checkbox text="Downloads">
-            <input type="checkbox"
-                   id="enabled"
-                   class="downloads"
-                   ng-model="$ctrl.showDownloadsStats"
-                   ng-change="$ctrl.toggleChart('downloads')">
-        </jf-checkbox>
-    </div>
-    <div ng-if="!$ctrl.withXray" class="alert alert-info"> <strog> Mock up.</strog>
-        <br/>
-            This graph presents what you could see if you had JFrog Xray which is available with:
-        <br/>
-    Artifactory ProX, Artifactory Enterprise, Artifactory Enterprise+
-        <br/>
-    To try this feature on your data, you can start a 30-day free trial of JFrog Xray.</div>
-    <jf-billboard style="display:inline-block" options="$ctrl.chartConfig"></jf-billboard>
-    <div id="bb-legend"></div>
-</div>
+                        <jf-checkbox text="Downloads">
+                            <input type="checkbox"
+                                   id="enabled"
+                                   class="downloads"
+                                   ng-model="$ctrl.showDownloadsStats"
+                                   ng-change="$ctrl.toggleChart('downloads')">
+                        </jf-checkbox>
+                    </div>
+                    <div ng-if="!$ctrl.withXray" class="alert alert-info"> <strog> Mock up.</strog>
+                        <br/>
+                        This graph presents what you could see if you had JFrog Xray which is available with:
+                        <br/>
+                        Artifactory ProX, Artifactory Enterprise, Artifactory Enterprise+
+                        <br/>
+                        To try this feature on your data, you can start a 30-day free trial of JFrog Xray.</div>
+                    <jf-billboard style="display:inline-block" options="$ctrl.chartConfig"></jf-billboard>
+                    <div id="bb-legend"></div>
+                </div>
 
 
             </div>

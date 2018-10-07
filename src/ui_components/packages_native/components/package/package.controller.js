@@ -269,10 +269,17 @@ export default class PackageController {
             this.initTable();
             this.limitOptions = ['5', '10', '15'];
             this.limitVal = '10';
-            this.dateSpanOptions = [{displayName: "Last 24 Hours", value: "LAST_24H"}, {
-                displayName: "Last 7 Days",
-                value: "LAST_7D"
-            }, {displayName: "Last 14 Days", value: "LAST_14D"}];
+            this.dateSpanOptions = [
+                {displayName: "All Times", value: null},
+                {displayName: "Last 24 Hours", value: "LAST_24H"},
+                {displayName: "Last 7 Days", value: "LAST_7D"},
+                {displayName: "Last 14 Days", value: "LAST_14D"}
+            ];
+            this.selectedTimeSpan = this.dateSpanOptions[0];
+            this.$scope.$watch('$ctrl.toggleByStringModel', () => {
+                this.tableViewOptions.update();
+            });
+
             this.subRouter.listenForChanges(['packageType', 'package', 'repos'], 'package', () => {
                 this.getSummaryData();
                 this.getPackageData().then(() => {
