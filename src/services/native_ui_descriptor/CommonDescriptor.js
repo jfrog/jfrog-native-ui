@@ -114,9 +114,14 @@ export default class CommonDescriptor extends BaseDescriptor{
                     header: 'Xray Status',
                     sortable: false,
                     width: '15%',
+/*
                     cellTemplate: `<div  ng-if="row.entity.xrayStatus" class="xray-status">
                                 <i  ng-class="[row.entity.xrayStatus.toLowerCase()]" class="icon-severity"></i>{{ row.entity.xrayStatus}}
                             </div><div  ng-if="!row.entity.xrayStatus" class="xray-status">N/A</div>`
+*/
+                    cellTemplate: `<jf-pending-data disable-tooltip-on-overflow wait-for="row.entity.xrayStatus || row.entity.calculated">
+                                        <div class="xray-status"><i  ng-class="[row.entity.xrayStatus.toLowerCase()]" class="icon-severity"></i>{{ row.entity.xrayStatus || 'N/A'}}</div>
+                                   </jf-pending-data>`
                 },
                 keywords: {
                     header: 'Keywords',

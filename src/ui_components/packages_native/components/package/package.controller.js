@@ -400,7 +400,7 @@ export default class PackageController {
 
         additionalDaoParams = additionalDaoParams || {};
         additionalDaoParams.sortBy = additionalDaoParams.sortBy || 'lastModified';
-        additionalDaoParams.order = additionalDaoParams.order || 'desc';
+        additionalDaoParams.order = 'asc';
         additionalDaoParams.with_xray = true;
         additionalDaoParams.limit = this.limitVal;
         if (this.selectedTimeSpan) {
@@ -409,13 +409,31 @@ export default class PackageController {
         additionalDaoParams.$no_spinner = true;
 
         this.nativeParent.hostData.getPackage(additionalDaoParams).then((data) => {
-            if (this.$stateParams.packageType == 'docker') {
-                this.graphData = data.versions;
-            } else {
-                this.graphData = data.results;
-            }
+            if (data.errorStatus) {
+                switch(data.errorStatus) {
+                    case 'Incompatible Xray version': {
+                        this.xrayError = 'Incompatible Xray version. This feature is supported from Xray 2.4.0 and above.\nUpgrade Xray to get license and security violations data.\nThis sample graph presents what you could see if you\'ll upgrade :'
+                        this.graphData = rawMockData;
+                        this.chartConfig = this.getGraphObj();
+                        break;
+                    }
+                    case 'Xray is not available': {
+                        this.xrayError = 'Xray is not available.'
+                        break;
+                    }
+                }
+                //
 
-            this.chartConfig = this.getGraphObj();
+            }
+            else {
+                if (this.$stateParams.packageType == 'docker') {
+                    this.graphData = data.versions;
+                } else {
+                    this.graphData = data.results;
+                }
+
+                this.chartConfig = this.getGraphObj();
+            }
         });
     }
 
@@ -826,12 +844,15 @@ ${_this.buildTooltip(d)}
         let _this = this;
         $('.bb-axis-x g text').each(function () {
             let version = $(this).find('title').text();
-            let url = _.findWhere(_this.finalData, {x: version}).xrayUrl;
-            if (url) {
-                $(this).addClass('link-generated');
-                $(this).click(function () {
-                    _this.$window.open(url, "_blank");
-                });
+            let foundDataItem = _.findWhere(_this.finalData, {x: version});
+            if (foundDataItem) {
+                let url = foundDataItem.xrayUrl;
+                if (url) {
+                    $(this).addClass('link-generated');
+                    $(this).click(function () {
+                        _this.$window.open(url, "_blank");
+                    });
+                }
             }
         });
     }

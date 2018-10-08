@@ -85,7 +85,8 @@ export default class NpmDescriptor extends BaseDescriptor{
             ],
             columnsRemovedForDerby: [
                 'downloadsCount',
-                'keywords'
+                'keywords',
+                'xrayStatus'
             ],
             packageSummaryColumns: [
                 'packageIcon',

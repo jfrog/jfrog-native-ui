@@ -34,15 +34,15 @@
                                object-name="Package">
                 </jf-table-view>
 
-                <div ng-if="$ctrl.toggleByStringModel == 'Xray' && ($ctrl.withXray && !$ctrl.graphData)"
+                <div ng-if="$ctrl.toggleByStringModel == 'Xray' && ($ctrl.withXray && !$ctrl.graphData && !$ctrl.xrayError)"
                      class="xray-graph-spinner">
                     <div class="spinner-msg">
                         <div class="icon-hourglass"></div>
                     </div>
                 </div>
 
-                <div ng-class="{'mock-mode':!$ctrl.withXray}" class="graph-wrapper" ng-if="$ctrl.toggleByStringModel == 'Xray' && (!$ctrl.withXray || $ctrl.graphData)">
-                    <div class="graph-filters">
+                <div ng-class="{'mock-mode':!$ctrl.withXray}" class="graph-wrapper" ng-if="$ctrl.toggleByStringModel == 'Xray' && (!$ctrl.withXray || $ctrl.graphData || $ctrl.xrayError)">
+                    <div class="graph-filters" ng-if="!$ctrl.xrayError">
                         <div ng-if="$ctrl.withXray" class="dd-wrapper">
                             <span>
                                 <label>Time Range</label>
@@ -97,9 +97,13 @@
                         <br/>
                         Artifactory ProX, Artifactory Enterprise, Artifactory Enterprise+
                         <br/>
-                        To try this feature on your data, you can start a 30-day free trial of JFrog Xray.</div>
-                    <jf-billboard style="display:inline-block" options="$ctrl.chartConfig"></jf-billboard>
-                    <div id="bb-legend"></div>
+                        To try this feature on your data, you can start a 30-day free trial of JFrog Xray.
+                        <br/>
+                        <a target="_blank" class="jf-link" href="https://jfrog.com/xray/free-trial/">Click to start your trial.</a>
+                    </div>
+	                <div ng-if="$ctrl.withXray && $ctrl.xrayError" class="alert alert-danger preserve-lb">{{$ctrl.xrayError}}</div>
+	                <jf-billboard ng-if="$ctrl.chartConfig" style="display:inline-block" options="$ctrl.chartConfig"></jf-billboard>
+                    <div ng-if="$ctrl.chartConfig" id="bb-legend"></div>
                 </div>
 
 
