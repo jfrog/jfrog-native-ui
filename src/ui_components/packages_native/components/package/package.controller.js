@@ -412,13 +412,15 @@ export default class PackageController {
             if (data.errorStatus) {
                 switch(data.errorStatus) {
                     case 'Incompatible Xray version': {
-                        this.xrayError = 'Incompatible Xray version. This feature is supported from Xray 2.4.0 and above.\nUpgrade Xray to get license and security violations data.\nThis sample graph presents what you could see if you\'ll upgrade :'
+                        this.xrayError = 'Incompatible JFrog Xray version. This feature is supported from JFrog Xray 2.4.0 and above.\n' +
+                                         'Upgrade JFrog Xray to get license and security violations data.\n' +
+                                         'This mock up graph presents what you could see if you had JFrog Xray 2.4.0 and above.';
                         this.graphData = rawMockData;
                         this.chartConfig = this.getGraphObj();
                         break;
                     }
                     case 'Xray is not available': {
-                        this.xrayError = 'Xray is not available.'
+                        this.xrayError = 'Cannot display data. JFrog Xray is unavailable.';
                         break;
                     }
                 }
