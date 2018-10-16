@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/env bash -e
 # -e will cause any subsequent commands which fail will cause the shell script to exit immediately
 
 ##
@@ -12,11 +12,29 @@
 #  source ./publish-npm.sh 2.1.5-beta.0                                                 #
 #########################################################################################
 
+####### Colors #############
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+###########################
+
 # If jq is not installed run: brew install jq
 
-# First we update the version of jfrog-native-ui in the package.json file
+# If no version is supplied - exit with error
+if [ -z $1 ]; then
+    echo -e "${RED}ERROR:${NC}" You must supply a valid version!
+    return
+fi
+
+# If version is not SemVer compliant - exit with error
+SEMVER_REGEX="^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
+if ! [[ "$1" =~ $SEMVER_REGEX ]]; then
+    echo -e "${RED}ERROR:${NC}" You must supply a SemVer compatible version!
+    return
+fi
+
+# Update the version of jfrog-native-ui in the package.json file
 echo Updating jfrog-native-ui version: $1 in "package.json"
-jq '.version = $newVal' --arg newVal $1 ./package.json > tmp.$$.json && mv tmp.$$.json ./package.json && rm -f tmp.$$.json
+jq '.version = $new_val' --arg new_val $1 ./package.json > tmp.$$.json && mv tmp.$$.json ./package.json && rm -f tmp.$$.json
 
 # Then we save the version number in BUILD_VERSION for when the version is build
 export BUILD_VERSION=$1
@@ -48,7 +66,7 @@ echo Log in to npm using your credentials:
 npm login
 
 # If the second arg $2 is set to "beta" or $1 ends with "-beta" - assume a beta version is being published
-if [ -n $2 -a "$2" =~ ^.*beta$ ] || [[ $1 =~ ^.*-beta$ ]]; then
+if [ -n $2 -a "$2" =~ ^.*beta$ ] || [[ $1 =~ ^.*-beta.*$ ]]; then
     echo Publishing a beta version $1:
     npm publish --tag beta
 else
@@ -56,6 +74,7 @@ else
     npm publish --tag
 fi
 
+# TODO: check if ~/.npmrc exists, if so don't move this back
 # TODO: unstash .npmrc on failure
 # Un-stash the .npmrc file
 echo Un-stashing your .npmrc file
