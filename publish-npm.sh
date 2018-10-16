@@ -9,7 +9,7 @@
 # You should run this file in the following manner for a regular (major/minor) version: #
 #  source ./publish-npm.sh 2.3.2                                                        #
 # Or for a beta version:                                                                #
-#  source ./publish-npm.sh 2.1.5-beta                                                   #
+#  source ./publish-npm.sh 2.1.5-beta.0                                                 #
 #########################################################################################
 
 # If jq is not installed run: brew install jq
