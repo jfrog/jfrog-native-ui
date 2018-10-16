@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# -e will cause any subsequent commands which fail will cause the shell script to exit immediately
 
 ##
 # Created by Tomer Elkayam @ 15/10/2018
@@ -10,8 +11,6 @@
 # Or for a beta version:                                                                #
 #  source ./publish-npm.sh 2.1.5-beta                                                   #
 #########################################################################################
-
-# -e will cause any subsequent commands which fail will cause the shell script to exit immediately
 
 # If jq is not installed run: brew install jq
 
@@ -25,7 +24,7 @@ echo Set BUILD_VERSION: $BUILD_VERSION
 
 # Build jfrog-native-ui
 echo Building jfrog-native-ui:
-#gulp build
+gulp build
 
 # Auto committing & pushing build files
 echo Committing and pushing build files:
