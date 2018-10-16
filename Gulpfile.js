@@ -51,11 +51,11 @@ gulp.task('build:common',
                 'less',
                 'fonts',
                 'images',
-                'copyBowerJson'
+                'copyPackageJson'
             ],
             'concatAllJS',
             'preprocessJS',
-            'preprocessBowerJSON',
+	        'preprocessPackageJSON',
             'announceBuildCompletion',
             'writeBuildVersion',
             'copyWebworkers',
@@ -127,8 +127,8 @@ gulp.task('preprocessJS', function() {
         .pipe(preprocess())
         .pipe(gulp.dest(CONFIG.DESTINATIONS.TARGET));
 });
-gulp.task('preprocessBowerJSON', function() {
-    return gulp.src(CONFIG.DESTINATIONS.TARGET + '/bower.json')
+gulp.task('preprocessPackageJSON', function() {
+    return gulp.src(CONFIG.DESTINATIONS.TARGET + '/' + CONFIG.SOURCES.PACKAGE_JSON)
         .pipe(preprocess())
         .pipe(gulp.dest(CONFIG.DESTINATIONS.TARGET));
 });
@@ -153,19 +153,12 @@ function sequence() {
     }
 }
 
-// copy bower.json file to dest
-gulp.task('copyBowerJson', function () {
-    return gulp.src(CONFIG.SOURCES.BOWER_JSON)
+// copy package.json file to dest
+gulp.task('copyPackageJson', function () {
+    return gulp.src(CONFIG.SOURCES.PACKAGE_JSON)
         .pipe(gulp.dest(CONFIG.DESTINATIONS.TARGET))
 });
 
-
-
-// install bower dependedencies
-gulp.task('bower', function () {
-    return gulp.src(['./bower.json'])
-            .pipe(install());
-});
 
 // bundle application code
 gulp.task("webpack", function (callback) {
