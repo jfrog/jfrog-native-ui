@@ -701,8 +701,8 @@ ${_this.buildTooltip(d)}
         if (!this.withXray) {
             this.graphData = rawMockData;
         }
-
-        let duplicatedVersions = _.map(_.filter(Object.entries(_.countBy(this.graphData, 'xrayViolations.version')), e => e[1] > 1), i => i[0]);
+        let aggregatedDataByVersion = _.countBy(this.graphData, 'xrayViolations.version');
+        let duplicatedVersions = _.map(_.filter(_.map(Object.keys(aggregatedDataByVersion), key => [key, aggregatedDataByVersion[key]]), e => e[1] > 1), i => i[0]);
         _.each(this.graphData, (val, index) => {
 
             if (_.includes(duplicatedVersions, val.xrayViolations.version)) {
