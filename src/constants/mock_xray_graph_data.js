@@ -2,20 +2,20 @@ export const rawMockData = [
     {
         "version": "1.02",
         "downloads": 120,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 22,
-                    "minor": 42,
-                    "major": 53,
-                    "critical": 30
+                    "low": 42,
+                    "medium": 53,
+                    "high": 30
                 },
                 "security": {
                     "unknown": 22,
-                    "minor": 422,
-                    "major": 123,
-                    "critical": 220
+                    "low": 422,
+                    "medium": 123,
+                    "high": 220
                 }
             }
         },
@@ -24,20 +24,20 @@ export const rawMockData = [
     {
         "version": "1.03",
         "downloads": 130,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 32,
-                    "minor": 42,
-                    "major": 53,
-                    "critical": 320
+                    "low": 42,
+                    "medium": 53,
+                    "high": 320
                 },
                 "security": {
                     "unknown": 52,
-                    "minor": 32,
-                    "major": 23,
-                    "critical": 72
+                    "low": 32,
+                    "medium": 23,
+                    "high": 72
                 }
             }
         },
@@ -46,20 +46,20 @@ export const rawMockData = [
     {
         "version": "1.1",
         "downloads": 640,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 22,
-                    "minor": 52,
-                    "major": 33,
-                    "critical": 80
+                    "low": 52,
+                    "medium": 33,
+                    "high": 80
                 },
                 "security": {
                     "unknown": 0,
-                    "minor": 9,
-                    "major": 33,
-                    "critical": 70
+                    "low": 9,
+                    "medium": 33,
+                    "high": 70
                 }
             }
         },
@@ -68,20 +68,20 @@ export const rawMockData = [
     {
         "version": "1.2",
         "downloads": 120,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 0,
-                    "minor": 0,
-                    "major": 0,
-                    "critical": 14
+                    "low": 0,
+                    "medium": 0,
+                    "high": 14
                 },
                 "security": {
                     "unknown": 0,
-                    "minor": 0,
-                    "major": 3,
-                    "critical": 54
+                    "low": 0,
+                    "medium": 3,
+                    "high": 54
                 }
             }
         },
@@ -90,20 +90,20 @@ export const rawMockData = [
     {
         "version": "1.3",
         "downloads": 100,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 11,
-                    "minor": 2,
-                    "major": 4,
-                    "critical": 120
+                    "low": 2,
+                    "medium": 4,
+                    "high": 120
                 },
                 "security": {
                     "unknown": 12,
-                    "minor": 52,
-                    "major": 33,
-                    "critical": 80
+                    "low": 52,
+                    "medium": 33,
+                    "high": 80
                 }
             }
         },
@@ -112,20 +112,20 @@ export const rawMockData = [
     {
         "version": "1.4",
         "downloads": 180,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 22,
-                    "minor": 21,
-                    "major": 32,
-                    "critical": 60
+                    "low": 21,
+                    "medium": 32,
+                    "high": 60
                 },
                 "security": {
                     "unknown": 32,
-                    "minor": 22,
-                    "major": 23,
-                    "critical": 20
+                    "low": 22,
+                    "medium": 23,
+                    "high": 20
                 }
             }
         },
@@ -134,20 +134,20 @@ export const rawMockData = [
     {
         "version": "1.5",
         "downloads": 500,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 2,
-                    "minor": 2,
-                    "major": 3,
-                    "critical": 20
+                    "low": 2,
+                    "medium": 3,
+                    "high": 20
                 },
                 "security": {
                     "unknown": 2,
-                    "minor": 2,
-                    "major": 3,
-                    "critical": 20
+                    "low": 2,
+                    "medium": 3,
+                    "high": 20
                 }
             }
         },
@@ -156,20 +156,20 @@ export const rawMockData = [
     {
         "version": "1.6",
         "downloads": 4332,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 0,
-                    "minor": 0,
-                    "major": 0,
-                    "critical": 0
+                    "low": 0,
+                    "medium": 0,
+                    "high": 0
                 },
                 "security": {
                     "unknown": 0,
-                    "minor": 0,
-                    "major": 0,
-                    "critical": 0
+                    "low": 0,
+                    "medium": 0,
+                    "high": 0
                 }
             }
         },
@@ -178,20 +178,20 @@ export const rawMockData = [
     {
         "version": "1.7",
         "downloads": 250,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 2,
-                    "minor": 2,
-                    "major": 3,
-                    "critical": 20
+                    "low": 2,
+                    "medium": 3,
+                    "high": 20
                 },
                 "security": {
                     "unknown": 42,
-                    "minor": 22,
-                    "major": 23,
-                    "critical": 20
+                    "low": 22,
+                    "medium": 23,
+                    "high": 20
                 }
             }
         },
@@ -200,20 +200,20 @@ export const rawMockData = [
     {
         "version": "1.8",
         "downloads": 32,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 22,
-                    "minor": 22,
-                    "major": 13,
-                    "critical": 220
+                    "low": 22,
+                    "medium": 13,
+                    "high": 220
                 },
                 "security": {
                     "unknown": 92,
-                    "minor": 42,
-                    "major": 63,
-                    "critical": 220
+                    "low": 42,
+                    "medium": 63,
+                    "high": 220
                 }
             }
         },
@@ -222,20 +222,20 @@ export const rawMockData = [
     {
         "version": "1.9",
         "downloads": 800,
-        "status": "critical(15)",
+        "status": "high(15)",
         "xrayViolations": {
             violations: {
                 "license": {
                     "unknown": 32,
-                    "minor": 22,
-                    "major": 13,
-                    "critical": 420
+                    "low": 22,
+                    "medium": 13,
+                    "high": 420
                 },
                 "security": {
                     "unknown": 22,
-                    "minor": 52,
-                    "major": 53,
-                    "critical": 320
+                    "low": 52,
+                    "medium": 53,
+                    "high": 320
                 }
             }
         },

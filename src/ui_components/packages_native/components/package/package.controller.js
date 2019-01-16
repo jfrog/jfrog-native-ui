@@ -1,4 +1,15 @@
 import {rawMockData} from '../../../../constants/mock_xray_graph_data';
+const SEVERITIES_COLORS = {
+    security_high:'#fbc02d',
+    security_medium:'#fdd981',
+    security_low:'#fef3d5',
+    security_unknown:'#eef5a7',
+    license_high:'#4a7cb8',
+    license_medium:'#92b0d4',
+    license_low:'#dbe5f1',
+    license_unknown:'#6a68f1',
+    downloads: "#6317d3"
+}
 export default class PackageController {
 
     constructor(JFrogSubRouter, $scope, $q, JFrogTableViewOptions,
@@ -20,6 +31,17 @@ export default class PackageController {
     }
 
     $onInit() {
+
+        this.severitiesDictionary = {
+            high:'high',
+            medium:'medium',
+            low:'low',
+            unknown:'unknown'
+
+        }
+        this.oldSeverityModel = ["security_critical", "security_major", "security_minor", "security_unknown", "license_critical", "license_major", "license_minor", "license_unknown"]
+        this.newSeverityModel = ["security_high", "security_medium", "security_low", "security_unknown", "license_high", "license_medium", "license_low", "license_unknown"]
+        this.selectedSeveritiesModel = this.newSeverityModel
         this.nativeParent.stateController = this;
 
         let init = () => {
@@ -172,6 +194,7 @@ export default class PackageController {
                         this.xrayError = 'Incompatible JFrog Xray version. This feature is supported from JFrog Xray 2.4.0 and above.\n' +
                                          'Upgrade JFrog Xray to get license and security violations data.\n' +
                                          'This mock-up graph presents what you could see if you had JFrog Xray 2.4.0 and above.';
+
                         this.graphData = rawMockData;
                         this.chartConfig = this.getGraphObj();
                         break;
@@ -418,49 +441,51 @@ export default class PackageController {
 
     getGraphObj(type = "chart") {
         let _this = this;
+
+
         return {
             id: "xray-data-chart",
             data: {
+                json: _this.getFormattedData(),
                 colors: {
-                    security_critical: "#fbc02d",
-                    security_minor: "#fef3d5",
-                    security_unknown: "#eef5a7",
-                    security_major: "#fdd981",
-                    license_minor: "#dbe5f1",
-                    license_unknown: "#6a68f1",
-                    license_major: "#92b0d4",
-                    license_critical: "#4a7cb8",
-                    downloads: "#6317d3"
+                    ['security_'+ _this.severitiesDictionary.high]: SEVERITIES_COLORS.security_high,
+                    ['security_'+ _this.severitiesDictionary.low]: SEVERITIES_COLORS.security_low,
+                    ['security_'+ _this.severitiesDictionary.unknown]:SEVERITIES_COLORS.security_unknown,
+                    ['security_'+ _this.severitiesDictionary.medium]: SEVERITIES_COLORS.security_medium,
+                    ['license_'+ _this.severitiesDictionary.low]: SEVERITIES_COLORS.license_low,
+                    ['license_'+ _this.severitiesDictionary.unknown]: SEVERITIES_COLORS.license_unknown,
+                    ['license_'+ _this.severitiesDictionary.medium]: SEVERITIES_COLORS.license_medium,
+                    ['license_'+ _this.severitiesDictionary.high]: SEVERITIES_COLORS.license_high,
+                    downloads: SEVERITIES_COLORS.downloads
                 },
                 x: "x",
-                json: _this.getFormattedData(),
                 keys: {
                     // x: "name", // it's possible to specify 'x' when category axis
-                    value: ["x", "security_critical", "security_major", "security_minor", "security_unknown", "license_critical", "license_major", "license_minor", "license_unknown", "downloads"]
+                    value: ["x", ..._this.selectedSeveritiesModel, "downloads"]
                 },
                 types: {
                     downloads: "spline",
-                    security_unknown: "bar",
-                    security_minor: "bar",
-                    security_major: "bar",
-                    security_critical: "bar",
-                    license_unknown: "bar",
-                    license_minor: "bar",
-                    license_major: "bar",
-                    license_critical: "bar"
+                    ['security_'+ _this.severitiesDictionary.unknown]: "bar",
+                    ['security_'+ _this.severitiesDictionary.low]: "bar",
+                    ['security_'+ _this.severitiesDictionary.medium]: "bar",
+                    ['security_'+ _this.severitiesDictionary.high]: "bar",
+                    ['license_'+ _this.severitiesDictionary.unknown]:"bar",
+                    ['license_'+ _this.severitiesDictionary.low]: "bar",
+                    ['license_'+ _this.severitiesDictionary.medium]: "bar",
+                    ['license_'+ _this.severitiesDictionary.high]: "bar"
                 },
                 groups: [
                     [
-                        "security_critical",
-                        "security_major",
-                        "security_minor",
-                        "security_unknown"
+                        `security_${ _this.severitiesDictionary.high}`,
+                        `security_${ _this.severitiesDictionary.medium}`,
+                        `security_${ _this.severitiesDictionary.low}`,
+                        `security_${ _this.severitiesDictionary.unknown}`
                     ],
                     [
-                        "license_critical",
-                        "license_major",
-                        "license_minor",
-                        "license_unknown"
+                        `license_${ _this.severitiesDictionary.high}`,
+                        `license_${ _this.severitiesDictionary.medium}`,
+                        `license_${ _this.severitiesDictionary.low}`,
+                        `license_${ _this.severitiesDictionary.unknown}`
                     ]
                 ],
                 axes: {
@@ -700,6 +725,7 @@ ${_this.buildTooltip(d)}
         let finalDataArr = [];
         if (!this.withXray) {
             this.graphData = rawMockData;
+
         }
         let aggregatedData = _.countBy(this.graphData, 'xrayViolations.version');
         let duplicatedVersions = _.map(_.filter(_.map(Object.keys(aggregatedData),key => [key, aggregatedData[key]]), e => e[1] > 1), i => i[0]);
@@ -728,11 +754,26 @@ ${_this.buildTooltip(d)}
                 tmpObj.downloads = val.downloads;
             }
 
-
             tmpObj.xrayUrl = val.xrayViolations.detailsUrl
 
             finalDataArr.push(tmpObj)
         });
+
+        if(finalDataArr[0]){
+            let isOldModel = _.includes(_.keys(finalDataArr[0]),'security_critical')
+
+            if(isOldModel){
+                this.selectedSeveritiesModel = this.oldSeverityModel;
+                this.severitiesDictionary = {
+                    high:'critical',
+                    medium:'major',
+                    low:'minor',
+                    unknown:'unknown'
+                }
+            }
+
+        }
+
 
         this.finalData = finalDataArr;
         return finalDataArr;
