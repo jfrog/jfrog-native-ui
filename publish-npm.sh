@@ -71,13 +71,13 @@ echo -e "${YELLOW}Log in to npm using your credentials${NC}"
 npm login
 
 # If the second arg $2 is set to "beta" or $1 ends with "-beta" - assume a beta version is being published
-if [ -n $2 -a "$2" =~ ^.*beta$ ] || [[ $1 =~ ^.*-.*$ ]]; then
-    echo -e "${YELLOW}Publishing a beta version ${GREEN}$1${YELLOW}:${NC}"
-    npm publish --tag beta
-else
+#if [ -n $2 -a "$2" =~ ^.*beta$ ] || [[ $1 =~ ^.*-.*$ ]]; then
+#    echo -e "${YELLOW}Publishing a beta version ${GREEN}$1${YELLOW}:${NC}"
+#    npm publish --tag beta
+#else
     echo -e "${YELLOW}Publishing version ${GREEN}$1${YELLOW}:${NC}"
     npm publish
-fi
+#fi
 
 # TODO: check if ~/.npmrc exists, if so don't move this back
 # TODO: unstash .npmrc on failure
