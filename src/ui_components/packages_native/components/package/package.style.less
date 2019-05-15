@@ -65,8 +65,11 @@ package-component {
             font-size: 14px;
             fill: #959595;
           }
-          jf-billboard.bb {
-            height: 85%;
+          .bb {
+            display: inline-block;
+            float: left;
+            width: 75%;
+            margin-top: 50px;
           }
           .graph-filters {
             .dd-wrapper {
@@ -126,27 +129,38 @@ package-component {
               }
             }
           }
-          span.legend-item span {
-            width: 10px;
-            height: 10px;
-            display: inline-block;
-            margin-left: 10px;
-            border-radius: 50%;
+          .legend-item div {
+            padding-left: 5px;
           }
           .bb-legend-item {
             margin: 0 10px;
+            display: flex;
+            padding: 3px;
+            position:relative;
 
             &.bb-legend-item-downloads {
               display: none;
+            }
+            .legend-text {
+              width: 120px;
+            }
+            .legend-color {
+              width: 10px;
+              height: 10px;
+              display: inline-block;
+              margin-left: 10px;
+              border-radius: 50%;
+              margin: 3px;
             }
           }
 
           div#bb-legend {
             display: inline-block;
-            border: 1px solid;
-            padding-right: 10px;
-            padding-left: 10px;
             border-color: #dadada;
+            float: right;
+            width: 25%;
+            padding: 20px 10px;
+            margin-top: 50px;
             h4 {
               width: auto;
               display: block;
