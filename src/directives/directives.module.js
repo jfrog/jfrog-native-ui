@@ -4,5 +4,5 @@ import {jfDockerV2Layers} from "./jf_docker_v2_layers/jf_docker_v2_layers";
 angular.module('directives', [])
     .directive({
 	    'jfDockerV2Layer': jfDockerV2Layer,
-	    'jfDockerV2Layers': jfDockerV2Layers,
+	    'jfDockerV2Layers': jfDockerV2Layers
     });
