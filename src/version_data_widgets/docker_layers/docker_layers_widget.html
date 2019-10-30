@@ -1,5 +1,5 @@
 <div class="version-widget-container docker-layers">
-    <ul ng-if="ctrl.features.isJCR()" class="nav nav-tabs">
+    <ul ng-if="ctrl.features.isJCRDemo()" class="nav nav-tabs">
         <li ng-click="ctrl.tabClicked(tab)" ng-class="{active:ctrl.isActive(tab)}" ng-repeat="tab in ctrl.tabs"
             class="jf-tabs-tab-header">
             <a>{{tab}}</a>
@@ -7,12 +7,12 @@
     </ul>
     <div class="content-wrapper">
         <jf-docker-v2-layers
-                ng-if="ctrl.activeTab === 'Layers' || !ctrl.features.isJCR()"
+                ng-if="ctrl.activeTab === 'Layers' || !ctrl.features.isJCRDemo()"
                 controller="ctrl.$scope.versionCtrl"
                 data="ctrl.$scope.versionCtrl.version.layers"
                 current-path="a/latest">
         </jf-docker-v2-layers>
-        <div ng-if="ctrl.features.isJCR()" class="xuc-wrapper" ng-if="ctrl.activeTab === 'Security Vulnerabilities' ">
+        <div ng-if="ctrl.features.isJCRDemo()" class="xuc-wrapper" ng-if="ctrl.activeTab === 'Security Vulnerabilities' ">
             <jf-xuc-data version="ctrl.version" package-id="ctrl.package_id" data="ctrl.mockData"></jf-xuc-data>
         </div>
     </div>
