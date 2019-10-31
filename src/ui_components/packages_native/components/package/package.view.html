@@ -102,8 +102,8 @@
                         <a target="_blank" class="jf-link" href="https://jfrog.com/xray/free-trial/">Click to start your trial.</a>
                     </div>
 	                <div ng-if="$ctrl.withXray && $ctrl.xrayError" class="alert alert-danger preserve-lb">{{$ctrl.xrayError}}</div>
+	                <jf-billboard ng-if="$ctrl.chartConfig" style="display:inline-block" options="$ctrl.chartConfig"></jf-billboard>
                     <div ng-if="$ctrl.chartConfig" id="bb-legend"></div>
-                    <package-graphs-component ng-if="$ctrl.chartConfig" graph-object="$ctrl.chartConfig" ></package-graphs-component>
                 </div>
 
 
