@@ -602,8 +602,9 @@ ${_this.buildTooltip(d)}
                 contents: {
                     bindto: "#bb-legend",
                     template: (title, color) => {
-                        return `<div class="legend-item bb-legend-item"> <div class="legend-text">${this.getViolation(title)}</div><div class="legend-color" style="background-color: ${color}" ></div> <div class="legend-text">${this.removeChart(title)}</div></div>`
-                    },
+                        return `<span style="position:relative" class="legend-item bb-legend-item"> 
+                        <span style="background-color: ${color}" ></span> ${this.removeChart(title)} </span>`
+                    }
                 },
                 item: {
                     onclick: () => {
@@ -654,17 +655,6 @@ ${_this.buildTooltip(d)}
         }
         return _.capitalize(txt);
 
-    }
-    getViolation(txt) {
-        if (txt === 'downloads') { return '' }
-        const txtValue = txt.split('_');
-        if (txtValue.length > 1) {
-            if(txtValue[1] != 'high') {
-                return '';
-            }
-            return _.capitalize(`${txtValue[0]} Violations`);
-        }
-        return _.capitalize(`${txt} Violations`);
     }
 
     getTooltipText(type, data) {
