@@ -60,7 +60,7 @@
     "webpack": "~1.12.12"
   },
   "dependencies": {
-    "angular": "1.7.2",
+    "angular": "1.7.9",
     "codemirror": "5.0.0",
     "html-loader": "^0.5.5",
     "jfrog-ui-essentials": "2.6.0",
