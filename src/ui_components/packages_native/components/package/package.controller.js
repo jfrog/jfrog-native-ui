@@ -628,7 +628,7 @@ ${_this.buildTooltip(d)}
         let _this = this;
         $('.bb-axis-x g text').each(function () {
             let version = $(this).find('title').text();
-            let foundDataItem = _.findWhere(_this.finalData, {x: version});
+            let foundDataItem = _.find(_this.finalData, {x: version});
             if (foundDataItem) {
                 let url = foundDataItem.xrayUrl;
                 if (url) {
@@ -660,8 +660,8 @@ ${_this.buildTooltip(d)}
     getTooltipText(type, data) {
 
         if (type == 'download') {
-            if (_.findWhere(data, {id: 'downloads'})) {
-                return _.findWhere(data, {id: 'downloads'}).value;
+            if (_.find(data, {id: 'downloads'})) {
+                return _.find(data, {id: 'downloads'}).value;
             }
             return "N/A"
         }

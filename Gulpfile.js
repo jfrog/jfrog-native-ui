@@ -16,7 +16,7 @@ var runSequence = require('run-sequence');
 var webserver = require('gulp-webserver');
 var prefixer = require('gulp-autoprefixer');
 var combiner = require('stream-combiner2');
-var uglify = require('gulp-uglify');
+var uglify = require('gulp-uglify-es').default;
 var minifyCss = require('gulp-minify-css');
 var RevAll = require('gulp-rev-all');
 var revReplace = require("gulp-rev-replace");
@@ -176,7 +176,7 @@ gulp.task('copyPackageJson', function () {
 // bundle application code
 gulp.task("webpack", function (callback) {
     return webpack(webpackConfig, function (err, stats) {
-        if (err || _.contains(stats.toString({}),'ERROR')) {
+        if (err || _.includes(stats.toString({}),'ERROR')) {
             runSequence(['clean'],()=>{
                 gutil.log(gutil.colors.red.bgYellow.bold(stats.toString({})));
                 gutil.log(gutil.colors.red.bgYellow.bold('ERRORS IN WEBPACK BUILD!!!'));
